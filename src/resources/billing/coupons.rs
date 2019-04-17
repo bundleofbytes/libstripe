@@ -1,10 +1,3 @@
-//use serde;
-//use crate::stripe::{StripePath, UrlPath, Currency, Object};
-//use crate::util::{List, Deleted, RangeQuery};
-//use crate::{Client, Result};
-//use std::collections::HashMap;
-//use crate::StripeService;
-
 use crate::{
     resources::common::{
         object::Object,
