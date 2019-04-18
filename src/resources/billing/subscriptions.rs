@@ -3,7 +3,6 @@ use crate::resources::billing::discounts::Discount;
 use crate::util::List;
 use std::collections::HashMap;
 use crate::resources::billing::plans::Plans;
-use crate::resources::issuing::cardholders::Billing;
 use crate::{StripeService, Client};
 use crate::resources::common::path::UrlPath;
 use crate::resources::paymentmethods::source::PaymentSourceParam;
@@ -25,7 +24,7 @@ pub struct Subscription {
     pub customer: String,
     pub days_until_due: Option<i64>,
     pub default_source: Option<String>,
-    pub discount: Option<Discount>, //TODO: import
+    pub discount: Option<Discount>,
     pub ended_at: Option<i64>,
     pub items: List<SubscriptionItems>,
     pub livemode: bool,
@@ -40,14 +39,14 @@ pub struct Subscription {
     pub trial_start: Option<i64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all="snake_case")]
 pub enum SubscriptionBilling {
     ChargeAutomatically,
     SendInvoice
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug)]
 pub struct BillingThresholds {
     pub amount_gte: i64,
     pub reset_billing_cycle_anchor: bool
@@ -63,76 +62,6 @@ pub struct SubscriptionItems {
     pub plan: Plans,
     pub quantity: i64,
     pub subscription: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SubscriptionSchedules {
-    pub id: String,
-    pub object: Object,
-    pub billing: Billing,
-    pub billing_thresholds: Option<BillingThresholds>,
-    pub canceled_at: Option<i64>,
-    pub completed_at: Option<i64>,
-    pub created: i64,
-    pub current_phase: Option<CurrentPhase>,
-    pub customer: String,
-    pub invoice_settings: Option<InvoiceSettings>,
-    pub livemode: bool,
-    pub metadata: HashMap<String, String>,
-    pub phases: Vec<Phase>,
-    pub released_at: Option<i64>,
-    pub released_subscription: Option<String>,
-    pub renewal_behavior: String,
-    pub renewal_interval: Option<RenewalInterval>,
-    pub revision: String,
-    pub status: SubscriptionSchedulesStatus,
-    pub subscription: Option<String>
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct CurrentPhase {
-    pub start_date: i64,
-    pub end_date: i64
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct Phase {
-    pub applicaiton_fee_percent: Option<f64>,
-    pub coupon: Option<String>,
-    pub end_date: i64,
-    pub start_date: i64,
-    pub trail_end: i64,
-    pub trail: bool,
-    pub tax_percent: Option<f64>,
-    pub plans: Vec<PhasePlans>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct PhasePlans {
-    pub billing_thresholds: Option<BillingThresholds>,
-    pub plan: String,
-    pub quantity: i64
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct InvoiceSettings {
-    pub days_until_due: i64
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct RenewalInterval {
-    pub interval: String,
-    pub length: i64
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
-pub enum SubscriptionSchedulesStatus {
-    NotStarted,
-    Active,
-    Completed,
-    Released,
-    Canceled
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]

@@ -15,7 +15,6 @@ pub struct Discount {
     pub subscription: Option<String>,
 }
 
-//TODO: Delete Sub
 impl StripeService for Discount {}
 
 impl Discount {

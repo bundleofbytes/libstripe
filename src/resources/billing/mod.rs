@@ -3,5 +3,6 @@ pub mod discounts;
 pub mod invoiceitems;
 pub mod invoices;
 pub mod plans;
+pub mod subscription_schedules;
 pub mod subscriptions;
 pub mod usage_record;
