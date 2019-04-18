@@ -1,12 +1,12 @@
 use crate::resources::common::object::Object;
 use crate::util::List;
 use crate::resources::core::filelink::FileLink;
-use std::fmt;
 use std::collections::HashMap;
 use crate::{StripeService, Client};
 use crate::resources::common::path::{UrlPath, StripePath};
 use reqwest::multipart::Form;
 use std::path::Path;
+use std::borrow::Cow;
 
 #[derive(Debug, Deserialize)]
 pub struct File {
@@ -25,40 +25,32 @@ pub struct File {
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all="snake_case")]
 pub enum FilePurpose {
-    #[serde(rename = "business_logo")]
     BusinessLogo,
-    #[serde(rename = "finance_report_run")]
     FinanceReportRun,
-    #[serde(rename = "founders_stock_document")]
     FoundersStockDocument,
-    #[serde(rename = "dispute_evidence")]
     DisputeEvidence,
-    #[serde(rename = "identity_document")]
     IdentityDocument,
-    #[serde(rename = "customer_signature")]
     CustomerSignature,
-    #[serde(rename = "pci_document")]
     PciDocument,
-    #[serde(rename = "tax_document_user_upload")]
     TaxDocumentUserUpload,
-    #[serde(rename = "sigma_scheduled_query")]
     SigmaScheduledQuery,
 }
 
-impl fmt::Display for FilePurpose {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-       match *self {
-           FilePurpose::BusinessLogo => write!(f, "business_logo"),
-           FilePurpose::DisputeEvidence => write!(f, "dispute_evidence"),
-           FilePurpose::IdentityDocument => write!(f, "identity_document"),
-           FilePurpose::CustomerSignature => write!(f, "customer_signature"),
-           FilePurpose::PciDocument => write!(f, "pci_document"),
-           FilePurpose::TaxDocumentUserUpload => write!(f, "tax_document_user_upload"),
-           FilePurpose::SigmaScheduledQuery => write!(f, "sigma_scheduled_query"),
-           FilePurpose::FinanceReportRun => write!(f, "finance_report_run"),
-           FilePurpose::FoundersStockDocument => write!(f, "founders_stock_document")
-       }
+impl Into<Cow<'static, str>> for FilePurpose {
+    fn into(self) -> Cow<'static, str> {
+        match self {
+            FilePurpose::BusinessLogo => "business_logo",
+            FilePurpose::DisputeEvidence => "dispute_evidence",
+            FilePurpose::IdentityDocument => "identity_document",
+            FilePurpose::CustomerSignature => "customer_signature",
+            FilePurpose::PciDocument => "pci_document",
+            FilePurpose::TaxDocumentUserUpload => "tax_document_user_upload",
+            FilePurpose::SigmaScheduledQuery => "sigma_scheduled_query",
+            FilePurpose::FinanceReportRun => "finance_report_run",
+            FilePurpose::FoundersStockDocument => "founders_stock_document"
+        }.into()
     }
 }
 
@@ -97,7 +89,7 @@ impl File {
 
     pub fn create<B: serde::Serialize + StripeService, P: AsRef<Path>>(client: &Client, path: P, purpose: FilePurpose, file_link: B) -> crate::Result<Self> {
         let form= Form::new()
-            .text("purpose", format!("{}", purpose))
+            .text("purpose", purpose)
             .file("file", path.as_ref())?;
 
         client.upload(UrlPath::File, &StripePath::default(), file_link, form)
