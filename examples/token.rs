@@ -1,8 +1,7 @@
-
-use std::env;
-use libstripe::Client;
+use libstripe::resources::core::tokens::{TokenParam, Tokens};
 use libstripe::resources::paymentmethods::cards::CardParam;
-use libstripe::resources::core::tokens::{Tokens, TokenParam};
+use libstripe::Client;
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");

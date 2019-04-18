@@ -1,15 +1,14 @@
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
-use crate::{ErrorCode, StripeService, Client};
-use std::collections::HashMap;
-use crate::resources::core::refunds::Refund;
-use crate::util::{List, RangeQuery};
-use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam};
 use crate::resources::common::address::Address;
-//use crate::resources::paymentmethods::bank::AccountHolderType;
-use crate::resources::paymentmethods::paymentmethods::PaymentMethodsDetails;
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+use crate::resources::core::refunds::Refund;
+use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam};
+use crate::util::{List, RangeQuery};
+use crate::{Client, ErrorCode};
+use std::collections::HashMap;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::paymentmethods::paymentmethods::PaymentMethodsDetails;
 
 #[derive(Deserialize, Debug)]
 pub struct Charge {
@@ -23,7 +22,7 @@ pub struct Charge {
     pub balance_transaction: String,
     pub billing_details: BillingDetails,
     pub captured: bool,
-    pub created: i64, 
+    pub created: i64,
     pub currency: Currency,
     pub customer: Option<String>,
     pub description: Option<String>,
@@ -63,16 +62,17 @@ pub struct BillingDetails {
     pub phone: Option<String>,
 }
 
-
 #[derive(Debug, PartialEq, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum PreferredLanguage {
-    EN, DE, FR, NL
+    EN,
+    DE,
+    FR,
+    NL,
 }
 
-
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum ChargeStatus {
     Succeeded,
     Pending,
@@ -97,16 +97,16 @@ pub struct FraudDetails {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum UserReport {
     Safe,
-    Fraudulent
+    Fraudulent,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum StripeReport {
-    Fraudulent
+    Fraudulent,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -119,36 +119,36 @@ pub struct ShippingDetails {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum OutcomeType {
     Authorized,
     ManualReview,
     IssuerDeclined,
     Blocked,
-    Invalid
+    Invalid,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum NetworkStatus {
     ApprovedByNetwork,
     DeclinedByNetwork,
     NotSentToNetwork,
-    ReversedAfterApproval
+    ReversedAfterApproval,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum RiskLevel {
     Normal,
     Elevated,
     Highest,
     NotAssessed,
-    Unknown
+    Unknown,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum OutcomeReason {
     ApprovedWithID,
     CallIssuer,
@@ -191,7 +191,7 @@ pub enum OutcomeReason {
     TestmodeDeclined,
     TransactionNotAllowed,
     TryAgainLater,
-    WithrawalCountLimitExceeded
+    WithrawalCountLimitExceeded,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -226,7 +226,7 @@ pub struct ChargeParams<'a> {
     pub statement_descriptor: Option<&'a str>,
     //Used for updates
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub fraud_details: Option<FraudDetails>
+    pub fraud_details: Option<FraudDetails>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -253,38 +253,36 @@ pub struct ChargeSourceListParam {
 }
 
 #[derive(Serialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum ChargeSourceObject {
     All,
     AlipayAccount,
     BankAccount,
-    Card
+    Card,
 }
 
-impl StripeService for Charge {}
-impl<'a> StripeService for ChargeParams<'a> {}
-impl StripeService for ChargeSourceListParam {}
-
 impl Charge {
-    
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Charges, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Charges, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Charges, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Charges, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Charges, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Charges, vec![id], param)
     }
 
-    pub fn capture<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Charges, &StripePath::default().param(id), param)
+    pub fn capture<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Charges, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Charges, &StripePath::default(), param)
-    }    
-    
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Charges, vec![], param)
+    }
 }

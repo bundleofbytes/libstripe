@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use crate::resources::issuing::authorizations::MerchantData;
-use crate::util::{RangeQuery, List};
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::issuing::authorizations::MerchantData;
+use crate::util::{List, RangeQuery};
+use crate::{Client};
 
 #[derive(Deserialize, Debug)]
 pub struct Transactions {
@@ -21,18 +21,18 @@ pub struct Transactions {
     pub livemode: bool,
     pub merchant_data: MerchantData,
     #[serde(rename = "type")]
-    pub transaction_type: TransactionType
+    pub transaction_type: TransactionType,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum TransactionType {
     Capture,
     Refund,
     CashWithdrawal,
     RefundReversal,
     Dispute,
-    DisputeLoss
+    DisputeLoss,
 }
 
 #[derive(Serialize, Debug)]
@@ -53,21 +53,16 @@ pub struct TransactionParam<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for Transactions {}
-impl<'a> StripeService for TransactionParam<'a> {}
-
 impl Transactions {
-
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Transactions, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Transactions, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Transactions, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Transactions, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Transactions, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Transactions, vec![], param)
     }
-
 }

@@ -1,9 +1,9 @@
 use crate::resources::common::object::Object;
+use crate::resources::common::path::{UrlPath};
 use crate::resources::core::events::EventType;
+use crate::util::{Deleted, List};
+use crate::{Client};
 use serde::Serialize;
-use crate::{Client, StripeService};
-use crate::resources::common::path::{UrlPath, StripePath};
-use crate::util::{List, Deleted};
 
 #[derive(Deserialize, Debug)]
 pub struct WebhookEndpoints {
@@ -16,14 +16,14 @@ pub struct WebhookEndpoints {
     pub livemode: bool,
     pub status: EndpointStatus,
     pub url: String,
-    pub secret: Option<String>
+    pub secret: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum EndpointStatus {
     Enabled,
-    Disabled
+    Disabled,
 }
 
 #[derive(Serialize, Debug)]
@@ -48,32 +48,24 @@ pub struct WebhookEndpointsListParams<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-
-impl StripeService for WebhookEndpoints {}
-impl<'a> StripeService for WebhookEndpointsParams<'a> {}
-impl<'a> StripeService for WebhookEndpointsListParams<'a> {}
-
 impl WebhookEndpoints {
-
-    pub fn create<S: Serialize + StripeService>(client: &Client, param: S) -> crate::Result<Self> {
-        client.post(UrlPath::WebhookEndpoints, &StripePath::default(), param)
+    pub fn create<S: Serialize>(client: &Client, param: S) -> crate::Result<Self> {
+        client.post(UrlPath::WebhookEndpoints, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::WebhookEndpoints, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::WebhookEndpoints, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<S: Serialize + StripeService>(client: &Client, id: &str, param: S) -> crate::Result<Self> {
-        client.post(UrlPath::WebhookEndpoints, &StripePath::default().param(id), param)
+    pub fn update<S: Serialize>(client: &Client, id: &str, param: S) -> crate::Result<Self> {
+        client.post(UrlPath::WebhookEndpoints, vec![id], param)
     }
 
-    pub fn list<S: Serialize + StripeService>(client: &Client, param: S) -> crate::Result<List<Self>> {
-        client.get(UrlPath::WebhookEndpoints, &StripePath::default(), param)
+    pub fn list<S: Serialize>(client: &Client, param: S) -> crate::Result<List<Self>> {
+        client.get(UrlPath::WebhookEndpoints, vec![], param)
     }
 
     pub fn delete(client: &Client, id: &str) -> crate::Result<Deleted> {
-        client.get(UrlPath::WebhookEndpoints, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::WebhookEndpoints, vec![id], serde_json::Map::new())
     }
-
-
 }

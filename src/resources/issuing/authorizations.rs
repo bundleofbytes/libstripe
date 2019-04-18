@@ -1,12 +1,12 @@
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
-use crate::resources::core::balance::BalanceTransaction;
-use std::collections::HashMap;
 use crate::resources::common::category::MerchantCategories;
-use crate::{StripeService, Client};
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
+use crate::resources::core::balance::BalanceTransaction;
 use crate::util::List;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Authorizations {
@@ -33,17 +33,16 @@ pub struct Authorizations {
     pub transactions: Option<String>,
     //TODO: Transactions
     pub verification_data: VerificationData,
-
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum AuthorizationMethod {
     KeyedIn,
     Swipe,
     Chip,
     Contactless,
-    Online
+    Online,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -69,7 +68,7 @@ pub struct RequestHistory {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum RequestReason {
     AuthorizationControls,
     CardActive,
@@ -90,54 +89,58 @@ pub enum RequestReason {
     ForcedInsufficientFunds,
     ForcedInvalidAccountNumber,
     ForcedInvalidTransaction,
-    ForcedSuspectedFraud
+    ForcedSuspectedFraud,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct VerificationData {
     pub address_line1_check: VerificationCheck,
     pub address_zip_check: VerificationCheck,
-    pub cvc_check: VerificationCheck
+    pub cvc_check: VerificationCheck,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum VerificationCheck {
     Match,
     Mismatch,
-    NotProvided
+    NotProvided,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum AuthorizationStatus {
     Pending,
     Reversed,
-    Closed
+    Closed,
 }
 
-impl StripeService for Authorizations {}
-
 impl Authorizations {
-
     pub fn retrieve(client: &Client) -> crate::Result<Self> {
-        client.get(UrlPath::Authorizations, &StripePath::default(), Self::object())
+        client.get(UrlPath::Authorizations, vec![], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Authorizations, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Authorizations, vec![id], param)
     }
 
-    pub fn approve<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Authorizations, &StripePath::default().param(id).param("approve"), param)
+    pub fn approve<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Authorizations, vec![id, "approve"], param)
     }
 
-    pub fn decline<B: serde::Serialize + StripeService>(client: &Client, id: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Authorizations, &StripePath::default().param(id).param("decline"), Self::object())
+    pub fn decline<B: serde::Serialize>(client: &Client, id: &str) -> crate::Result<Self> {
+        client.post(
+            UrlPath::Authorizations,
+            vec![id, "decline"],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Authorizations, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Authorizations, vec![], param)
     }
-
 }

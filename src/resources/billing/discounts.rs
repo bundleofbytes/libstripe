@@ -1,9 +1,9 @@
-use crate::resources::common::object::Object;
 use crate::resources::billing::coupons::Coupon;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
 use crate::util::Deleted;
+use crate::{Client};
 
 #[derive(Deserialize, Debug)]
 pub struct Discount {
@@ -15,16 +15,20 @@ pub struct Discount {
     pub subscription: Option<String>,
 }
 
-impl StripeService for Discount {}
-
 impl Discount {
-
-    pub fn delete_customer_discount(client: &Client, cust_id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Customers, &StripePath::default().param(cust_id).param("discount"), Self::object())
+    pub fn delete_customer_discount(client: &Client, id: &str) -> crate::Result<Deleted> {
+        client.delete(
+            UrlPath::Customers,
+            vec![id, "discount"],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn delete_subscription_discount(client: &Client, sub_id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Subscriptions, &StripePath::default().param(sub_id).param("discount"), Self::object())
+    pub fn delete_subscription_discount(client: &Client, id: &str) -> crate::Result<Deleted> {
+        client.delete(
+            UrlPath::Subscriptions,
+            vec![id, "discount"],
+            serde_json::Map::new(),
+        )
     }
-
 }

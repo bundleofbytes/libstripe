@@ -1,11 +1,11 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::resources::core::product::ProductsParam;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
+use crate::resources::core::product::ProductsParam;
 use crate::util::Deleted;
-use crate::resources::common::path::StripePath;
+use crate::Client;
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Plans {
@@ -31,32 +31,32 @@ pub struct Plans {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum AggregateUsage {
     Sum,
     LastDuringPeriod,
     LastEver,
-    Max
+    Max,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Tiers {
     pub amount: i64,
-    pub up_to: Option<String>
+    pub up_to: Option<String>,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum BillingScheme {
     PerUnit,
     Tiered,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum TiersMode {
     Graduated,
-    Volume
+    Volume,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -66,27 +66,27 @@ pub struct TransformUsage {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum Round {
     UP,
-    DOWN
+    DOWN,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum UsageType {
     Metered,
-    Licensed
+    Licensed,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum Interval {
     Manual,
     Day,
     Week,
     Month,
-    Year
+    Year,
 }
 
 #[derive(Default, Debug, Serialize)]
@@ -109,24 +109,24 @@ pub struct PlansParam<'a> {
     pub product: Option<ProductsParam<'a>>,
 }
 
-impl StripeService for Plans {}
-impl<'a> StripeService for PlansParam<'a> {}
-
 impl Plans {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Plans, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Plans, vec![], param)
     }
 
     pub fn retrieve(client: &Client, plan: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Plans, &StripePath::default().param(plan), Self::object())
+        client.get(UrlPath::Plans, vec![plan], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, plan: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Plans, &StripePath::default().param(plan), param)
+    pub fn update<B: serde::Serialize>(
+        client: &Client,
+        plan: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Plans, vec![plan], param)
     }
 
     pub fn delete(client: &Client, plan: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Plans, &StripePath::default().param(plan), Self::object())
+        client.delete(UrlPath::Plans, vec![plan], serde_json::Map::new())
     }
 }

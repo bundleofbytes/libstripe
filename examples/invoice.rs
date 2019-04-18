@@ -1,9 +1,8 @@
-
-use std::env;
-use libstripe::Client;
-use libstripe::resources::core::customer::{Customer, CustomerParam};
 use libstripe::resources::billing::invoices::{Invoice, InvoiceParam};
+use libstripe::resources::core::customer::{Customer, CustomerParam};
 use libstripe::resources::paymentmethods::source::PaymentSourceParam;
+use libstripe::Client;
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");
@@ -24,6 +23,4 @@ fn main() -> libstripe::Result<()> {
     println!("{:?}", invoice);
 
     Ok(())
-
-
 }

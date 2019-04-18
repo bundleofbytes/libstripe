@@ -1,15 +1,15 @@
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
-use crate::util::{List, Deleted};
-use std::collections::HashMap;
-use crate::resources::common::address::Address;
-use crate::{StripeService, Client};
-use serde::Serialize;
-use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
 use crate::resources::billing::plans::Interval;
+use crate::resources::common::address::Address;
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+
+use crate::resources::common::path::UrlPath;
 use crate::resources::connect::persons::{Persons, PersonsParam};
-use crate::resources::paymentmethods::bank::{BankAccountParam, BankAccount};
+use crate::resources::paymentmethods::bank::{BankAccount, BankAccountParam};
+use crate::util::{Deleted, List};
+use crate::{Client};
+use serde::Serialize;
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Account {
@@ -32,9 +32,8 @@ pub struct Account {
     pub requirements: Requirements,
     pub settings: AccountSettings,
     pub tos_acceptance: TosAcceptance,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub account_type: AccountType,
-
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
@@ -47,31 +46,30 @@ pub struct Requirements {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum DisabledReason {
-    #[serde(rename="requirements.past_due")]
+    #[serde(rename = "requirements.past_due")]
     RequirementsPastDue,
-    #[serde(rename="requirements.pending_verification")]
+    #[serde(rename = "requirements.pending_verification")]
     RequirementsPendingVerification,
-    #[serde(rename="rejected.fraud")]
+    #[serde(rename = "rejected.fraud")]
     RejectedFraud,
-    #[serde(rename="rejected.terms_of_service")]
+    #[serde(rename = "rejected.terms_of_service")]
     RejectedTermsOfService,
-    #[serde(rename="rejected.list")]
+    #[serde(rename = "rejected.list")]
     RejectedListed,
-    #[serde(rename="rejected.other")]
+    #[serde(rename = "rejected.other")]
     RejectedOther,
     Listed,
     UnderReview,
-    Other
+    Other,
 }
 
-
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum BusinessType {
     Individual,
-    Company
+    Company,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -99,24 +97,24 @@ pub struct AccountSettings {
 pub struct Branding {
     pub icon: Option<String>,
     pub logo: Option<String>,
-    pub primary_color: Option<String>
+    pub primary_color: Option<String>,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct CardPayments {
     pub decline_on: Option<DeclineOn>,
-    pub statement_descriptor_prefix: Option<String>
+    pub statement_descriptor_prefix: Option<String>,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct Dashboard {
     pub display_name: String,
-    pub timezone: String
+    pub timezone: String,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct Payments {
-    pub statement_descriptor: Option<String>
+    pub statement_descriptor: Option<String>,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
@@ -131,9 +129,8 @@ pub struct PayoutsSchedule {
     pub dalay_days: Option<i32>,
     pub interval: Option<Interval>,
     pub monthly_anchor: Option<i32>,
-    pub weekly_anchor: Option<i32>
+    pub weekly_anchor: Option<i32>,
 }
-
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct TosAcceptance {
@@ -150,11 +147,11 @@ pub struct Capabilities {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum AccountType {
     STANDARD,
     EXPRESS,
-    CUSTOM
+    CUSTOM,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
@@ -199,7 +196,7 @@ pub struct DeclineOn {
 pub struct LoginLink {
     pub object: Object,
     pub created: i64,
-    pub url: String
+    pub url: String,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -232,46 +229,42 @@ pub struct AccountParam<'a> {
     pub settings: Option<AccountSettings>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tos_acceptance: Option<TosAcceptance>,
-    #[serde(rename="type", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub account_type: Option<AccountType>,
 }
 
-impl StripeService for Account {}
-
 impl Account {
-
-    pub fn create<B: Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Accounts, &StripePath::default(), param)
+    pub fn create<B: Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Accounts, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Accounts, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Accounts, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Accounts, &StripePath::default().param(id), param)
+    pub fn update<B: Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Accounts, vec![id], param)
     }
 
     pub fn delete(client: &Client, id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Accounts, &StripePath::default().param(id), Self::object())
+        client.delete(UrlPath::Accounts, vec![id], serde_json::Map::new())
     }
 
-    pub fn reject<B: Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Accounts, &StripePath::default().param(id).param("reject"), param)
+    pub fn reject<B: Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Accounts, vec![id, "reject"], param)
     }
 
-    pub fn list<B: Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Accounts, &StripePath::default(), param)
+    pub fn list<B: Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Accounts, vec![], param)
     }
-
 }
 
-impl StripeService for LoginLink {}
-
 impl LoginLink {
-
     pub fn create(client: &Client, account: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Accounts, &StripePath::default().param(account).param("login_links"), Self::object())
+        client.post(
+            UrlPath::Accounts,
+            vec![account, "login_links"],
+            serde_json::Map::new(),
+        )
     }
-
 }

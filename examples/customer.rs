@@ -1,7 +1,6 @@
-
-use std::env;
-use libstripe::Client;
 use libstripe::resources::core::customer::{Customer, CustomerParam};
+use libstripe::Client;
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");

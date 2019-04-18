@@ -1,7 +1,6 @@
-
-use std::env;
+use libstripe::resources::core::product::{ProductType, Products, ProductsParam};
 use libstripe::Client;
-use libstripe::resources::core::product::{Products, ProductsParam, ProductType};
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");
@@ -16,5 +15,4 @@ fn main() -> libstripe::Result<()> {
     println!("{:?}", product);
 
     Ok(())
-
 }

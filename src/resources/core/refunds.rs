@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
 use crate::util::List;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Debug, Deserialize)]
 pub struct Refund {
@@ -26,28 +26,28 @@ pub struct Refund {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum RefundReason {
     Duplicate,
     Fraudulent,
-    RequestedByCustomer
+    RequestedByCustomer,
 }
 
 #[derive(Debug, PartialEq, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum FailureReason {
     LostOrStolenCard,
     ExpiredOrCanceledCard,
-    Unknown
+    Unknown,
 }
 
 #[derive(Debug, PartialEq, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum RefundStatus {
     Succeeded,
     Pending,
     Failed,
-    Cancelled
+    Cancelled,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -63,29 +63,23 @@ pub struct RefundParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refund_application_fee: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reverse_transfer: Option<bool>
+    pub reverse_transfer: Option<bool>,
 }
 
-impl StripeService for Refund {}
-impl<'a> StripeService for RefundParam<'a> {}
-
-
 impl Refund {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Refunds, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Refunds, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Refunds, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Refunds, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Refunds, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Refunds, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Refunds, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Refunds, vec![], param)
     }
-
 }

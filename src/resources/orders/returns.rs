@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use crate::resources::orders::order::OrderItem;
-use crate::util::{RangeQuery, List};
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::orders::order::OrderItem;
+use crate::util::{List, RangeQuery};
+use crate::{Client};
 
 #[derive(Debug, Deserialize)]
 pub struct Returns {
@@ -16,7 +16,7 @@ pub struct Returns {
     pub items: Vec<OrderItem>,
     pub livemode: bool,
     pub order: String,
-    pub refund: Option<String>
+    pub refund: Option<String>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -33,17 +33,12 @@ pub struct ReturnListParams<'a> {
     pub order: Option<&'a str>,
 }
 
-impl StripeService for Returns {}
-impl<'a> StripeService for ReturnListParams<'a> {}
-
 impl Returns {
-
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::OrderReturns, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::OrderReturns, vec![id], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::OrderReturns, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::OrderReturns, vec![], param)
     }
-
 }

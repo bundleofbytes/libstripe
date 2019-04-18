@@ -1,12 +1,12 @@
-use crate::resources::common::object::Object;
-use crate::util::{List, RangeQuery};
-use crate::resources::core::charges::Charge;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::resources::issuing::cards::IssuingShipping;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::core::charges::Charge;
+use crate::resources::issuing::cards::IssuingShipping;
+use crate::util::{List, RangeQuery};
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct PaymentIntent {
@@ -46,16 +46,16 @@ pub struct PaymentIntent {
 #[derive(Deserialize, Debug)]
 pub struct NextSourceAction {
     pub authorize_with_url: Option<AuthorizeWithUrl>,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub action_type: ActionType,
-    pub use_stripe_sdk: Option<String>
+    pub use_stripe_sdk: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum ActionType {
     AuthorizeWithUrl,
-    UseStripeSdk
+    UseStripeSdk,
 }
 
 #[derive(Deserialize, Debug)]
@@ -65,29 +65,29 @@ pub struct AuthorizeWithUrl {
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum ConfirmationMethod {
     Secret,
-    Publishable
+    Publishable,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum CancellationReason {
     Duplicate,
     Fraudulent,
-    RequestedByCustomer
+    RequestedByCustomer,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum CaptureMethod {
     Automatic,
-    Manual
+    Manual,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum PaymentIntentsStatus {
     RequiresSource,
     RequiresConfirmation,
@@ -95,7 +95,7 @@ pub enum PaymentIntentsStatus {
     Processing,
     RequiresCapture,
     Canceled,
-    Succeeded
+    Succeeded,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -116,7 +116,7 @@ pub struct LastPaymentError {
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum LastPaymentErrorType {
     ApiConnectionError,
     ApiError,
@@ -124,11 +124,11 @@ pub enum LastPaymentErrorType {
     CardError,
     IdempotencyError,
     InvalidRequestError,
-    RateLimitError
+    RateLimitError,
 }
 
 #[derive(Default, Serialize, Debug)]
-pub struct PaymentIntentParam<'a>{
+pub struct PaymentIntentParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_source_type: Option<Vec<&'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,37 +183,40 @@ pub struct PaymentIntentListParams<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for PaymentIntent {}
-impl<'a> StripeService for PaymentIntentParam<'a> {}
-impl<'a> StripeService for PaymentIntentListParams<'a> {}
-
 impl PaymentIntent {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentIntents, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentIntents, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::PaymentIntents, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::PaymentIntents, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentIntents, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentIntents, vec![id], param)
     }
 
-    pub fn confirm<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentIntents, &StripePath::default().param(id).param("confirm"), param)
+    pub fn confirm<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentIntents, vec![id, "confirm"], param)
     }
 
-    pub fn capture<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentIntents, &StripePath::default().param(id).param("capture"), param)
+    pub fn capture<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentIntents, vec![id, "capture"], param)
     }
 
-    pub fn cancel<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentIntents, &StripePath::default().param(id).param("cancel"), param)
+    pub fn cancel<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentIntents, vec![id, "cancel"], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::PaymentIntents, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::PaymentIntents, vec![], param)
     }
 }

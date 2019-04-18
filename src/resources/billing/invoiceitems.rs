@@ -1,11 +1,11 @@
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::util::{Period, RangeQuery, Deleted, List};
 use crate::resources::billing::plans::Plans;
-use crate::{StripeService, Client};
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::util::{Deleted, List, Period, RangeQuery};
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct InvoiceItems {
@@ -25,7 +25,7 @@ pub struct InvoiceItems {
     pub proration: bool,
     pub quantity: Option<i64>,
     pub subscription: Option<String>,
-    pub subscription_item: Option<String>
+    pub subscription_item: Option<String>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -45,9 +45,8 @@ pub struct InvoiceItemsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subscription: Option<&'a str>
+    pub subscription: Option<&'a str>,
 }
-
 
 #[derive(Default, Serialize, Debug)]
 pub struct InvoiceItemsListParams<'a> {
@@ -65,30 +64,24 @@ pub struct InvoiceItemsListParams<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for InvoiceItems {}
-impl<'a> StripeService for InvoiceItemsParam<'a> {}
-impl<'a> StripeService for InvoiceItemsListParams<'a> {}
-
 impl InvoiceItems {
-    
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::InvoiceItems, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::InvoiceItems, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::InvoiceItems, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::InvoiceItems, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::InvoiceItems, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::InvoiceItems, vec![id], param)
     }
 
     pub fn delete(client: &Client, id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::InvoiceItems, &StripePath::default().param(id), Self::object())
+        client.delete(UrlPath::InvoiceItems, vec![id], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::InvoiceItems, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::InvoiceItems, vec![], param)
     }
-
 }

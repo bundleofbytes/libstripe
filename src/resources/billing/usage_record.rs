@@ -1,7 +1,7 @@
 use crate::resources::common::object::Object;
-use crate::{StripeService, Client};
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
 
 #[derive(Deserialize, Debug)]
 pub struct UsageRecord {
@@ -10,7 +10,7 @@ pub struct UsageRecord {
     pub livemode: bool,
     pub quantity: i64,
     pub subscription_item: String,
-    pub timestamp: i64
+    pub timestamp: i64,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -22,22 +22,18 @@ pub struct UsageRecordParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub action: Option<UsageAction>
+    pub action: Option<UsageAction>,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum UsageAction {
     Increment,
-    Set
+    Set,
 }
 
-impl StripeService for UsageRecord {}
-
 impl UsageRecord {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::SubscriptionItems, &StripePath::default().param(id).param("usage_records"), param)
+    pub fn create<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::SubscriptionItems, vec![id, "usage_records"], param)
     }
-
 }

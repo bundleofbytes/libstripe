@@ -1,14 +1,14 @@
-use crate::resources::common::object::Object;
-use crate::resources::paymentmethods::cards::CardBrand;
-use crate::resources::issuing::cardholders::CardHolders;
-use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::resources::common::category::MerchantCategories;
 use crate::resources::common::address::Address;
-use crate::{StripeService, Client};
+use crate::resources::common::category::MerchantCategories;
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
+use crate::resources::issuing::cardholders::CardHolders;
+use crate::resources::paymentmethods::cards::CardBrand;
 use crate::util::List;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct IssuingCard {
@@ -37,25 +37,25 @@ pub struct AuthorizationControls {
     pub blocked_categories: Option<Vec<MerchantCategories>>,
     pub currency: Currency,
     pub max_amount: i64,
-    pub max_approvals: i64
+    pub max_approvals: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum CardStatus {
     Active,
     Inactive,
     Pending,
     Canceled,
     Lost,
-    Stolen
+    Stolen,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum IssuingCardType {
     Virtual,
-    Physical
+    Physical,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -71,14 +71,14 @@ pub struct IssuingShipping {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum IssuingShippingStatus {
     Pending,
     Shipped,
     Delivered,
     Returned,
     Failure,
-    Canceled
+    Canceled,
 }
 
 #[derive(Serialize, Debug)]
@@ -93,29 +93,28 @@ pub struct IssuingCardParam<'a> {
     pub status: Option<CardStatus>,
 }
 
-impl StripeService for IssuingCard {}
-impl<'a> StripeService for IssuingCardParam<'a> {}
-
 impl IssuingCard {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::IssuingCard, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::IssuingCard, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::IssuingCard, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::IssuingCard, vec![id], serde_json::Map::new())
     }
 
     pub fn retrieve_details(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::IssuingCard, &StripePath::default().param(id).param("details"), Self::object())
+        client.get(
+            UrlPath::IssuingCard,
+            vec![id, "details"],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::IssuingCard, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::IssuingCard, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::IssuingCard, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::IssuingCard, vec![], param)
     }
-
 }

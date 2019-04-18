@@ -18,7 +18,7 @@ pub struct Deleted {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Period {
     start: i64,
-    end: i64
+    end: i64,
 }
 
 #[derive(Serialize, Debug)]
@@ -28,7 +28,6 @@ pub struct RangeBounds {
     pub lt: Option<i64>,
     pub lte: Option<i64>,
 }
-
 
 impl Default for RangeBounds {
     fn default() -> Self {

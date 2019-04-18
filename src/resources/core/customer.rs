@@ -1,13 +1,12 @@
-
-use crate::{StripeService, Client};
-use crate::resources::common::path::{StripePath, UrlPath};
-use crate::resources::common::address::Address;
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::util::{List, RangeQuery, Deleted};
-use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam};
 use crate::resources::billing::subscriptions::Subscription;
+use crate::resources::common::address::Address;
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+use crate::resources::common::path::{UrlPath};
+use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam};
+use crate::util::{Deleted, List, RangeQuery};
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CustomerShipping {
@@ -49,7 +48,7 @@ pub struct InvoiceSettings {
 #[derive(Deserialize, Debug)]
 pub struct CustomFields {
     pub name: String,
-    pub value: String
+    pub value: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -62,15 +61,15 @@ pub struct TaxInfo {
 #[derive(Debug, Deserialize)]
 pub struct TaxInfoVerification {
     pub verified_name: String,
-    pub status: TaxStatus
+    pub status: TaxStatus,
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum TaxStatus {
     Unverified,
     Pending,
-    Verified
+    Verified,
 }
 
 #[derive(Default, Debug, Serialize)]
@@ -113,30 +112,24 @@ pub struct CustomerListParams<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for Customer {}
-impl<'a> StripeService for CustomerParam<'a> {}
-impl<'a> StripeService for CustomerListParams<'a> {}
-
 impl Customer {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Customers, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Customers, vec![], param)
     }
 
-    pub fn retrieve(client: &Client, customer_id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Customers, &StripePath::default().param(customer_id), Self::object())
+    pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
+        client.get(UrlPath::Customers, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, customer_id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Customers, &StripePath::default().param(customer_id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Customers, vec![id], param)
     }
 
-    pub fn delete(client: &Client, customer_id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Customers, &StripePath::default().param(customer_id), Self::object())
+    pub fn delete(client: &Client, id: &str) -> crate::Result<Deleted> {
+        client.delete(UrlPath::Customers, vec![id], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Customers, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Customers, vec![], param)
     }
-
 }

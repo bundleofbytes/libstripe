@@ -1,4 +1,3 @@
-
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub struct Address {
     pub line1: Option<String>,

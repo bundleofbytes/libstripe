@@ -1,14 +1,13 @@
-
-use std::env;
-use libstripe::Client;
-use libstripe::resources::core::customer::{CustomerParam, Customer};
-use libstripe::resources::billing::subscriptions::{SubscriptionParam, Subscription, ItemParam};
+use libstripe::resources::billing::subscriptions::{ItemParam, Subscription, SubscriptionParam};
+use libstripe::resources::core::customer::{Customer, CustomerParam};
 use libstripe::resources::paymentmethods::source::PaymentSourceParam;
+use libstripe::Client;
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");
     let client = Client::new(&secret_key);
-    
+
     let mut customer_param = CustomerParam::default();
     customer_param.email = Some("example@example.com");
     customer_param.description = Some("Example account");

@@ -1,14 +1,14 @@
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
 use crate::resources::billing::discounts::Discount;
-use crate::util::{List, Period, RangeQuery};
-use std::collections::HashMap;
-use crate::resources::core::paymentintents::PaymentIntent;
 use crate::resources::billing::plans::Plans;
 use crate::resources::billing::subscriptions::SubscriptionItems;
-use crate::{StripeService, Client};
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::core::paymentintents::PaymentIntent;
+use crate::util::{List, Period, RangeQuery};
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Invoice {
@@ -69,7 +69,7 @@ pub struct CustomFields {
 #[derive(Deserialize, Debug)]
 pub struct ThresholdReason {
     pub amount_gte: i64,
-    pub item_reasons: ItemReasons
+    pub item_reasons: ItemReasons,
 }
 
 #[derive(Deserialize, Debug)]
@@ -83,36 +83,35 @@ pub struct StatusTransitions {
     pub finalized_at: i64,
     pub marked_uncollectible_at: i64,
     pub paid_at: i64,
-    pub voided_at: i64
+    pub voided_at: i64,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum InvoiceBilling {
     ChargeAutomatcally,
-    SendInvoice
+    SendInvoice,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum InvoiceBillingReason {
     SubscriptionCycle,
     SubscriptionCreate,
     SubscriptionUpdate,
     Subscription,
     Manual,
-    Upcoming
+    Upcoming,
 }
 
-
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum InvoiceStatus {
     Draft,
     Open,
     Paid,
     Uncollectible,
-    Void
+    Void,
 }
 
 #[derive(Deserialize, Debug)]
@@ -132,15 +131,15 @@ pub struct InvoiceLine {
     pub quantity: Option<i64>,
     pub subscription: Option<String>,
     pub subscription_item: Option<String>,
-    #[serde(rename="type")]
-    pub invoiceline_type: InvoiceLineType
+    #[serde(rename = "type")]
+    pub invoiceline_type: InvoiceLineType,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum InvoiceLineType {
     InvoiceItem,
-    Subscription
+    Subscription,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -188,7 +187,7 @@ pub struct InvoiceLineParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_trial_end: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub subscription_trial_from_plan: Option<&'a str>
+    pub subscription_trial_from_plan: Option<&'a str>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -211,68 +210,92 @@ pub struct InvoiceListParams<'a> {
     pub subscription: Option<&'a str>,
 }
 
-impl StripeService for Invoice {}
-impl StripeService for InvoiceLine {}
-impl<'a> StripeService for InvoiceParam<'a> {}
-impl<'a> StripeService for InvoiceListParams<'a> {}
-impl<'a> StripeService for InvoiceLineParam<'a> {}
-
-
 impl Invoice {
-    
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Invoices, vec![], param)
     }
 
     pub fn retrieve(client: &Client, invoice: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Invoices, &StripePath::default().param(invoice), Self::object())
+        client.get(UrlPath::Invoices, vec![invoice], serde_json::Map::new())
     }
 
-    pub fn retrieve_upcoming<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.get(UrlPath::Invoices, &StripePath::default().param("upcoming"), param)
+    pub fn retrieve_upcoming<B: serde::Serialize>(
+        client: &Client,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.get(UrlPath::Invoices, vec!["upcoming"], param)
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, invoice_id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default().param(invoice_id), param)
+    pub fn update<B: serde::Serialize>(
+        client: &Client,
+        invoice_id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Invoices, vec![invoice_id], param)
     }
 
     pub fn delete(client: &Client, invoice_id: &str) -> crate::Result<Self> {
-        client.delete(UrlPath::Invoices, &StripePath::default().param(invoice_id), Self::object())
+        client.delete(UrlPath::Invoices, vec![invoice_id], serde_json::Map::new())
     }
 
-    pub fn finalize<B: serde::Serialize + StripeService>(client: &Client, invoice_id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default().param(invoice_id).param("finalize"), param)
+    pub fn finalize<B: serde::Serialize>(
+        client: &Client,
+        invoice_id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Invoices, vec![invoice_id, "finalize"], param)
     }
 
-    pub fn pay<B: serde::Serialize + StripeService>(client: &Client, invoice_id: &str, source: B) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default().param(invoice_id).param("pay"), source)
+    pub fn pay<B: serde::Serialize>(
+        client: &Client,
+        invoice_id: &str,
+        source: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Invoices, vec![invoice_id, "pay"], source)
     }
 
     pub fn send(client: &Client, invoice_id: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default().param(invoice_id).param("send"), Self::object())
+        client.post(
+            UrlPath::Invoices,
+            vec![invoice_id, "send"],
+            serde_json::Map::new(),
+        )
     }
 
     pub fn void(client: &Client, invoice_id: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default().param(invoice_id).param("void"), Self::object())
+        client.post(
+            UrlPath::Invoices,
+            vec![invoice_id, "void"],
+            serde_json::Map::new(),
+        )
     }
 
     pub fn uncollectible(client: &Client, invoice_id: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Invoices, &StripePath::default().param(invoice_id).param("mark_uncollectible"), Self::object())
+        client.post(
+            UrlPath::Invoices,
+            vec![invoice_id, "mark_uncollectible"],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Invoices, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Invoices, vec![], param)
     }
-
 }
 
 impl InvoiceLine {
-
-    pub fn retrieve_upcoming_lines<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Invoices, &StripePath::default().param("upcoming").param("lines"), param)
+    pub fn retrieve_upcoming_lines<B: serde::Serialize>(
+        client: &Client,
+        param: B,
+    ) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Invoices, vec!["upcoming", "lines"], param)
     }
 
-    pub fn retrieve_lines<B: serde::Serialize + StripeService>(client: &Client, invoice: &str, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Invoices, &StripePath::default().param(invoice).param("lines"), param)
+    pub fn retrieve_lines<B: serde::Serialize>(
+        client: &Client,
+        invoice: &str,
+        param: B,
+    ) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Invoices, vec![invoice, "lines"], param)
     }
 }

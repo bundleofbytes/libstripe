@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
 use crate::util::List;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Debug, PartialEq, Deserialize)]
 pub struct CountrySpecs {
@@ -15,24 +15,22 @@ pub struct CountrySpecs {
     pub supported_payment_currencies: Vec<Currency>,
     pub supported_payment_methods: Vec<PaymentMethods>,
     pub verification_fields: Option<Verification>,
-
 }
 
 #[derive(Debug, PartialEq, Deserialize)]
 pub struct Verification {
     pub individual: Option<EntityVerification>,
-    pub company: Option<EntityVerification>
+    pub company: Option<EntityVerification>,
 }
 
 #[derive(Debug, PartialEq, Deserialize)]
 pub struct EntityVerification {
     pub minimum: Option<Vec<MinimumVerification>>,
-    pub additional: Option<Vec<AdditionalVerification>>
+    pub additional: Option<Vec<AdditionalVerification>>,
 }
 
-
 #[derive(Debug, PartialEq, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum MinimumVerification {
     ExternalAccount,
     BusinessType,
@@ -95,16 +93,16 @@ pub enum AdditionalVerification {
     #[serde(rename = "individual.verification.document")]
     IndividualVerificationDocument,
     #[serde(rename = "relationship.account_opener")]
-    RelationshipAccountOpener
+    RelationshipAccountOpener,
 }
 
 #[derive(Debug, PartialEq, Eq, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum PaymentMethods {
     Alipay,
     Card,
     Stripe,
-    Ach
+    Ach,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -117,16 +115,12 @@ pub struct CountrySpecListParams<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for CountrySpecs {}
-impl<'a> StripeService for CountrySpecListParams<'a> {}
-
 impl CountrySpecs {
-
     pub fn retrieve(client: &Client, country: &str) -> crate::Result<Self> {
-        client.get(UrlPath::CountrySpecs, &StripePath::default().param(country), Self::object())
+        client.get(UrlPath::CountrySpecs, vec![country], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::CountrySpecs, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::CountrySpecs, vec![], param)
     }
 }

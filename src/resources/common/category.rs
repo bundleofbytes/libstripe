@@ -1,178 +1,177 @@
-
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum MerchantCategories {
-    AcRefrigerationRepair, //A/C, Refrigeration Repair
-    AccountingBookkeepingServices, //Accounting/Bookkeeping Services
-    AdvertisingServices, //Advertising Services
-    AgriculturalCooperative, //Agricultural Cooperative
-    AirlinesAirCarriers, //Airlines, Air Carriers
-    AirportsFlyingFields, //Airports, Flying Fields
-    AmbulanceServices, //Ambulance Services
-    AmusementParksCarnivals, //Amusement Parks/Carnivals
-    AntiqueReproductions, //Antique Reproductions
-    AntiqueShops, //Antique Shops
-    Aquariums, //Aquariums
-    ArchitecturalSurveyingServices, //Architectural/Surveying Services
-    ArtDealersAndGalleries, //Art Dealers and Galleries
-    ArtistsSupplyAndCraftShops, //Artists Supply and Craft Shops
-    AutoBodyRepairShops, //Auto Body Repair Shops
-    AutoPaintShops, //Auto Paint Shops
-    AutoServiceShops, //Auto Service Shops
-    AutoAndHomeSupplyStores, //Auto and Home Supply Stores
-    AutomatedCashDisburse, //Automated Cash Disburse
-    AutomatedFuelDispensers, //Automated Fuel Dispensers
-    AutomobileAssociations, //Automobile Associations
-    AutomotivePartsAndAccessoriesStores, //Automotive Parts and Accessories Stores
-    AutomotiveTireStores, //Automotive Tire Stores
+    AcRefrigerationRepair,                              //A/C, Refrigeration Repair
+    AccountingBookkeepingServices,                      //Accounting/Bookkeeping Services
+    AdvertisingServices,                                //Advertising Services
+    AgriculturalCooperative,                            //Agricultural Cooperative
+    AirlinesAirCarriers,                                //Airlines, Air Carriers
+    AirportsFlyingFields,                               //Airports, Flying Fields
+    AmbulanceServices,                                  //Ambulance Services
+    AmusementParksCarnivals,                            //Amusement Parks/Carnivals
+    AntiqueReproductions,                               //Antique Reproductions
+    AntiqueShops,                                       //Antique Shops
+    Aquariums,                                          //Aquariums
+    ArchitecturalSurveyingServices,                     //Architectural/Surveying Services
+    ArtDealersAndGalleries,                             //Art Dealers and Galleries
+    ArtistsSupplyAndCraftShops,                         //Artists Supply and Craft Shops
+    AutoBodyRepairShops,                                //Auto Body Repair Shops
+    AutoPaintShops,                                     //Auto Paint Shops
+    AutoServiceShops,                                   //Auto Service Shops
+    AutoAndHomeSupplyStores,                            //Auto and Home Supply Stores
+    AutomatedCashDisburse,                              //Automated Cash Disburse
+    AutomatedFuelDispensers,                            //Automated Fuel Dispensers
+    AutomobileAssociations,                             //Automobile Associations
+    AutomotivePartsAndAccessoriesStores,                //Automotive Parts and Accessories Stores
+    AutomotiveTireStores,                               //Automotive Tire Stores
     BailAndBondPayments, //Bail and Bond Payments (payment to the surety for the bond, not the actual bond paid to the government agency)
-    Bakeries, //Bakeries
-    BandsOrchestras, //Bands, Orchestras
+    Bakeries,            //Bakeries
+    BandsOrchestras,     //Bands, Orchestras
     BarberAndBeautyShops, //Barber and Beauty Shops
     BettingCasinoGambling, //Betting/Casino Gambling
-    BicycleShops, //Bicycle Shops
+    BicycleShops,        //Bicycle Shops
     BilliardPoolEstablishments, //Billiard/Pool Establishments
-    BoatDealers, //Boat Dealers
+    BoatDealers,         //Boat Dealers
     BoatRentalsAndLeases, //Boat Rentals and Leases
-    BookStores, //Book Stores
+    BookStores,          //Book Stores
     BooksPeriodicalsAndNewspapers, //Books, Periodicals, and Newspapers
-    BowlingAlleys, //Bowling Alleys
-    BusLines, //Bus Lines
+    BowlingAlleys,       //Bowling Alleys
+    BusLines,            //Bus Lines
     BusinessSecretarialSchools, //Business/Secretarial Schools
     BuyingShoppingServices, //Buying/Shopping Services
     CableSatelliteAndOtherPayTelevisionAndRadio, //Cable, Satellite, and Other Pay Television and Radio
-    CameraAndPhotographicSupplyStores, //Camera and Photographic Supply Stores
-    CandyNutAndConfectioneryStores, //Candy, Nut, and Confectionery Stores
-    CarRentalAgencies, //Car Rental Agencies
-    CarWashes, //Car Washes
+    CameraAndPhotographicSupplyStores,           //Camera and Photographic Supply Stores
+    CandyNutAndConfectioneryStores,              //Candy, Nut, and Confectionery Stores
+    CarRentalAgencies,                           //Car Rental Agencies
+    CarWashes,                                   //Car Washes
     CarAndTruckDealersNewUsed, //Car and Truck Dealers (New & Used) Sales, Service, Repairs Parts and Leasing
     CarAndTruckDealersUsedOnly, //Car and Truck Dealers (Used Only) Sales, Service, Repairs Parts and Leasing
-    CarpentryServices, //Carpentry Services
-    CarpetUpholsteryCleaning, //Carpet/Upholstery Cleaning
-    Caterers, //Caterers
+    CarpentryServices,          //Carpentry Services
+    CarpetUpholsteryCleaning,   //Carpet/Upholstery Cleaning
+    Caterers,                   //Caterers
     CharitableAndSocialServiceOrganizationsFundraising, //Charitable and Social Service Organizations - Fundraising
     ChemicalsAndAlliedProducts, //Chemicals and Allied Products (Not Elsewhere Classified)
     ChidrensAndInfantsWearStores, //Chidrens and Infants Wear Stores
-    ChildCareServices, //Child Care Services
-    ChiropodistsPodiatrists, //Chiropodists, Podiatrists
-    Chiropractors, //Chiropractors
-    CigarStoresAndStands, //Cigar Stores and Stands
+    ChildCareServices,          //Child Care Services
+    ChiropodistsPodiatrists,    //Chiropodists, Podiatrists
+    Chiropractors,              //Chiropractors
+    CigarStoresAndStands,       //Cigar Stores and Stands
     CivicSocialFraternalAssociations, //Civic, Social, Fraternal Associations
-    CleaningAndMaintenance, //Cleaning and Maintenance
-    ClothingRental, //Clothing Rental
-    CollegesUniversities, //Colleges, Universities
-    CommercialEquipment, //Commercial Equipment (Not Elsewhere Classified)
-    CommercialFootwear, //Commercial Footwear
+    CleaningAndMaintenance,     //Cleaning and Maintenance
+    ClothingRental,             //Clothing Rental
+    CollegesUniversities,       //Colleges, Universities
+    CommercialEquipment,        //Commercial Equipment (Not Elsewhere Classified)
+    CommercialFootwear,         //Commercial Footwear
     CommercialPhotographyArtAndGraphics, //Commercial Photography, Art and Graphics
     CommuterTransportAndFerries, //Commuter Transport, Ferries
-    ComputerNetworkServices, //Computer Network Services
-    ComputerProgramming, //Computer Programming
-    ComputerRepair, //Computer Repair
-    ComputerSoftwareStores, //Computer Software Stores
+    ComputerNetworkServices,    //Computer Network Services
+    ComputerProgramming,        //Computer Programming
+    ComputerRepair,             //Computer Repair
+    ComputerSoftwareStores,     //Computer Software Stores
     ComputersPeripheralsAndSoftware, //Computers, Peripherals, and Software
-    ConcreteWorkServices, //Concrete Work Services
-    ConstructionMaterials, //Construction Materials (Not Elsewhere Classified)
-    ConsultingPublicRelations, //Consulting, Public Relations
-    CorrespondenceSchools, //Correspondence Schools
-    CosmeticStores, //Cosmetic Stores
-    CounselingServices, //Counseling Services
-    CountryClubs, //Country Clubs
-    CourierServices, //Courier Services
-    CourtCosts, //Court Costs, Including Alimony and Child Support - Courts of Law
-    CreditReportingAgencies, //Credit Reporting Agencies
-    CruiseLines, //Cruise Lines
-    DairyProductsStores, //Dairy Products Stores
-    DanceHallStudiosSchools, //Dance Hall, Studios, Schools
-    DatingEscortServices, //Dating/Escort Services
-    DentistsOrthodontists, //Dentists, Orthodontists
-    DepartmentStores, //Department Stores
-    DetectiveAgencies, //Detective Agencies
+    ConcreteWorkServices,       //Concrete Work Services
+    ConstructionMaterials,      //Construction Materials (Not Elsewhere Classified)
+    ConsultingPublicRelations,  //Consulting, Public Relations
+    CorrespondenceSchools,      //Correspondence Schools
+    CosmeticStores,             //Cosmetic Stores
+    CounselingServices,         //Counseling Services
+    CountryClubs,               //Country Clubs
+    CourierServices,            //Courier Services
+    CourtCosts,                 //Court Costs, Including Alimony and Child Support - Courts of Law
+    CreditReportingAgencies,    //Credit Reporting Agencies
+    CruiseLines,                //Cruise Lines
+    DairyProductsStores,        //Dairy Products Stores
+    DanceHallStudiosSchools,    //Dance Hall, Studios, Schools
+    DatingEscortServices,       //Dating/Escort Services
+    DentistsOrthodontists,      //Dentists, Orthodontists
+    DepartmentStores,           //Department Stores
+    DetectiveAgencies,          //Detective Agencies
     DirectMarketingCatalogMerchant, //Direct Marketing - Catalog Merchant
     DirectMarketingCombinationCatalogAndRetailMerchant, //Direct Marketing - Combination Catalog and Retail Merchant
-    DirectMarketingInboundTelemarketing, //Direct Marketing - Inbound Telemarketing
-    DirectMarketingInsuranceServices, //Direct Marketing - Insurance Services
-    DirectMarketingOther, //Direct Marketing - Other
-    DirectMarketingOutboundTelemarketing, //Direct Marketing - Outbound Telemarketing
-    DirectMarketingSubscription, //Direct Marketing - Subscription
-    DirectMarketingTravel, //Direct Marketing - Travel
-    DiscountStores, //Discount Stores
-    Doctors, //Doctors
-    DoorToDoorSales, //Door-To-Door Sales
+    DirectMarketingInboundTelemarketing,                //Direct Marketing - Inbound Telemarketing
+    DirectMarketingInsuranceServices,                   //Direct Marketing - Insurance Services
+    DirectMarketingOther,                               //Direct Marketing - Other
+    DirectMarketingOutboundTelemarketing,               //Direct Marketing - Outbound Telemarketing
+    DirectMarketingSubscription,                        //Direct Marketing - Subscription
+    DirectMarketingTravel,                              //Direct Marketing - Travel
+    DiscountStores,                                     //Discount Stores
+    Doctors,                                            //Doctors
+    DoorToDoorSales,                                    //Door-To-Door Sales
     DraperyWindowCoveringAndUpholsteryStores, //Drapery, Window Covering, and Upholstery Stores
-    DrinkingPlaces, //Drinking Places
-    DrugStoresAndPharmacies, //Drug Stores and Pharmacies
+    DrinkingPlaces,                           //Drinking Places
+    DrugStoresAndPharmacies,                  //Drug Stores and Pharmacies
     DrugsDrugProprietariesAndDruggistSundries, //Drugs, Drug Proprietaries, and Druggist Sundries
-    DryCleaners, //Dry Cleaners
-    DurableGoods, //Durable Goods (Not Elsewhere Classified)
-    DutyFreeStores, //Duty Free Stores
-    EatingPlacesRestaurants, //Eating Places, Restaurants
-    EducationalServices, //Educational Services
-    ElectricRazorStores, //Electric Razor Stores
-    ElectricalPartsAndEquipment, //Electrical Parts and Equipment
-    ElectricalServices, //Electrical Services
-    ElectronicsRepairShops, //Electronics Repair Shops
-    ElectronicsStores, //Electronics Stores
-    ElementarySecondarySchools, //Elementary, Secondary Schools
-    EmploymentTempAgencies, //Employment/Temp Agencies
-    EquipmentRental, //Equipment Rental
-    ExterminatingServices, //Exterminating Services
-    FamilyClothingStores, //Family Clothing Stores
-    FastFoodRestaurants, //Fast Food Restaurants
-    FinancialInstitutions, //Financial Institutions
-    FinesGovernmentAdministrativeEntities, //Fines - Government Administrative Entities
+    DryCleaners,                              //Dry Cleaners
+    DurableGoods,                             //Durable Goods (Not Elsewhere Classified)
+    DutyFreeStores,                           //Duty Free Stores
+    EatingPlacesRestaurants,                  //Eating Places, Restaurants
+    EducationalServices,                      //Educational Services
+    ElectricRazorStores,                      //Electric Razor Stores
+    ElectricalPartsAndEquipment,              //Electrical Parts and Equipment
+    ElectricalServices,                       //Electrical Services
+    ElectronicsRepairShops,                   //Electronics Repair Shops
+    ElectronicsStores,                        //Electronics Stores
+    ElementarySecondarySchools,               //Elementary, Secondary Schools
+    EmploymentTempAgencies,                   //Employment/Temp Agencies
+    EquipmentRental,                          //Equipment Rental
+    ExterminatingServices,                    //Exterminating Services
+    FamilyClothingStores,                     //Family Clothing Stores
+    FastFoodRestaurants,                      //Fast Food Restaurants
+    FinancialInstitutions,                    //Financial Institutions
+    FinesGovernmentAdministrativeEntities,    //Fines - Government Administrative Entities
     FireplaceFireplaceScreensAndAccessoriesStores, //Fireplace, Fireplace Screens, and Accessories Stores
-    FloorCoveringStores, //Floor Covering Stores
-    Florists, //Florists
-    FloristsSuppliesNurseryStockAndFlowers, //Florists Supplies, Nursery Stock, and Flowers
-    FreezerAndLockerMeatProvisioners, //Freezer and Locker Meat Provisioners
-    FuelDealersNonAutomotive, //Fuel Dealers (Non Automotive)
-    FuneralServicesCrematories, //Funeral Services, Crematories
-    FurnitureRepairRefinishing, //Furniture Repair, Refinishing
+    FloorCoveringStores,                           //Floor Covering Stores
+    Florists,                                      //Florists
+    FloristsSuppliesNurseryStockAndFlowers,        //Florists Supplies, Nursery Stock, and Flowers
+    FreezerAndLockerMeatProvisioners,              //Freezer and Locker Meat Provisioners
+    FuelDealersNonAutomotive,                      //Fuel Dealers (Non Automotive)
+    FuneralServicesCrematories,                    //Funeral Services, Crematories
+    FurnitureRepairRefinishing,                    //Furniture Repair, Refinishing
     FurnitureHomeFurnishingsAndEquipmentStoresExceptAppliances, //Furniture, Home Furnishings, and Equipment Stores, Except Appliances
-    FurriersAndFurShops, //Furriers and Fur Shops
-    GeneralServices, //General Services
+    FurriersAndFurShops,                                        //Furriers and Fur Shops
+    GeneralServices,                                            //General Services
     GiftCardNoveltyAndSouvenirShops, //Gift, Card, Novelty, and Souvenir Shops
-    GlassPaintAndWallpaperStores, //Glass, Paint, and Wallpaper Stores
-    GlasswareCrystalStores, //Glassware, Crystal Stores
-    GolfCoursesPublic, //Golf Courses - Public
-    GovernmentServices, //Government Services (Not Elsewhere Classified)
-    GroceryStoresSupermarkets, //Grocery Stores, Supermarkets
-    HardwareStores, //Hardware Stores
-    HardwareEquipmentAndSupplies, //Hardware, Equipment, and Supplies
-    HealthAndBeautySpas, //Health and Beauty Spas
-    HearingAidsSalesAndSupplies, //Hearing Aids Sales and Supplies
-    HeatingPlumbingAC, //Heating, Plumbing, A/C
-    HobbyToyAndGameShops, //Hobby, Toy, and Game Shops
-    HomeSupplyWarehouseStores, //Home Supply Warehouse Stores
-    Hospitals, //Hospitals
-    HotelsMotelsAndResorts, //Hotels, Motels, and Resorts
-    HouseholdApplianceStores, //Household Appliance Stores
-    IndustrialSupplies, //Industrial Supplies (Not Elsewhere Classified)
-    InformationRetrievalServices, //Information Retrieval Services
-    InsuranceDefault, //Insurance - Default
-    InsuranceUnderwritingPremiums, //Insurance Underwriting, Premiums
-    IntraCompanyPurchases, //Intra-Company Purchases
+    GlassPaintAndWallpaperStores,    //Glass, Paint, and Wallpaper Stores
+    GlasswareCrystalStores,          //Glassware, Crystal Stores
+    GolfCoursesPublic,               //Golf Courses - Public
+    GovernmentServices,              //Government Services (Not Elsewhere Classified)
+    GroceryStoresSupermarkets,       //Grocery Stores, Supermarkets
+    HardwareStores,                  //Hardware Stores
+    HardwareEquipmentAndSupplies,    //Hardware, Equipment, and Supplies
+    HealthAndBeautySpas,             //Health and Beauty Spas
+    HearingAidsSalesAndSupplies,     //Hearing Aids Sales and Supplies
+    HeatingPlumbingAC,               //Heating, Plumbing, A/C
+    HobbyToyAndGameShops,            //Hobby, Toy, and Game Shops
+    HomeSupplyWarehouseStores,       //Home Supply Warehouse Stores
+    Hospitals,                       //Hospitals
+    HotelsMotelsAndResorts,          //Hotels, Motels, and Resorts
+    HouseholdApplianceStores,        //Household Appliance Stores
+    IndustrialSupplies,              //Industrial Supplies (Not Elsewhere Classified)
+    InformationRetrievalServices,    //Information Retrieval Services
+    InsuranceDefault,                //Insurance - Default
+    InsuranceUnderwritingPremiums,   //Insurance Underwriting, Premiums
+    IntraCompanyPurchases,           //Intra-Company Purchases
     JewelryStoresWatchesClocksAndSilverwareStores, //Jewelry Stores, Watches, Clocks, and Silverware Stores
-    LandscapingServices, //Landscaping Services
-    Laundries, //Laundries
-    LaundryCleaningServices, //Laundry, Cleaning Services
-    LegalServicesAttorneys, //Legal Services, Attorneys
-    LuggageAndLeatherGoodsStores, //Luggage and Leather Goods Stores
-    LumberBuildingMaterialsStores, //Lumber, Building Materials Stores
-    ManualCashDisburse, //Manual Cash Disburse
-    MarinasServiceAndSupplies, //Marinas, Service and Supplies
-    MasonryStoneworkAndPlaster, //Masonry, Stonework, and Plaster
-    MassageParlors, //Massage Parlors
-    MeansWomensClothingStores, //Means, Womens Clothing Stores
-    MedicalServices, //Medical Services
-    MedicalAndDentalLabs, //Medical and Dental Labs
+    LandscapingServices,                           //Landscaping Services
+    Laundries,                                     //Laundries
+    LaundryCleaningServices,                       //Laundry, Cleaning Services
+    LegalServicesAttorneys,                        //Legal Services, Attorneys
+    LuggageAndLeatherGoodsStores,                  //Luggage and Leather Goods Stores
+    LumberBuildingMaterialsStores,                 //Lumber, Building Materials Stores
+    ManualCashDisburse,                            //Manual Cash Disburse
+    MarinasServiceAndSupplies,                     //Marinas, Service and Supplies
+    MasonryStoneworkAndPlaster,                    //Masonry, Stonework, and Plaster
+    MassageParlors,                                //Massage Parlors
+    MeansWomensClothingStores,                     //Means, Womens Clothing Stores
+    MedicalServices,                               //Medical Services
+    MedicalAndDentalLabs,                          //Medical and Dental Labs
     MedicalDentalOphthalmicAndHospitalEquipmentAndSupplies, //Medical, Dental, Ophthalmic, and Hospital Equipment and Supplies
-    MembershipOrganizations, //Membership Organizations
+    MembershipOrganizations,                                //Membership Organizations
     MensAndBoysClothingAndAccessoriesStores, //Mens and Boys Clothing and Accessories Stores
-    MetalServiceCenters, //Metal Service Centers
-    MiscellaneousApparelAndAccessoryShops, //Miscellaneous Apparel and Accessory Shops
-    MiscellaneousAutoDealers, //Miscellaneous Auto Dealers
-    MiscellaneousBusinessServices, //Miscellaneous Business Services
+    MetalServiceCenters,                     //Metal Service Centers
+    MiscellaneousApparelAndAccessoryShops,   //Miscellaneous Apparel and Accessory Shops
+    MiscellaneousAutoDealers,                //Miscellaneous Auto Dealers
+    MiscellaneousBusinessServices,           //Miscellaneous Business Services
     MiscellaneousFoodStores, //Miscellaneous Food Stores - Convenience Stores and Specialty Markets
     MiscellaneousGeneralMerchandise, //Miscellaneous General Merchandise
     MiscellaneousGeneralServices, //Miscellaneous General Services
@@ -181,112 +180,112 @@ pub enum MerchantCategories {
     MiscellaneousRecreationServices, //Miscellaneous Recreation Services
     MiscellaneousRepairShops, //Miscellaneous Repair Shops
     MiscellaneousSpecialtyRetail, //Miscellaneous Specialty Retail
-    MobileHomeDealers, //Mobile Home Dealers
-    MotionPictureTheaters, //Motion Picture Theaters
+    MobileHomeDealers,       //Mobile Home Dealers
+    MotionPictureTheaters,   //Motion Picture Theaters
     MotorFreightCarriersAndTrucking, //Motor Freight Carriers and Trucking - Local and Long Distance, Moving and Storage Companies, and Local Delivery Services
-    MotorHomesDealers, //Motor Homes Dealers
+    MotorHomesDealers,               //Motor Homes Dealers
     MotorVehicleSuppliesAndNewParts, //Motor Vehicle Supplies and New Parts
-    MotorcycleShopsAndDealers, //Motorcycle Shops and Dealers
-    MotorcycleShopsDealers, //Motorcycle Shops, Dealers
+    MotorcycleShopsAndDealers,       //Motorcycle Shops and Dealers
+    MotorcycleShopsDealers,          //Motorcycle Shops, Dealers
     MusicStoresMusicalInstrumentsPianosAndSheetMusic, //Music Stores-Musical Instruments, Pianos, and Sheet Music
-    NewsDealersAndNewsstands, //News Dealers and Newsstands
-    NonFiMoneyOrders, //Non-FI, Money Orders
-    NonFiStoredValueCardPurchaseLoad, //Non-FI, Stored Value Card Purchase/Load
-    NondurableGoods, //Nondurable Goods (Not Elsewhere Classified)
-    NurseriesLawnAndGardenSupplyStores, //Nurseries, Lawn and Garden Supply Stores
-    NursingPersonalCare, //Nursing/Personal Care
-    OfficeAndCommercialFurniture, //Office and Commercial Furniture
-    OpticiansEyeglasses, //Opticians, Eyeglasses
-    OptometristsOphthalmologist, //Optometrists, Ophthalmologist
-    OrthopedicGoodsProstheticDevices, //Orthopedic Goods - Prosthetic Devices
-    Osteopaths, //Osteopaths
-    PackageStoresBeerWineAndLiquor, //Package Stores-Beer, Wine, and Liquor
-    PaintsVarnishesAndSupplies, //Paints, Varnishes, and Supplies
-    ParkingLotsGarages, //Parking Lots, Garages
-    PassengerRailways, //Passenger Railways
-    PawnShops, //Pawn Shops
-    PetShopsPetFoodAndSupplies, //Pet Shops, Pet Food, and Supplies
-    PetroleumAndPetroleumProducts, //Petroleum and Petroleum Products
-    PhotoDeveloping, //Photo Developing
-    PhotographicStudios, //Photographic Studios
+    NewsDealersAndNewsstands,                         //News Dealers and Newsstands
+    NonFiMoneyOrders,                                 //Non-FI, Money Orders
+    NonFiStoredValueCardPurchaseLoad,                 //Non-FI, Stored Value Card Purchase/Load
+    NondurableGoods,                                  //Nondurable Goods (Not Elsewhere Classified)
+    NurseriesLawnAndGardenSupplyStores,               //Nurseries, Lawn and Garden Supply Stores
+    NursingPersonalCare,                              //Nursing/Personal Care
+    OfficeAndCommercialFurniture,                     //Office and Commercial Furniture
+    OpticiansEyeglasses,                              //Opticians, Eyeglasses
+    OptometristsOphthalmologist,                      //Optometrists, Ophthalmologist
+    OrthopedicGoodsProstheticDevices,                 //Orthopedic Goods - Prosthetic Devices
+    Osteopaths,                                       //Osteopaths
+    PackageStoresBeerWineAndLiquor,                   //Package Stores-Beer, Wine, and Liquor
+    PaintsVarnishesAndSupplies,                       //Paints, Varnishes, and Supplies
+    ParkingLotsGarages,                               //Parking Lots, Garages
+    PassengerRailways,                                //Passenger Railways
+    PawnShops,                                        //Pawn Shops
+    PetShopsPetFoodAndSupplies,                       //Pet Shops, Pet Food, and Supplies
+    PetroleumAndPetroleumProducts,                    //Petroleum and Petroleum Products
+    PhotoDeveloping,                                  //Photo Developing
+    PhotographicStudios,                              //Photographic Studios
     PhotographicPhotocopyMicrofilmEquipmentAndSupplies, //Photographic, Photocopy, Microfilm Equipment, and Supplies
-    PictureVideoProduction, //Picture/Video Production
-    PieceGoodsNotionsAndOtherDryGoods, //Piece Goods, Notions, and Other Dry Goods
-    PlumbingHeatingEquipmentAndSupplies, //Plumbing, Heating Equipment, and Supplies
-    PoliticalOrganizations, //Political Organizations
-    PostalServicesGovernmentOnly, //Postal Services - Government Only
+    PictureVideoProduction,                             //Picture/Video Production
+    PieceGoodsNotionsAndOtherDryGoods,                  //Piece Goods, Notions, and Other Dry Goods
+    PlumbingHeatingEquipmentAndSupplies,                //Plumbing, Heating Equipment, and Supplies
+    PoliticalOrganizations,                             //Political Organizations
+    PostalServicesGovernmentOnly,                       //Postal Services - Government Only
     PreciousStonesAndMetalsWatchesAndJewelry, //Precious Stones and Metals, Watches and Jewelry
-    ProfessionalServices, //Professional Services
+    ProfessionalServices,                     //Professional Services
     PublicWarehousingAndStorage, //Public Warehousing and Storage - Farm Products, Refrigerated Goods, Household Goods, and Storage
-    QuickCopyReproAndBlueprint, //Quick Copy, Repro, and Blueprint
-    Railroads, //Railroads
+    QuickCopyReproAndBlueprint,  //Quick Copy, Repro, and Blueprint
+    Railroads,                   //Railroads
     RealEstateAgentsAndManagersRentals, //Real Estate Agents and Managers - Rentals
-    RecordStores, //Record Stores
-    RecreationalVehicleRentals, //Recreational Vehicle Rentals
-    ReligiousGoodsStores, //Religious Goods Stores
-    ReligiousOrganizations, //Religious Organizations
-    RoofingSidingSheetMetal, //Roofing/Siding, Sheet Metal
-    SecretarialSupportServices, //Secretarial Support Services
-    SecurityBrokersDealers, //Security Brokers/Dealers
-    ServiceStations, //Service Stations
+    RecordStores,                //Record Stores
+    RecreationalVehicleRentals,  //Recreational Vehicle Rentals
+    ReligiousGoodsStores,        //Religious Goods Stores
+    ReligiousOrganizations,      //Religious Organizations
+    RoofingSidingSheetMetal,     //Roofing/Siding, Sheet Metal
+    SecretarialSupportServices,  //Secretarial Support Services
+    SecurityBrokersDealers,      //Security Brokers/Dealers
+    ServiceStations,             //Service Stations
     SewingNeedleworkFabricAndPieceGoodsStores, //Sewing, Needlework, Fabric, and Piece Goods Stores
-    ShoeRepairHatCleaning, //Shoe Repair/Hat Cleaning
-    ShoeStores, //Shoe Stores
-    SmallApplianceRepair, //Small Appliance Repair
-    SnowmobileDealers, //Snowmobile Dealers
-    SpecialTradeServices, //Special Trade Services
-    SpecialtyCleaning, //Specialty Cleaning
-    SportingGoodsStores, //Sporting Goods Stores
-    SportingRecreationCamps, //Sporting/Recreation Camps
-    SportsClubsFields, //Sports Clubs/Fields
+    ShoeRepairHatCleaning,       //Shoe Repair/Hat Cleaning
+    ShoeStores,                  //Shoe Stores
+    SmallApplianceRepair,        //Small Appliance Repair
+    SnowmobileDealers,           //Snowmobile Dealers
+    SpecialTradeServices,        //Special Trade Services
+    SpecialtyCleaning,           //Specialty Cleaning
+    SportingGoodsStores,         //Sporting Goods Stores
+    SportingRecreationCamps,     //Sporting/Recreation Camps
+    SportsClubsFields,           //Sports Clubs/Fields
     SportsAndRidingApparelStores, //Sports and Riding Apparel Stores
-    StampAndCoinStores, //Stamp and Coin Stores
+    StampAndCoinStores,          //Stamp and Coin Stores
     StationaryOfficeSuppliesPrintingAndWritingPaper, //Stationary, Office Supplies, Printing and Writing Paper
     StationeryStoresOfficeAndSchoolSupplyStores, //Stationery Stores, Office, and School Supply Stores
-    SwimmingPoolsSales, //Swimming Pools Sales
-    TUiTravelGermany, //TUI Travel - Germany
-    TailorsAlterations, //Tailors, Alterations
-    TaxPaymentsGovernmentAgencies, //Tax Payments - Government Agencies
-    TaxPreparationServices, //Tax Preparation Services
-    TaxicabsLimousines, //Taxicabs/Limousines
+    SwimmingPoolsSales,                          //Swimming Pools Sales
+    TUiTravelGermany,                            //TUI Travel - Germany
+    TailorsAlterations,                          //Tailors, Alterations
+    TaxPaymentsGovernmentAgencies,               //Tax Payments - Government Agencies
+    TaxPreparationServices,                      //Tax Preparation Services
+    TaxicabsLimousines,                          //Taxicabs/Limousines
     TelecommunicationEquipmentAndTelephoneSales, //Telecommunication Equipment and Telephone Sales
-    TelecommunicationServices, //Telecommunication Services
-    TelegraphServices, //Telegraph Services
-    TentAndAwningShops, //Tent and Awning Shops
-    TestingLaboratories, //Testing Laboratories
-    TheatricalTicketAgencies, //Theatrical Ticket Agencies
-    Timeshares, //Timeshares
-    TireRetreadingAndRepair, //Tire Retreading and Repair
-    TollsBridgeFees, //Tolls/Bridge Fees
-    TouristAttractionsAndExhibits, //Tourist Attractions and Exhibits
-    TowingServices, //Towing Services
-    TrailerParksCampgrounds, //Trailer Parks, Campgrounds
+    TelecommunicationServices,                   //Telecommunication Services
+    TelegraphServices,                           //Telegraph Services
+    TentAndAwningShops,                          //Tent and Awning Shops
+    TestingLaboratories,                         //Testing Laboratories
+    TheatricalTicketAgencies,                    //Theatrical Ticket Agencies
+    Timeshares,                                  //Timeshares
+    TireRetreadingAndRepair,                     //Tire Retreading and Repair
+    TollsBridgeFees,                             //Tolls/Bridge Fees
+    TouristAttractionsAndExhibits,               //Tourist Attractions and Exhibits
+    TowingServices,                              //Towing Services
+    TrailerParksCampgrounds,                     //Trailer Parks, Campgrounds
     TransportationServices, //Transportation Services (Not Elsewhere Classified)
     TravelAgenciesTourOperators, //Travel Agencies, Tour Operators
-    TruckStopIteration, //Truck StopIteration
+    TruckStopIteration,     //Truck StopIteration
     TruckUtilityTrailerRentals, //Truck/Utility Trailer Rentals
     TypesettingPlateMakingAndRelatedServices, //Typesetting, Plate Making, and Related Services
-    TypewriterStores, //Typewriter Stores
+    TypewriterStores,       //Typewriter Stores
     USFederalGovernmentAgenciesOrDepartments, //U.S. Federal Government Agencies or Departments
     UniformsCommercialClothing, //Uniforms, Commercial Clothing
     UsedMerchandiseAndSecondhandStores, //Used Merchandise and Secondhand Stores
-    Utilities, //Utilities
-    VarietyStores, //Variety Stores
-    VeterinaryServices, //Veterinary Services
+    Utilities,              //Utilities
+    VarietyStores,          //Variety Stores
+    VeterinaryServices,     //Veterinary Services
     VideoAmusementGameSupplies, //Video Amusement Game Supplies
-    VideoGameArcades, //Video Game Arcades
-    VideoTapeRentalStores, //Video Tape Rental Stores
+    VideoGameArcades,       //Video Game Arcades
+    VideoTapeRentalStores,  //Video Tape Rental Stores
     VocationalTradeSchools, //Vocational/Trade Schools
-    WatchJewelryRepair, //Watch/Jewelry Repair
-    WeldingRepair, //Welding Repair
-    WholesaleClubs, //Wholesale Clubs
-    WigAndToupeeStores, //Wig and Toupee Stores
-    WiresMoneyOrders, //Wires, Money Orders
+    WatchJewelryRepair,     //Watch/Jewelry Repair
+    WeldingRepair,          //Welding Repair
+    WholesaleClubs,         //Wholesale Clubs
+    WigAndToupeeStores,     //Wig and Toupee Stores
+    WiresMoneyOrders,       //Wires, Money Orders
     WomensAccessoryAndSpecialtyShops, //Womens Accessory and Specialty Shops
     WomensReadyToWearStores, //Womens Ready-To-Wear Stores
     WreckingAndSalvageYards, //Wrecking and Salvage Yards
     #[serde(other, skip_serializing)]
-    Unknown
+    Unknown,
 }
 
 impl MerchantCategories {
@@ -575,7 +574,7 @@ impl MerchantCategories {
             MerchantCategories::WomensAccessoryAndSpecialtyShops => 5631,
             MerchantCategories::WomensReadyToWearStores => 5621,
             MerchantCategories::WreckingAndSalvageYards => 5935,
-            MerchantCategories::Unknown => 0
+            MerchantCategories::Unknown => 0,
         }
     }
 
@@ -864,7 +863,7 @@ impl MerchantCategories {
             5631 => MerchantCategories::WomensAccessoryAndSpecialtyShops,
             5621 => MerchantCategories::WomensReadyToWearStores,
             5935 => MerchantCategories::WreckingAndSalvageYards,
-            _ => MerchantCategories::Unknown
+            _ => MerchantCategories::Unknown,
         }
     }
 }

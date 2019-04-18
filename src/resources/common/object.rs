@@ -1,6 +1,5 @@
-
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum Object {
     #[serde(rename = "issuing.authorization")]
     Authorization,
@@ -58,7 +57,7 @@ pub enum Object {
     SKU,
     ScheduledQueryRun,
     #[serde(other, skip_serializing)]
-    Unknown
+    Unknown,
 }
 
 //impl Default for Object {

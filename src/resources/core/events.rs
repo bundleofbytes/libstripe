@@ -1,28 +1,28 @@
-use crate::resources::common::object::Object;
-use crate::resources::core::charges::Charge;
-use crate::resources::billing::invoices::Invoice;
-use crate::resources::billing::invoiceitems::InvoiceItems;
-use crate::resources::billing::subscriptions::{Subscription, SubscriptionItems};
-use crate::resources::paymentmethods::cards::Card;
-use crate::resources::core::customer::Customer;
 use crate::resources::billing::coupons::Coupon;
-use crate::resources::core::balance::Balance;
+use crate::resources::billing::discounts::Discount;
+use crate::resources::billing::invoiceitems::InvoiceItems;
+use crate::resources::billing::invoices::Invoice;
 use crate::resources::billing::plans::Plans;
+use crate::resources::billing::subscriptions::{Subscription, SubscriptionItems};
+use crate::resources::common::object::Object;
+
+use crate::resources::common::path::UrlPath;
+use crate::resources::connect::transfers::Transfer;
+use crate::resources::core::balance::Balance;
+use crate::resources::core::charges::Charge;
+use crate::resources::core::customer::Customer;
 use crate::resources::core::disputes::Dispute;
 use crate::resources::core::payout::Payout;
+use crate::resources::core::product::Products;
 use crate::resources::core::refunds::Refund;
 use crate::resources::core::tokens::Tokens;
-use crate::resources::paymentmethods::bank::BankAccount;
-use crate::resources::paymentmethods::source::Source;
-use crate::resources::connect::transfers::Transfer;
-use crate::resources::billing::discounts::Discount;
-use crate::resources::core::product::Products;
-use crate::resources::orders::sku::Sku;
-use crate::{StripeService, Client};
-use crate::resources::common::path::UrlPath;
-use crate::util::List;
 use crate::resources::orders::order::{Order, OrderReturn};
-use crate::resources::common::path::StripePath;
+use crate::resources::orders::sku::Sku;
+use crate::resources::paymentmethods::bank::BankAccount;
+use crate::resources::paymentmethods::cards::Card;
+use crate::resources::paymentmethods::source::Source;
+use crate::util::List;
+use crate::{Client};
 
 #[derive(Debug, PartialEq, Deserialize)]
 pub enum EventType {
@@ -283,7 +283,7 @@ pub struct Event {
     pub pending_webhooks: i64,
     pub request: EventRequest,
     #[serde(rename = "type")]
-    pub event_type: EventType, 
+    pub event_type: EventType,
 }
 
 #[derive(Debug, Deserialize)]
@@ -295,11 +295,11 @@ pub struct EventRequest {
 #[derive(Debug, Deserialize)]
 pub struct EventData {
     pub object: EventObject,
-    pub previous_attributes: Option<String>
+    pub previous_attributes: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(untagged, rename_all="snake_case")]
+#[serde(untagged, rename_all = "snake_case")]
 pub enum EventObject {
     Charge(Charge),
     Invoice(Invoice),
@@ -326,15 +326,12 @@ pub enum EventObject {
     Sku(Sku),
 }
 
-impl StripeService for Event {}
-
 impl Event {
-
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Events, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Events, vec![id], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Events, &StripePath::default(), param)
-    } 
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Events, vec![], param)
+    }
 }

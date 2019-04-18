@@ -1,13 +1,13 @@
 use crate::resources::common::object::Object;
+use crate::resources::common::path::{UrlPath};
 use crate::resources::core::charges::BillingDetails;
-use crate::resources::paymentmethods::cards::{CardBrand, CardType, CardCheck};
-use std::collections::HashMap;
 use crate::resources::paymentmethods::bank::AccountHolderType;
-use crate::resources::common::path::{StripePath, UrlPath};
+use crate::resources::paymentmethods::cards::{CardBrand, CardCheck, CardType};
 use crate::resources::paymentmethods::source::PaymentSourceParam;
-use crate::{StripeService, Client};
 use crate::util::List;
+use crate::{Client};
 use serde::{Deserialize, Deserializer};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct PaymentMethods {
@@ -20,7 +20,7 @@ pub struct PaymentMethods {
     pub customer: String,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub payment_method_type: PaymentMethodsType,
 }
 
@@ -36,28 +36,58 @@ pub struct PaymentCard {
     pub generated_from: Option<String>,
     pub last4: String,
     pub three_d_secure_usage: ThreeDSecureUsage,
-    pub wallet: Option<String>
+    pub wallet: Option<String>,
 }
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct ThreeDSecureUsage {
-    pub supported: bool
+    pub supported: bool,
 }
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct GenerateFrom {
     pub charge: String,
-    pub payment_method_details: PaymentMethodsDetails
+    pub payment_method_details: PaymentMethodsDetails,
 }
 
 #[derive(Debug, Deserialize, Clone)]
-#[serde(remote = "Self", rename_all="snake_case")]
+#[serde(remote = "Self", rename_all = "snake_case")]
 pub enum PaymentMethodsDetails {
-    AchCreditTransfer { account_number: String, bank_name: String, routing_number: String, swift_code: String },
-    AchDebit { account_holder_type: AccountHolderType,  bank_name: String, country: String, fingerprint: String, last4: String, routing_number: String },
+    AchCreditTransfer {
+        account_number: String,
+        bank_name: String,
+        routing_number: String,
+        swift_code: String,
+    },
+    AchDebit {
+        account_holder_type: AccountHolderType,
+        bank_name: String,
+        country: String,
+        fingerprint: String,
+        last4: String,
+        routing_number: String,
+    },
     AliPay,
-    BanContact { bank_code: String, bank_name: String, bic: String, iban_last4: String, preferred_language: String, verified_name: String },
-    Card { brand: String, checks: ChargeChecks, country: String, exp_month: i32, exp_year: i32, fingerprint: String, funding: CardType, last4: String, three_d_secure: Option<String>, wallet: Option<String> },
+    BanContact {
+        bank_code: String,
+        bank_name: String,
+        bic: String,
+        iban_last4: String,
+        preferred_language: String,
+        verified_name: String,
+    },
+    Card {
+        brand: String,
+        checks: ChargeChecks,
+        country: String,
+        exp_month: i32,
+        exp_year: i32,
+        fingerprint: String,
+        funding: CardType,
+        last4: String,
+        three_d_secure: Option<String>,
+        wallet: Option<String>,
+    },
     //TODO: Complete
 }
 
@@ -82,7 +112,7 @@ pub struct ChargeChecks {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum PaymentMethodsType {
     Card,
     CardPresent,
@@ -90,7 +120,7 @@ pub enum PaymentMethodsType {
 
 #[derive(Serialize, Debug)]
 pub struct PaymentMethodsParam<'a> {
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub payment_method_type: Option<PaymentMethodsType>,
     pub billing_details: Option<BillingDetails>,
     pub card: Option<PaymentSourceParam<'a>>,
@@ -111,33 +141,28 @@ pub struct PaymentMethodsListParams {
     pub starting_after: Option<String>,
 }
 
-impl StripeService for PaymentMethods {}
-impl<'a> StripeService for PaymentMethodsParam<'a> {}
-impl StripeService for PaymentMethodsListParams {}
-
 impl PaymentMethods {
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentMethods, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentMethods, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::PaymentMethods, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::PaymentMethods, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentMethods, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentMethods, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client,  param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::PaymentMethods, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::PaymentMethods, vec![], param)
     }
 
-    pub fn attach<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentMethods, &StripePath::default().param(id).param("attach"), param)
+    pub fn attach<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentMethods, vec![id, "attach"], param)
     }
 
-    pub fn detach<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::PaymentMethods, &StripePath::default().param(id).param("attach"), param)
+    pub fn detach<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::PaymentMethods, vec![id, "attach"], param)
     }
-
 }

@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
-use crate::resources::issuing::cardholders::Billing;
-use std::collections::HashMap;
 use crate::resources::billing::subscriptions::{BillingThresholds, SubscriptionBilling};
-use crate::{StripeService, Client};
-use crate::resources::common::path::{UrlPath, StripePath};
+use crate::resources::common::object::Object;
+use crate::resources::common::path::{UrlPath};
+use crate::resources::issuing::cardholders::Billing;
 use crate::util::List;
+use crate::Client;
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SubscriptionSchedules {
@@ -27,12 +27,12 @@ pub struct SubscriptionSchedules {
     pub renewal_interval: Option<RenewalInterval>,
     pub revision: String,
     pub status: SubscriptionSchedulesStatus,
-    pub subscription: Option<String>
+    pub subscription: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InvoiceSettings {
-    pub days_until_due: i64
+    pub days_until_due: i64,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
@@ -51,36 +51,36 @@ pub struct Phase {
 pub struct PhasePlans {
     pub billing_thresholds: Option<BillingThresholds>,
     pub plan: Option<String>,
-    pub quantity: Option<i64>
+    pub quantity: Option<i64>,
 }
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CurrentPhase {
     pub start_date: i64,
-    pub end_date: i64
+    pub end_date: i64,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct RenewalInterval {
     pub interval: Option<String>,
-    pub length: Option<i64>
+    pub length: Option<i64>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum SubscriptionSchedulesStatus {
     NotStarted,
     Active,
     Completed,
     Released,
-    Canceled
+    Canceled,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum RenewalBehavior {
     None,
     Renew,
-    Release
+    Release,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -110,36 +110,39 @@ pub struct SubscriptionSchedulesParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prorate: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub preserve_cancel_date: Option<i64>
+    pub preserve_cancel_date: Option<i64>,
 }
 
-impl StripeService for SubscriptionSchedules {}
-impl<'a> StripeService for SubscriptionSchedulesParam<'a> {}
-
-
 impl SubscriptionSchedules {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::SubscriptionSchedules, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::SubscriptionSchedules, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::SubscriptionSchedules, &StripePath::default().param(id), Self::object())
+        client.get(
+            UrlPath::SubscriptionSchedules,
+            vec![id],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::SubscriptionSchedules, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::SubscriptionSchedules, vec![id], param)
     }
 
-    pub fn cancel<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.delete(UrlPath::SubscriptionSchedules, &StripePath::default().param(id).param("cancel"), param)
+    pub fn cancel<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.delete(UrlPath::SubscriptionSchedules, vec![id, "cancel"], param)
     }
 
-    pub fn release<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::SubscriptionSchedules, &StripePath::default().param(id).param("release"), param)
+    pub fn release<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::SubscriptionSchedules, vec![id, "release"], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::SubscriptionSchedules, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::SubscriptionSchedules, vec![], param)
     }
 }

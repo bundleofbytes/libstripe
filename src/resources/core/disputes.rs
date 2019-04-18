@@ -1,15 +1,13 @@
-
-
 //TODO: Impl fileupload for disputes for submitting evidence via API
 
-use crate::resources::common::object::Object;
-use crate::resources::core::balance::BalanceTransaction;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::util::{RangeQuery, List};
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::core::balance::BalanceTransaction;
+use crate::util::{List, RangeQuery};
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct Evidence {
@@ -66,7 +64,7 @@ pub struct Evidence {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uncategorized_file: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub uncategorized_text: Option<String>
+    pub uncategorized_text: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -74,7 +72,7 @@ pub struct EvidenceDetails {
     pub due_by: i64,
     pub has_evidence: bool,
     pub past_due: bool,
-    pub submission_count: i64
+    pub submission_count: i64,
 }
 
 #[derive(Deserialize, Debug)]
@@ -97,53 +95,34 @@ pub struct Dispute {
 }
 
 #[derive(Deserialize, Debug)]
+#[serde(rename_all="snake_case")]
 pub enum DisputeReason {
-    #[serde(rename = "duplicate")]
     Duplicate,
-    #[serde(rename = "fraudulent")]
     Fraudulent,
-    #[serde(rename = "subscription_canceled")]
     SubscriptionCanceled,
-    #[serde(rename = "product_unacceptable")]
     ProductUnacceptable,
-    #[serde(rename = "product_not_received")]
     ProductNotReceived,
-    #[serde(rename = "unrecognized")]
     Unrecognized,
-    #[serde(rename = "credit_not_processed")]
     CreditNotProcessed,
-    #[serde(rename = "general")]
     General,
-    #[serde(rename = "incorrect_account_details")]
     IncorrectAccountDetails,
-    #[serde(rename = "insufficient_funds")]
     InsufficientFunds,
-    #[serde(rename = "bank_cannot_process")]
     BankCannotProcess,
-    #[serde(rename = "debit_not_authorized")]
     DebitNotAuthorized,
-    #[serde(rename = "customer_initiated")]
-    CustomerInitiated
+    CustomerInitiated,
 }
 
 #[derive(Deserialize, Debug)]
+#[serde(rename_all="snake_case")]
 pub enum DisputeStatus {
-    #[serde(rename = "warning_needs_response")]
     WarningNeedsResponse,
-    #[serde(rename = "warning_under_review")]
     WarningUnderReview,
-    #[serde(rename = "warning_closed")]
     WarningClosed,
-    #[serde(rename = "needs_response")]
     NeedsResponse,
-    #[serde(rename = "under_review")]
     UnderReview,
-    #[serde(rename = "charge_refunded")]
     ChargeRefunded,
-    #[serde(rename = "won")]
     Won,
-    #[serde(rename = "lost")]
-    Lost
+    Lost,
 }
 
 #[derive(Default, Serialize, Deserialize, Debug)]
@@ -153,7 +132,7 @@ pub struct DisputeParam {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub submit: Option<bool>
+    pub submit: Option<bool>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -168,26 +147,20 @@ pub struct DisputeListParam<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for Dispute {}
-impl StripeService for DisputeParam {}
-impl<'a> StripeService for DisputeListParam<'a> {}
-
 impl Dispute {
-    
-    pub fn retrieve(client: &Client, dispute_id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Disputes, &StripePath::default().param(dispute_id), Self::object())
+    pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
+        client.get(UrlPath::Disputes, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, dispute_id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Disputes, &StripePath::default().param(dispute_id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Disputes, vec![id], param)
     }
 
-    pub fn close(client: &Client, dispute_id: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Disputes, &StripePath::default().param(dispute_id).param("close"), Self::object())
+    pub fn close(client: &Client, id: &str) -> crate::Result<Self> {
+        client.post(UrlPath::Disputes, vec![id, "close"], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Disputes, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Disputes, vec![], param)
     }
-
 }

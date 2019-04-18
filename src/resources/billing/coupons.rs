@@ -1,14 +1,9 @@
-use crate::{
-    resources::common::{
-        object::Object,
-        currency::Currency,
-        path::{UrlPath, StripePath}
-    },
-    util::{RangeQuery, Deleted, List},
-    StripeService, Client
-};
+use crate::resources::common::object::Object;
+use crate::resources::common::currency::Currency;
 use std::collections::HashMap;
-
+use crate::util::{RangeQuery, Deleted, List};
+use crate::Client;
+use crate::resources::common::path::UrlPath;
 
 #[derive(Debug, Deserialize)]
 pub struct Coupon {
@@ -26,15 +21,15 @@ pub struct Coupon {
     pub percent_off: Option<f32>,
     pub redeem_by: Option<i64>,
     pub times_redeemed: i32,
-    pub valid: bool
+    pub valid: bool,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum Duration {
     Forever,
     Once,
-    Repeating
+    Repeating,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -71,30 +66,28 @@ pub struct CouponListParam<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for Coupon {}
-impl<'a> StripeService for CouponParam<'a> {}
-impl<'a> StripeService for CouponListParam<'a> {}
-
 impl Coupon {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Coupons, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Coupons, vec![], param)
     }
 
     pub fn retrieve(client: &Client, coupon: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Coupons, &StripePath::default().param(coupon), Self::object())
+        client.get(UrlPath::Coupons, vec![coupon], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, coupon: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Coupons, &StripePath::default().param(coupon), param)
+    pub fn update<B: serde::Serialize>(
+        client: &Client,
+        coupon: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Coupons, vec![coupon], param)
     }
 
     pub fn delete(client: &Client, coupon: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Coupons, &StripePath::default().param(coupon), Self::object())
+        client.delete(UrlPath::Coupons, vec![coupon], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Coupons, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Coupons, vec![], param)
     }
-
 }

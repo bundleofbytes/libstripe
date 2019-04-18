@@ -1,11 +1,11 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::address::Address;
-use std::collections::HashMap;
+use crate::resources::common::object::Object;
+use crate::resources::common::path::{UrlPath};
 use crate::resources::connect::account::Requirements;
-use serde::Serialize;
-use crate::{StripeService, Client};
-use crate::resources::common::path::{UrlPath, StripePath};
 use crate::util::{Deleted, List};
+use crate::{Client};
+use serde::Serialize;
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Persons {
@@ -32,7 +32,7 @@ pub struct Persons {
     pub relationship: Relationship,
     pub requirements: Requirements,
     pub ssn_last_4_provided: bool,
-    pub verification: AccountVerification
+    pub verification: AccountVerification,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -45,12 +45,11 @@ pub struct Relationship {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum Gender {
     Male,
-    Female
+    Female,
 }
-
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct DayOfBirth {
@@ -64,7 +63,7 @@ pub struct AccountVerification {
     pub details: Option<String>,
     pub details_code: Option<DetailsCode>,
     pub status: Option<DocumentStatus>,
-    pub document: Option<Document>
+    pub document: Option<Document>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -76,15 +75,15 @@ pub struct Document {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum DocumentStatus {
     Unverified,
     Pending,
-    Verified
+    Verified,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum DetailsCode {
     DocumentCorrupt,
     DocumentFailedCopy,
@@ -150,7 +149,7 @@ pub struct PersonsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssn_last_4: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub verification: Option<AccountVerification>
+    pub verification: Option<AccountVerification>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -165,30 +164,37 @@ pub struct PersonsListParams<'a> {
     pub relationship: Option<Relationship>,
 }
 
-impl StripeService for Persons {}
-impl<'a> StripeService for PersonsParam<'a> {}
-impl<'a> StripeService for PersonsListParams<'a> {}
-
 impl Persons {
-
-    pub fn create<B: Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Accounts, &StripePath::default().param(id).param("persons"), param)
+    pub fn create<B: Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Accounts, vec![id, "persons"], param)
     }
 
     pub fn retrieve(client: &Client, aid: &str, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Accounts, &StripePath::default().param(aid).param("persons").param(id), Self::object())
+        client.get(
+            UrlPath::Accounts,
+            vec![aid, "persons", id],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn update<B: Serialize + StripeService>(client: &Client, aid: &str, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Accounts, &StripePath::default().param(aid).param("persons").param(id), param)
+    pub fn update<B: Serialize>(
+        client: &Client,
+        aid: &str,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Accounts, vec![aid, "persons", id], param)
     }
 
     pub fn delete(client: &Client, aid: &str, id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Accounts, &StripePath::default().param(aid).param("persons").param(id), Self::object())
+        client.delete(
+            UrlPath::Accounts,
+            vec![aid, "persons", id],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn list<B: Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Accounts, &StripePath::default().param(id).param("persons"), param)
+    pub fn list<B: Serialize>(client: &Client, id: &str, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Accounts, vec![id, "persons"], param)
     }
-
 }

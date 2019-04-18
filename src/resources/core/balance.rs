@@ -1,15 +1,15 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use crate::util::{RangeQuery, List};
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::util::{List, RangeQuery};
+use crate::{Client};
 
 #[derive(Deserialize, Debug)]
 pub struct Balance {
     pub object: Object,
     pub available: Vec<BalanceSource>,
-    pub connect_reserved: Vec<BalanceSource>,
+    pub connect_reserved: Option<Vec<BalanceSource>>,
     pub pending: Vec<BalanceSource>,
     pub livemode: bool,
 }
@@ -18,14 +18,13 @@ pub struct Balance {
 pub struct BalanceSource {
     pub currency: Currency,
     pub amount: i64,
-    pub source_types: Option<BalanceSourceType>
+    pub source_types: Option<BalanceSourceType>,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct BalanceSourceType {
     pub card: Option<i64>,
     pub bank_account: Option<i64>,
-    pub bitcoin_receiver: Option<i64>
 }
 
 #[derive(Deserialize, Debug)]
@@ -43,19 +42,19 @@ pub struct BalanceTransaction {
     pub net: i64,
     pub source: String,
     pub status: BalanceStatus,
-    #[serde(rename="type")]
-    pub balance_type: BalanceType
+    #[serde(rename = "type")]
+    pub balance_type: BalanceType,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum BalanceStatus {
     Available,
-    Pending
+    Pending,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum BalanceType {
     Adjustment,
     ApplicationFee,
@@ -81,16 +80,16 @@ pub struct FeeDetails {
     pub application: Option<String>,
     pub currency: Currency,
     pub description: String,
-    #[serde(rename="type")]
-    pub fee_type: FeeType
+    #[serde(rename = "type")]
+    pub fee_type: FeeType,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum FeeType {
     ApplicationFee,
     StripeFee,
-    Tax
+    Tax,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -112,30 +111,26 @@ pub struct BalanceListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency: Option<Currency>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub balance_type: Option<BalanceType>,
 }
 
-impl StripeService for Balance {}
-impl StripeService for BalanceTransaction {}
-impl<'a> StripeService for BalanceListParams<'a> {}
-
 impl Balance {
-
     pub fn retrieve(client: &Client) -> crate::Result<Self> {
-        client.get(UrlPath::Balance, &StripePath::default(), Balance::object())
+        client.get(UrlPath::Balance, vec![], serde_json::Map::new())
     }
-
 }
 
 impl BalanceTransaction {
-
-    pub fn retrieve_transaction(client: &Client, txn: String) -> crate::Result<Self> {
-        client.get(UrlPath::Balance, &StripePath::default().param("history").param(txn), Balance::object())
+    pub fn retrieve_transaction(client: &Client, txn: &str) -> crate::Result<Self> {
+        client.get(
+            UrlPath::Balance,
+            vec!["history", txn],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Balance, &StripePath::default().param("history"), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Balance, vec!["history"], param)
     }
-
 }

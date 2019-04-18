@@ -1,13 +1,13 @@
-use crate::resources::common::object::Object;
-use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::resources::core::refunds::FailureReason;
 use crate::resources::common::address::Address;
+use crate::resources::common::currency::Currency;
+use crate::resources::common::object::Object;
+
+use crate::resources::common::path::UrlPath;
+use crate::resources::core::refunds::FailureReason;
 use crate::resources::paymentmethods::bank::{BankAccount, BankAccountParam};
 use crate::resources::paymentmethods::cards::{Card, CardParam};
-use crate::{StripeService, Client};
-use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Source {
@@ -28,7 +28,7 @@ pub struct Source {
     pub redirect: Option<SourceRedirect>,
     pub statement_descriptor: Option<String>,
     pub status: SourceStatus,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub source_type: SourceType,
     pub usage: SourceUsage,
 }
@@ -45,15 +45,15 @@ pub struct AchCreditTransfer {
 #[derive(Deserialize, Debug)]
 pub struct CodeVerification {
     pub attempts_remaining: i64,
-    pub status: VerificationStatus
+    pub status: VerificationStatus,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum VerificationStatus {
     Pending,
     Succeeded,
-    Failed
+    Failed,
 }
 
 #[derive(Deserialize, Debug)]
@@ -61,24 +61,24 @@ pub struct SourceRedirect {
     pub failure_reason: FailureReason,
     pub return_url: String,
     pub status: SourceRedirectStatus,
-    pub url: String
+    pub url: String,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum RedirectFailureReason {
     UserAbort,
     Declined,
-    ProcessingError
+    ProcessingError,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum SourceRedirectStatus {
     Pending,
     Succeeded,
     NotRequired,
-    Failed
+    Failed,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -104,33 +104,33 @@ pub struct SourceReceiver {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum SourceFlow {
     Redirect,
     Receiver,
     CodeVerification,
-    None
+    None,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum SourceUsage {
     Reusable,
-    SingleUse
+    SingleUse,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum SourceStatus {
     Canceled,
     Chargeable,
     Consumed,
     Failed,
-    Pending
+    Pending,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum SourceType {
     AchCreditTransfer,
     AchDebit,
@@ -148,7 +148,7 @@ pub enum SourceType {
     SepaDebit,
     Sofort,
     ThreeDSecure,
-    Wechat
+    Wechat,
 }
 
 #[derive(Debug, Deserialize)]
@@ -163,7 +163,7 @@ pub enum PaymentSource {
 pub enum PaymentSourceParam<'a> {
     BankAccount(BankAccountParam<'a>),
     Card(CardParam<'a>),
-    Token(&'a str)
+    Token(&'a str),
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -171,7 +171,7 @@ pub struct PaymentParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<PaymentSourceParam<'a>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub metadata: Option<HashMap<String, String>>
+    pub metadata: Option<HashMap<String, String>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -203,36 +203,32 @@ pub struct SourceParam<'a> {
 
 #[derive(Serialize, Debug)]
 pub struct SourceRedirectParam<'a> {
-    pub return_url: &'a str
+    pub return_url: &'a str,
 }
 
-impl StripeService for Source {}
-impl<'a> StripeService for SourceParam<'a> {}
-impl<'a> StripeService for SourceRedirectParam<'a> {}
-impl<'a> StripeService for PaymentParam<'a> {}
-
-
 impl Source {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Sources, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Sources, vec![], param)
     }
 
-    pub fn retrieve<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.get(UrlPath::Sources, &StripePath::default().param(id), param)
+    pub fn retrieve<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.get(UrlPath::Sources, vec![id], param)
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Sources, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Sources, vec![id], param)
     }
 
     //TODO: Review documents
-    pub fn attach<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Customers, &StripePath::default().param(id).param("sources"), param)
+    pub fn attach<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Customers, vec![id, "sources"], param)
     }
 
-    pub fn detach<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Customers, &StripePath::default().param(id).param("sources"), param)
+    pub fn detach<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Customers, vec![id, "sources"], param)
     }
-
 }

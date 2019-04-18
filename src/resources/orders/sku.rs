@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
-use std::collections::HashMap;
 use crate::resources::common::currency::Currency;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::util::{List, Deleted};
-use crate::resources::common::path::StripePath;
+use crate::util::{Deleted, List};
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Debug, Deserialize)]
 pub struct Sku {
@@ -21,7 +21,7 @@ pub struct Sku {
     pub package_dimensions: Option<PackageDimensions>,
     pub price: i64,
     pub product: String,
-    pub updated: i64
+    pub updated: i64,
 }
 
 #[derive(Default, Debug, Deserialize, Serialize)]
@@ -35,13 +35,13 @@ pub struct PackageDimensions {
 #[derive(Default, Debug, Deserialize, Serialize)]
 pub struct Inventory {
     pub quantity: Option<i32>,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub inventory_type: Option<InventoryType>,
     pub value: Option<InventoryValue>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum InventoryValue {
     InStock,
     Limited,
@@ -49,11 +49,11 @@ pub enum InventoryValue {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum InventoryType {
     Finite,
     Bucket,
-    Infinite
+    Infinite,
 }
 
 #[derive(Default, Debug, Serialize)]
@@ -77,35 +77,27 @@ pub struct SkuParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub package_dimensions: Option<PackageDimensions>
+    pub package_dimensions: Option<PackageDimensions>,
 }
 
-impl StripeService for Sku {}
-
-impl<'a> StripeService for SkuParam<'a> {}
-
-
 impl Sku {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Sku, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Sku, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Sku, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Sku, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Sku, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Sku, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Sku, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Sku, vec![], param)
     }
 
     pub fn delete(client: &Client, id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Sku, &StripePath::default().param(id), Self::object())
+        client.delete(UrlPath::Sku, vec![id], serde_json::Map::new())
     }
-
 }
-

@@ -1,11 +1,11 @@
-use crate::resources::common::object::Object;
-use crate::resources::core::balance::BalanceTransaction;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
+use crate::resources::core::balance::BalanceTransaction;
 use crate::util::List;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct TransferReversal {
@@ -18,7 +18,7 @@ pub struct TransferReversal {
     pub destination_payment_refund: Option<String>,
     pub metadata: HashMap<String, String>,
     pub source_refund: Option<String>,
-    pub transfer: String
+    pub transfer: String,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -45,26 +45,37 @@ pub struct TransferReversalListParams<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for TransferReversal {}
-impl<'a> StripeService for TransferReveralParam<'a> {}
-impl<'a> StripeService for TransferReversalListParams<'a> {}
-
 impl TransferReversal {
-
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Transfers, &StripePath::default().param(id).param("reversals"), param)
+    pub fn create<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Transfers, vec![id, "reversals"], param)
     }
 
     pub fn retrieve(client: &Client, id: &str, reversal_id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Transfers, &StripePath::default().param(id).param("reversals").param(reversal_id), Self::object())
+        client.get(
+            UrlPath::Transfers,
+            vec![id, "reversals", reversal_id],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, reversal_id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Transfers, &StripePath::default().param(id).param("reversals").param(reversal_id), param)
+    pub fn update<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        reversal_id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(
+            UrlPath::Transfers,
+            vec![id, "reversals", reversal_id],
+            param,
+        )
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Transfers, &StripePath::default().param(id).param("reversals"), param)
+    pub fn list<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Transfers, vec![id, "reversals"], param)
     }
-
 }

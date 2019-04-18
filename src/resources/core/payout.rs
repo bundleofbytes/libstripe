@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
 use crate::util::List;
-use crate::resources::common::path::StripePath;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Payout {
@@ -28,36 +28,35 @@ pub struct Payout {
     pub statement_descriptor: Option<String>,
     pub status: PayoutStatus,
     #[serde(rename = "type")]
-    pub payout_type: PayoutType
+    pub payout_type: PayoutType,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum PayoutStatus {
     Paid,
     Pending,
     InTransit,
     Canceled,
-    Failed
+    Failed,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum PayoutSourceType {
     BankAccount,
     Card,
 }
 
-
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum PayoutType {
     BankAccount,
     Card,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum PayoutFailureCode {
     AccountClosed,
     AccountFrozen,
@@ -69,16 +68,15 @@ pub enum PayoutFailureCode {
     InvalidAccountNumber,
     InvalidCurrency,
     NoAccount,
-    UnsupportedCard
+    UnsupportedCard,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum PayoutMethod {
     STANDARD,
-    INSTANT
+    INSTANT,
 }
-
 
 #[derive(Default, Serialize, Debug)]
 pub struct PayoutParam<'a> {
@@ -100,29 +98,24 @@ pub struct PayoutParam<'a> {
     pub statement_descriptor: Option<&'a str>,
 }
 
-impl StripeService for Payout {}
-impl<'a> StripeService for PayoutParam<'a> {}
-
 impl Payout {
-    
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Payouts, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Payouts, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Payouts, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Payouts, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Payouts, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Payouts, vec![id], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Payouts, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Payouts, vec![], param)
     }
 
     pub fn cancel(client: &Client, id: &str) -> crate::Result<Self> {
-        client.post(UrlPath::Payouts, &StripePath::default().param(id).param("cancel"), Self::object())
+        client.post(UrlPath::Payouts, vec![id, "cancel"], serde_json::Map::new())
     }
-
 }

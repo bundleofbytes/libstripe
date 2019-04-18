@@ -1,11 +1,11 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use std::collections::HashMap;
-use crate::util::List;
-use crate::resources::core::charges::ShippingDetails;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::core::charges::ShippingDetails;
+use crate::util::List;
+use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Order {
@@ -29,15 +29,15 @@ pub struct Order {
     pub shipping_methods: Vec<ShippingMethods>,
     pub status: OrderStatus,
     pub status_transitions: OrderTransitions,
-    pub updated: i64
+    pub updated: i64,
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum OrderCharge {
     Paid,
     Fulfilled,
-    Refunded
+    Refunded,
 }
 
 #[derive(Deserialize, Debug)]
@@ -50,10 +50,10 @@ pub struct DeliveryEstimate {
 }
 
 #[derive(Deserialize, Debug)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum DeliveryType {
     Range,
-    Exact
+    Exact,
 }
 
 #[derive(Deserialize, Debug)]
@@ -62,7 +62,7 @@ pub struct ShippingMethods {
     pub amount: i64,
     pub currency: Currency,
     pub delivery_estimate: Option<DeliveryEstimate>,
-    pub description: String
+    pub description: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -97,28 +97,30 @@ pub struct OrderItem {
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum ItemType {
     Sku,
     Tax,
     Shipping,
     Discount,
     #[serde(other, skip_serializing)]
-    Unknown
+    Unknown,
 }
 
 impl Default for ItemType {
-    fn default() -> ItemType { ItemType::Unknown }
+    fn default() -> ItemType {
+        ItemType::Unknown
+    }
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum OrderStatus {
     Created,
     Paid,
     Canceled,
     Fulfilled,
-    Returned
+    Returned,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -139,32 +141,32 @@ pub struct OrderParam<'a> {
     pub shipping: Option<ShippingDetails>,
 }
 
-impl StripeService for Order {}
-impl<'a> StripeService for OrderParam<'a> {}
-
 impl Order {
-    
-    pub fn create<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Order, &StripePath::default(), param)
+    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Order, vec![], param)
     }
 
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Order, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::Order, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Order, &StripePath::default().param(id), param)
+    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Order, vec![id], param)
     }
 
-    pub fn pay<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Order, &StripePath::default().param(id).param("pay"), param)
+    pub fn pay<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+        client.post(UrlPath::Order, vec![id, "pay"], param)
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Order, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Order, vec![], param)
     }
 
-    pub fn return_item<B: serde::Serialize + StripeService>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
-        client.post(UrlPath::Order, &StripePath::default().param(id).param("returns"), param)
+    pub fn return_item<B: serde::Serialize>(
+        client: &Client,
+        id: &str,
+        param: B,
+    ) -> crate::Result<Self> {
+        client.post(UrlPath::Order, vec![id, "returns"], param)
     }
 }

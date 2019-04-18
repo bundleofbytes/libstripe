@@ -1,12 +1,12 @@
-use crate::StripeService;
-use crate::resources::common::object::Object;
-use serde_json::Value;
 use crate::client::Client;
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use serde::Serialize;
-use crate::util::List;
-use crate::resources::common::path::StripePath;
 use crate::resources::core::file::File;
+use crate::util::List;
+
+use serde::Serialize;
+use serde_json::Value;
 
 #[derive(Debug, Deserialize)]
 pub struct ScheduledQueryRun {
@@ -24,12 +24,12 @@ pub struct ScheduledQueryRun {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum SigmaStatus {
     Completed,
     Canceled,
     Failed,
-    TimedOut
+    TimedOut,
 }
 
 #[derive(Debug, Serialize)]
@@ -42,17 +42,16 @@ pub struct ScheduleQueryRunListParam<'a> {
     pub starting_after: Option<&'a str>,
 }
 
-impl StripeService for ScheduledQueryRun {}
-impl<'a> StripeService for ScheduleQueryRunListParam<'a> {}
-
 impl ScheduledQueryRun {
-
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Sigma, &StripePath::default().param("scheduled_query_run").param(id), Self::object())
+        client.get(
+            UrlPath::Sigma,
+            vec!["scheduled_query_run", id],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn list<B: Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Sigma, &StripePath::default().param("scheduled_query_run"), param)
+    pub fn list<B: Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Sigma, vec!["scheduled_query_run"], param)
     }
-
 }

@@ -1,9 +1,8 @@
-
-use std::env;
-use libstripe::Client;
-use libstripe::resources::common::currency::Currency;
 use libstripe::resources::billing::plans::{Interval, Plans, PlansParam};
+use libstripe::resources::common::currency::Currency;
 use libstripe::resources::core::product::ProductsParam;
+use libstripe::Client;
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");
@@ -19,15 +18,14 @@ fn main() -> libstripe::Result<()> {
     let mut product_param = ProductsParam::default();
     product_param.name = Some("Golden Plan");
     plans_param.product = Some(product_param);
-    
+
     let plan = Plans::create(&client, plans_param)?;
 
     println!("{:?}", plan);
 
-//    let deleted = Plans::delete(&client, &plan.id)?;
+    //    let deleted = Plans::delete(&client, &plan.id)?;
 
-//    println!("{:?}", deleted);
+    //    println!("{:?}", deleted);
 
     Ok(())
-
 }

@@ -1,12 +1,11 @@
-
+use http;
 use serde_json;
 use serde_qs;
-use http;
 //use crate::util::to_snakecase;
+use reqwest;
 use std::error::Error as StdError;
 use std::fmt;
 use std::io;
-use reqwest;
 
 macro_rules! from_error {
     ($f: ty, $e: expr) => {
@@ -26,7 +25,7 @@ pub enum Error {
     Io(io::Error),
     QsError(serde_qs::Error),
     HeaderError(reqwest::header::InvalidHeaderValue),
-    Unknown
+    Unknown,
 }
 
 impl fmt::Display for Error {
@@ -66,9 +65,8 @@ impl StdError for Error {
     }
 }
 
-
 #[derive(Debug, PartialEq, Deserialize)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum ErrorType {
     ApiError,
     ApiConnectionError,
@@ -94,7 +92,7 @@ impl fmt::Display for ErrorType {
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, Eq, PartialEq, Hash)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum ErrorCode {
     InvalidNumber,
     InvalidExpiryMonth,
@@ -169,7 +167,7 @@ pub enum ErrorCode {
     TokenInUse,
     TransfersNotAllowed,
     UrlInvalid,
-    InvalidUtf8InPostBody
+    InvalidUtf8InPostBody,
 }
 
 impl fmt::Display for ErrorCode {
@@ -193,7 +191,7 @@ pub struct StripeRequestObject {
     pub code: Option<ErrorCode>,
     pub decline_code: Option<String>,
     pub param: Option<String>,
-    pub doc_url: Option<String>
+    pub doc_url: Option<String>,
 }
 
 impl fmt::Display for StripeErrorObject {

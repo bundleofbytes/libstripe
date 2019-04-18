@@ -1,10 +1,10 @@
-use crate::resources::common::object::Object;
 use crate::resources::common::currency::Currency;
-use crate::util::List;
-use crate::resources::core::refunds::Refund;
-use crate::{StripeService, Client};
+use crate::resources::common::object::Object;
+
 use crate::resources::common::path::UrlPath;
-use crate::resources::common::path::StripePath;
+use crate::resources::core::refunds::Refund;
+use crate::util::List;
+use crate::{Client};
 
 #[derive(Deserialize, Debug)]
 pub struct ApplicationFees {
@@ -21,18 +21,15 @@ pub struct ApplicationFees {
     pub livemode: bool,
     pub originating_transaction: Option<String>,
     pub refunded: bool,
-    pub refunds: List<Refund>
+    pub refunds: List<Refund>,
 }
 
-impl StripeService for ApplicationFees {}
-
 impl ApplicationFees {
-
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::ApplicationFees, &StripePath::default().param(id), Self::object())
+        client.get(UrlPath::ApplicationFees, vec![id], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize + StripeService>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::ApplicationFees, &StripePath::default(), param)
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::ApplicationFees, vec![], param)
     }
 }

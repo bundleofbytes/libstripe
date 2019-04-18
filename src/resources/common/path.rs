@@ -1,7 +1,5 @@
 use std::fmt;
-//TODO: Change so that it is only dependent on "UrlPath"
-//      or move "UrlPath" to be in StripeService and have
-//      path to be defined per struct
+
 #[derive(Clone)]
 pub enum UrlPath {
     Accounts,
@@ -15,7 +13,7 @@ pub enum UrlPath {
     Customers,
     Disputes,
     Events,
-    File,
+    File(bool),
     FileLink,
     InvoiceItems,
     Invoices,
@@ -57,7 +55,7 @@ impl fmt::Display for UrlPath {
             UrlPath::Customers => "/customers",
             UrlPath::Disputes => "/disputes",
             UrlPath::Events => "/events",
-            UrlPath::File => "/files",
+            UrlPath::File(_) => "/files",
             UrlPath::FileLink => "/file_link",
             UrlPath::IssuingCard => "/issuing/cards",
             UrlPath::IssuingDispute => "/issuing/disputes",
@@ -87,43 +85,3 @@ impl fmt::Display for UrlPath {
         write!(f, "{}", uri)
     }
 }
-
-#[derive(Default, Clone)]
-pub struct StripePath {
-    list: Vec<String>,
-    query: Vec<String>,
-}
-
-impl StripePath {
-
-    pub fn param<T: fmt::Display>(&mut self, arg: T) -> &mut Self {
-        self.list.push(format!("{}", arg));
-        self
-    }
-
-//    pub fn query<T: fmt::Display>(&mut self, key: &str, val: T) -> &mut Self {
-//        self.query.push(format!("{}={}", key, val));
-//        self
-//    }
-
-}
-
-impl fmt::Display for StripePath {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut uri = String::new();
-        let list = &self.list;
-        list.into_iter().for_each(|data| uri.push_str(&format!("/{}", data)) );
-//        if self.query.len() != 0 {
-//            let query = &self.query;
-//            uri.push_str("?");
-//            query.into_iter().for_each(|data| uri.push_str(&format!("{}&", data)) );
-//        }
-        write!(f, "{}", uri)
-    }
-}
-
-//impl From<StripePath> for String {
-//    fn from(p: StripePath) -> String {
-//        p.to_string()
-//    }
-//}

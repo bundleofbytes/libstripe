@@ -1,12 +1,11 @@
-
-use std::env;
+use libstripe::resources::billing::coupons::{Coupon, CouponParam, Duration};
 use libstripe::Client;
-use libstripe::resources::billing::coupons::{Duration, Coupon, CouponParam};
+use std::env;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");
     let client = Client::new(&secret_key);
-    
+
     let mut coupon_param = CouponParam::default();
     coupon_param.percent_off = Some(25);
     coupon_param.duration = Some(Duration::Repeating);
