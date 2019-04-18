@@ -1,7 +1,7 @@
 
 use std::env;
 use libstripe::Client;
-use libstripe::resources::core::customer::Customer;
+use libstripe::resources::core::customer::{Customer, CustomerParam};
 use libstripe::resources::billing::invoices::{Invoice, InvoiceParam};
 use libstripe::resources::paymentmethods::source::PaymentSourceParam;
 
