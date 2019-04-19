@@ -56,6 +56,10 @@ pub enum Object {
     Transfer,
     TransferReversal,
     Topup,
+    #[serde(rename = "radar.value_list")]
+    RadarValueList,
+    #[serde(rename = "radar.value_list_item")]
+    RadarValueListItems,
     Review,
     Order,
     OrderItem,
