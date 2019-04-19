@@ -3,6 +3,7 @@ libstripe
 
 ![Status](https://img.shields.io/badge/status-active-brightgreen.svg?style=flat)
 [![](http://meritbadge.herokuapp.com/libstripe)](https://crates.io/crates/libstripe)
+[![Build Status](https://api.cirrus-ci.com/github/bundleofbytes/libstripe.svg)](https://cirrus-ci.com/github/bundleofbytes/libstripe)
 
 Stripe library for rust.
 
