@@ -78,7 +78,7 @@ impl fmt::Display for UrlPath {
             UrlPath::Reviews => "/reviews",
             UrlPath::Refunds => "/refunds",
             UrlPath::OrderReturns => "/order_returns",
-            UrlPath::Sigma => "/sigma",
+            UrlPath::Sigma => "/sigma/scheduled_query_runs",
             UrlPath::Sku => "/skus",
             UrlPath::Sources => "/sources",
             UrlPath::Subscriptions => "/subscriptions",

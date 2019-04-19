@@ -6,7 +6,6 @@ use crate::resources::core::file::File;
 use crate::util::List;
 
 use serde::Serialize;
-use serde_json::Value;
 
 #[derive(Debug, Deserialize)]
 pub struct ScheduledQueryRun {
@@ -14,13 +13,18 @@ pub struct ScheduledQueryRun {
     pub object: Object,
     pub created: i64,
     pub data_load_time: i64,
-    pub error: Option<Value>, //TODO
+    pub error: Option<SigmaError>,
     pub file: Option<File>,
     pub livemode: bool,
     pub result_available_until: i64,
     pub sql: String,
     pub status: SigmaStatus,
     pub title: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct SigmaError {
+    pub message: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -46,12 +50,12 @@ impl ScheduledQueryRun {
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
         client.get(
             UrlPath::Sigma,
-            vec!["scheduled_query_run", id],
+            vec![id],
             serde_json::Map::new(),
         )
     }
 
     pub fn list<B: Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Sigma, vec!["scheduled_query_run"], param)
+        client.get(UrlPath::Sigma, vec![], param)
     }
 }
