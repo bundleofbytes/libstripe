@@ -80,6 +80,26 @@ pub struct SkuParam<'a> {
     pub package_dimensions: Option<PackageDimensions>,
 }
 
+#[derive(Default, Debug, Serialize)]
+pub struct SkuListParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<HashMap<&'a str, &'a str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ids: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_stock: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
+}
+
 impl Sku {
     pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
         client.post(UrlPath::Sku, vec![], param)
