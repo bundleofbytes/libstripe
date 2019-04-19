@@ -47,6 +47,12 @@ pub enum Object {
     PlatformEarning,
     Person,
     CountrySpec,
+    #[serde(rename = "terminal.connection_token")]
+    TerminalConnectionToken,
+    #[serde(rename = "terminal.location")]
+    TerminalLocation,
+    #[serde(rename = "terminal.reader")]
+    TerminalReader,
     Transfer,
     TransferReversal,
     Topup,
