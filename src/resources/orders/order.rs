@@ -15,11 +15,11 @@ pub struct Order {
     pub amount_returned: Option<i64>,
     pub application: Option<String>,
     pub application_fee: Option<i64>,
-    pub charge: Option<OrderCharge>,
+    pub charge: Option<String>,
     pub created: i64,
     pub currency: Currency,
-    pub customer: String,
-    pub email: String,
+    pub customer: Option<String>,
+    pub email: Option<String>,
     pub items: Vec<OrderItem>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
@@ -30,14 +30,7 @@ pub struct Order {
     pub status: OrderStatus,
     pub status_transitions: OrderTransitions,
     pub updated: i64,
-}
-
-#[derive(Deserialize, Debug)]
-#[serde(rename_all = "lowercase")]
-pub enum OrderCharge {
-    Paid,
-    Fulfilled,
-    Refunded,
+    pub upstream_id: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -85,15 +78,14 @@ pub struct OrderReturn {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct OrderItem {
-    #[serde(skip_serializing)]
-    pub object: Object,
-    pub amount: i64,
-    pub currency: Currency,
+    pub object: Option<Object>,
+    pub amount: Option<i64>,
+    pub currency: Option<Currency>,
     pub description: Option<String>,
-    pub parent: String,
+    pub parent: Option<String>,
     pub quantity: Option<i64>,
     #[serde(rename = "type")]
-    pub item_type: ItemType,
+    pub item_type: Option<ItemType>,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
