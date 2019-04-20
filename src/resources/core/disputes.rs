@@ -94,9 +94,10 @@ pub struct Dispute {
     pub status: DisputeStatus,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all="snake_case")]
 pub enum DisputeReason {
+    CheckReturned,
     Duplicate,
     Fraudulent,
     SubscriptionCanceled,
@@ -110,6 +111,7 @@ pub enum DisputeReason {
     BankCannotProcess,
     DebitNotAuthorized,
     CustomerInitiated,
+    Other
 }
 
 #[derive(Deserialize, Debug)]
@@ -121,6 +123,7 @@ pub enum DisputeStatus {
     NeedsResponse,
     UnderReview,
     ChargeRefunded,
+    Unsubmitted,
     Won,
     Lost,
 }

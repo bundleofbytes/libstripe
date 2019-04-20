@@ -10,14 +10,17 @@ use std::collections::HashMap;
 pub struct CardHolders {
     pub id: String,
     pub object: Object,
+    pub authorization_controls: AuthorizationControls,
     pub billing: Billing,
     pub created: i64,
     pub email: String,
+    pub is_default: bool,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub name: String,
     pub phone_number: String,
     pub status: CardHolderStatus,
+    #[serde(rename="type")]
     pub cardholder_type: CardHolderType,
 }
 
@@ -68,16 +71,25 @@ pub enum CardHolderType {
     BusinessEntity,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug)]
 pub struct CardHolderParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub billing: Option<Billing>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<&'a str>,
+    #[serde(rename="type", skip_serializing_if = "Option::is_none")]
     pub cardholder_type: Option<CardHolderType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_controls: Option<AuthorizationControls>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_default: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub phone_number: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<CardHolderStatus>,
 }
 

@@ -5,6 +5,7 @@ use crate::resources::common::path::UrlPath;
 use crate::resources::issuing::authorizations::MerchantData;
 use crate::util::{List, RangeQuery};
 use crate::{Client};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
 pub struct Transactions {
@@ -36,7 +37,13 @@ pub enum TransactionType {
 }
 
 #[derive(Serialize, Debug)]
-pub struct TransactionParam<'a> {
+pub struct TransactionsParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<&'a str, &'a str>>,
+}
+
+#[derive(Serialize, Debug)]
+pub struct TransactionsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub card: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -50,10 +57,14 @@ pub struct TransactionParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub settlement: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
 }
 
+
 impl Transactions {
+
     pub fn retrieve(client: &Client, id: &str) -> crate::Result<Self> {
         client.get(UrlPath::Transactions, vec![id], serde_json::Map::new())
     }
@@ -65,4 +76,5 @@ impl Transactions {
     pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
         client.get(UrlPath::Transactions, vec![], param)
     }
+
 }

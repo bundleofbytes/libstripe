@@ -4,9 +4,11 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::balance::BalanceTransaction;
-use crate::util::List;
-use crate::{Client};
+use crate::util::{List, RangeQuery};
+use crate::Client;
 use std::collections::HashMap;
+use crate::resources::issuing::cards::IssuingCard;
+use crate::resources::issuing::transactions::Transactions;
 
 #[derive(Deserialize, Debug)]
 pub struct Authorizations {
@@ -17,8 +19,8 @@ pub struct Authorizations {
     pub authorized_amount: i64,
     pub authorized_currency: Currency,
     pub balance_transactions: Vec<BalanceTransaction>,
-    pub card: Option<String>,
-    pub cardholder: String,
+    pub card: Option<IssuingCard>,
+    pub cardholder: Option<String>,
     pub created: i64,
     pub held_amount: i64,
     pub held_currency: Currency,
@@ -30,9 +32,17 @@ pub struct Authorizations {
     pub pending_held_amount: i64,
     pub request_history: Vec<RequestHistory>,
     pub status: AuthorizationStatus,
-    pub transactions: Option<String>,
-    //TODO: Transactions
+    pub transactions: Option<Transactions>,
     pub verification_data: VerificationData,
+    pub wallet_provider: Option<WalletProvider>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all="snake_case")]
+pub enum WalletProvider {
+    ApplePay,
+    GooglePay,
+    SamsungPay
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -115,7 +125,34 @@ pub enum AuthorizationStatus {
     Closed,
 }
 
+#[derive(Debug, Default, Serialize)]
+pub struct AuthorizationsParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<&'a str, &'a str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub held_amount: Option<i64>,
+}
+
+#[derive(Debug, Default, Serialize)]
+pub struct AuthorizationsListParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub card: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cardholder: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<AuthorizationStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<RangeQuery>,
+}
+
 impl Authorizations {
+
     pub fn retrieve(client: &Client) -> crate::Result<Self> {
         client.get(UrlPath::Authorizations, vec![], serde_json::Map::new())
     }
@@ -143,4 +180,5 @@ impl Authorizations {
     pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
         client.get(UrlPath::Authorizations, vec![], param)
     }
+
 }

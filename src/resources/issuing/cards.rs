@@ -6,8 +6,8 @@ use crate::resources::common::object::Object;
 use crate::resources::common::path::UrlPath;
 use crate::resources::issuing::cardholders::CardHolders;
 use crate::resources::paymentmethods::cards::CardBrand;
-use crate::util::List;
-use crate::{Client};
+use crate::util::{List, RangeQuery};
+use crate::Client;
 use std::collections::HashMap;
 
 #[derive(Deserialize, Debug)]
@@ -25,7 +25,7 @@ pub struct IssuingCard {
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub name: String,
-    pub shipping: IssuingShipping,
+    pub shipping: Option<IssuingShipping>,
     pub status: CardStatus,
     #[serde(rename = "type")]
     pub card_type: IssuingCardType,
@@ -81,8 +81,12 @@ pub enum IssuingShippingStatus {
     Canceled,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Default, Serialize, Debug)]
 pub struct IssuingCardParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency: Option<AuthorizationControls>,
+    #[serde(rename="type", skip_serializing_if = "Option::is_none")]
+    pub issuing_card_type: Option<CardHolders>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_controls: Option<AuthorizationControls>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,7 +94,37 @@ pub struct IssuingCardParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub shipping: Option<IssuingShipping>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<CardStatus>,
+}
+
+#[derive(Default, Serialize, Debug)]
+pub struct IssuingCardListParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exp_month: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exp_year: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last4: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cardholder: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<CardStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<RangeQuery>,
+    #[serde(rename="type", skip_serializing_if = "Option::is_none")]
+    pub issuing_card_type: Option<CardHolders>,
 }
 
 impl IssuingCard {
@@ -103,11 +137,7 @@ impl IssuingCard {
     }
 
     pub fn retrieve_details(client: &Client, id: &str) -> crate::Result<Self> {
-        client.get(
-            UrlPath::IssuingCard,
-            vec![id, "details"],
-            serde_json::Map::new(),
-        )
+        client.get(UrlPath::IssuingCard, vec![id, "details"], serde_json::Map::new())
     }
 
     pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
