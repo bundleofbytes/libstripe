@@ -268,6 +268,8 @@ pub enum EventType {
     TransferReversed,
     #[serde(rename = "transfer.updated")]
     TransferUpdated,
+    #[serde(rename = "transfer.paid")]
+    TransferPaid,
     #[serde(rename = "ping")]
     Ping,
 }
@@ -281,7 +283,7 @@ pub struct Event {
     pub data: EventData,
     pub livemode: bool,
     pub pending_webhooks: i64,
-    pub request: EventRequest,
+    pub request: Option<EventRequest>,
     #[serde(rename = "type")]
     pub event_type: EventType,
 }
