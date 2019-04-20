@@ -7,7 +7,7 @@ use crate::util::{List, RangeQuery};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Transactions {
     pub id: String,
     pub object: Object,
@@ -25,7 +25,7 @@ pub struct Transactions {
     pub transaction_type: TransactionType,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum TransactionType {
     Capture,
@@ -36,13 +36,13 @@ pub enum TransactionType {
     DisputeLoss,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Default, Serialize, Debug)]
 pub struct TransactionsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Default, Serialize, Debug)]
 pub struct TransactionsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub card: Option<bool>,
@@ -60,6 +60,8 @@ pub struct TransactionsListParam<'a> {
     pub settlement: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 

@@ -6,7 +6,7 @@ use crate::resources::orders::order::OrderItem;
 use crate::util::{List, RangeQuery};
 use crate::{Client};
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Returns {
     pub id: String,
     pub object: Object,

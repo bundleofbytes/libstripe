@@ -6,7 +6,7 @@ use crate::util::{Deleted, List};
 use crate::Client;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Card {
     pub id: String,
     pub object: Object,
@@ -69,13 +69,14 @@ pub struct CardParam<'a> {
     pub metadata: Option<HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
+#[serde(rename="lowercase")]
 pub enum AvailablePayoutMethods {
-    #[serde(rename = "standard")]
     Standard,
-    #[serde(rename = "instant")]
     Instant,
 }
 
@@ -90,16 +91,18 @@ impl<'a> CardParam<'a> {
 }
 
 #[derive(Default, Serialize, Debug)]
-pub struct CardListParams {
+pub struct CardListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub ending_before: Option<String>,
+    pub ending_before: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub starting_after: Option<String>,
+    pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum CardType {
     Credit,
@@ -109,7 +112,7 @@ pub enum CardType {
 }
 
 //Doing a 'rename' just to insure that things will just work. can be removed
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 pub enum CardBrand {
     #[serde(rename = "Visa")]
     Visa,
@@ -129,7 +132,7 @@ pub enum CardBrand {
     Unknown,
 }
 
-#[derive(Deserialize, PartialEq, Debug, Clone)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum CardCheck {
     Pass,
@@ -138,11 +141,10 @@ pub enum CardCheck {
     Unchecked,
 }
 
-#[derive(Deserialize, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, PartialEq, Debug)]
+#[serde(rename_all="snake_case")]
 pub enum TokenizationMethod {
-    #[serde(rename = "apple_pay")]
     ApplePay,
-    #[serde(rename = "android_pay")]
     AndroidPay,
 }
 

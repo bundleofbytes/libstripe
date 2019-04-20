@@ -11,7 +11,7 @@ use crate::{Client};
 use serde::Serialize;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Account {
     pub id: String,
     pub object: Object,
@@ -192,7 +192,7 @@ pub struct DeclineOn {
     pub cvc_failure: bool,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LoginLink {
     pub object: Object,
     pub created: i64,

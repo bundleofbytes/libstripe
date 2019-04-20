@@ -2,8 +2,8 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::resources::core::product::ProductsParam;
-use crate::util::Deleted;
+use crate::resources::core::product::{ProductsParam, Products};
+use crate::util::{Deleted, Expandable};
 use crate::Client;
 use std::collections::HashMap;
 
@@ -22,7 +22,7 @@ pub struct Plans {
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub nickname: Option<String>,
-    pub product: Option<String>,
+    pub product: Option<Expandable<Products>>,
     pub tiers: Option<Tiers>,
     pub tiers_mode: Option<TiersMode>,
     pub transform_usage: Option<String>,
@@ -30,7 +30,7 @@ pub struct Plans {
     pub usage_type: Option<UsageType>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum AggregateUsage {
     Sum,
@@ -39,47 +39,47 @@ pub enum AggregateUsage {
     Max,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Tiers {
     pub amount: i64,
     pub up_to: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum BillingScheme {
     PerUnit,
     Tiered,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum TiersMode {
     Graduated,
     Volume,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TransformUsage {
     pub divide_by: f64,
     pub round: Round,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum Round {
     UP,
     DOWN,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum UsageType {
     Metered,
     Licensed,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum Interval {
     Manual,
@@ -107,6 +107,8 @@ pub struct PlansParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product: Option<ProductsParam<'a>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Plans {

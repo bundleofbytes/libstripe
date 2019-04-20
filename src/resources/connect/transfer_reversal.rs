@@ -7,7 +7,7 @@ use crate::util::List;
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TransferReversal {
     pub id: String,
     pub object: Object,
@@ -31,6 +31,8 @@ pub struct TransferReveralParam<'a> {
     pub metadata: Option<HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refund_application_fee: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -43,6 +45,8 @@ pub struct TransferReversalListParams<'a> {
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl TransferReversal {

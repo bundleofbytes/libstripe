@@ -24,7 +24,7 @@ use crate::resources::paymentmethods::source::Source;
 use crate::util::List;
 use crate::{Client};
 
-#[derive(Debug, PartialEq, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub enum EventType {
     #[serde(rename = "account.updated")]
     AccountUpdated,
@@ -272,7 +272,7 @@ pub enum EventType {
     Ping,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Event {
     pub id: String,
     pub object: Object,
@@ -286,19 +286,19 @@ pub struct Event {
     pub event_type: EventType,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct EventRequest {
     pub id: Option<String>,
     pub idempotency_key: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct EventData {
     pub object: EventObject,
     pub previous_attributes: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(untagged, rename_all = "snake_case")]
 pub enum EventObject {
     Charge(Charge),

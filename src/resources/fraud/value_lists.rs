@@ -5,7 +5,7 @@ use crate::resources::fraud::value_list_items::ValueListItems;
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ValueLists {
     pub id: String,
     pub object: Object,

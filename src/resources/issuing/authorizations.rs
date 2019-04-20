@@ -10,7 +10,7 @@ use std::collections::HashMap;
 use crate::resources::issuing::cards::IssuingCard;
 use crate::resources::issuing::transactions::Transactions;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Authorizations {
     pub id: String,
     pub object: Object,
@@ -131,6 +131,8 @@ pub struct AuthorizationsParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub held_amount: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Debug, Default, Serialize)]
@@ -149,6 +151,8 @@ pub struct AuthorizationsListParam<'a> {
     pub starting_after: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Authorizations {

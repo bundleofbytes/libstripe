@@ -3,7 +3,7 @@ use serde::Serialize;
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ConnectionTokens {
     pub object: Object,
     pub secret: String,

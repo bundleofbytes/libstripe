@@ -6,11 +6,15 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::paymentintents::PaymentIntent;
-use crate::util::{List, Period, RangeQuery};
+use crate::util::{List, Period, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::charges::Charge;
+use crate::resources::core::customer::Customer;
+use crate::resources::paymentmethods::source::PaymentSource;
+use crate::resources::paymentmethods::paymentmethods::PaymentMethods;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Invoice {
     pub id: String,
     pub object: Object,
@@ -23,12 +27,13 @@ pub struct Invoice {
     pub auto_advance: bool,
     pub billing: InvoiceBilling,
     pub billing_reason: Option<InvoiceBillingReason>,
-    pub charge: Option<String>,
+    pub charge: Option<Expandable<Charge>>,
     pub created: i64,
     pub currency: Currency,
     pub custom_fields: Option<CustomFields>,
-    pub customer: String,
-    pub default_source: Option<String>,
+    pub customer: Expandable<Customer>,
+    pub default_payment_method: Option<Expandable<PaymentMethods>>,
+    pub default_source: Option<Expandable<PaymentSource>>,
     pub description: Option<String>,
     pub discount: Option<Discount>,
     pub due_date: Option<i64>,
@@ -42,7 +47,7 @@ pub struct Invoice {
     pub next_payment_attempt: Option<i64>,
     pub number: Option<String>,
     pub paid: bool,
-    pub payment_intent: Option<PaymentIntent>,
+    pub payment_intent: Option<Expandable<PaymentIntent>>,
     pub period_end: i64,
     pub period_start: i64,
     pub receipt_number: Option<String>,
@@ -50,7 +55,7 @@ pub struct Invoice {
     pub statement_descriptor: Option<String>,
     pub status: InvoiceStatus,
     pub status_transition: StatusTransitions,
-    pub subscription: Option<String>,
+    pub subscription: Option<Expandable<String>>,
     pub subscription_proration_date: Option<i64>,
     pub subtotal: i64,
     pub tax: Option<i64>,
@@ -60,25 +65,25 @@ pub struct Invoice {
     pub webhooks_delivered_at: Option<i64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CustomFields {
     pub name: String,
     pub value: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ThresholdReason {
     pub amount_gte: i64,
     pub item_reasons: ItemReasons,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ItemReasons {
     pub line_item_ids: Vec<String>,
     pub usage_gte: i64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct StatusTransitions {
     pub finalized_at: i64,
     pub marked_uncollectible_at: i64,
@@ -86,14 +91,14 @@ pub struct StatusTransitions {
     pub voided_at: i64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum InvoiceBilling {
     ChargeAutomatcally,
     SendInvoice,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum InvoiceBillingReason {
     SubscriptionCycle,
@@ -104,7 +109,7 @@ pub enum InvoiceBillingReason {
     Upcoming,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum InvoiceStatus {
     Draft,
@@ -114,7 +119,7 @@ pub enum InvoiceStatus {
     Void,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct InvoiceLine {
     pub id: String,
     pub object: Object,
@@ -135,7 +140,7 @@ pub struct InvoiceLine {
     pub invoiceline_type: InvoiceLineType,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum InvoiceLineType {
     InvoiceItem,
@@ -158,6 +163,8 @@ pub struct InvoiceParam<'a> {
     pub subscription: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tax_percent: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -208,6 +215,8 @@ pub struct InvoiceListParams<'a> {
     pub starting_after: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Invoice {

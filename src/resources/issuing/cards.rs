@@ -10,7 +10,7 @@ use crate::util::{List, RangeQuery};
 use crate::Client;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct IssuingCard {
     pub id: String,
     pub object: Object,
@@ -51,7 +51,7 @@ pub enum CardStatus {
     Stolen,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum IssuingCardType {
     Virtual,

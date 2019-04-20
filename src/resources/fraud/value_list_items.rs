@@ -3,7 +3,7 @@ use crate::util::{RangeQuery, Deleted, List};
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ValueListItems {
     pub id: String,
     pub object: Object,

@@ -8,7 +8,7 @@ use crate::util::{List, RangeQuery};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct PaymentIntent {
     pub id: String,
     pub object: Object,
@@ -43,7 +43,7 @@ pub struct PaymentIntent {
     pub transfer_group: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct NextSourceAction {
     pub authorize_with_url: Option<AuthorizeWithUrl>,
     #[serde(rename = "type")]
@@ -51,20 +51,20 @@ pub struct NextSourceAction {
     pub use_stripe_sdk: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum ActionType {
     AuthorizeWithUrl,
     UseStripeSdk,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AuthorizeWithUrl {
     pub return_url: Option<String>,
     pub url: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum ConfirmationMethod {
     Secret,
@@ -86,7 +86,7 @@ pub enum CaptureMethod {
     Manual,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum PaymentIntentsStatus {
     RequiresSource,
@@ -103,7 +103,7 @@ pub struct TransferData {
     pub destination: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LastPaymentError {
     pub error_type: LastPaymentErrorType,
     pub charge: Option<String>,
@@ -115,7 +115,7 @@ pub struct LastPaymentError {
     pub source: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum LastPaymentErrorType {
     ApiConnectionError,
@@ -169,6 +169,8 @@ pub struct PaymentIntentParam<'a> {
     pub transfer_data: Option<TransferData>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_group: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -181,6 +183,8 @@ pub struct PaymentIntentListParams<'a> {
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl PaymentIntent {

@@ -3,28 +3,31 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::{Deleted, List, Period, RangeQuery};
+use crate::util::{Deleted, List, Period, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::customer::Customer;
+use crate::resources::billing::invoices::Invoice;
+use crate::resources::billing::subscriptions::Subscription;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct InvoiceItems {
     pub id: String,
     pub object: Object,
     pub amount: i64,
     pub currency: Currency,
-    pub customer: String,
+    pub customer: Expandable<Customer>,
     pub date: i64,
     pub description: Option<String>,
     pub discountable: bool,
-    pub invoice: Option<String>,
+    pub invoice: Option<Expandable<Invoice>>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub period: Period,
     pub plan: Option<Plans>,
     pub proration: bool,
     pub quantity: Option<i64>,
-    pub subscription: Option<String>,
+    pub subscription: Option<Expandable<Subscription>>,
     pub subscription_item: Option<String>,
 }
 
@@ -46,6 +49,8 @@ pub struct InvoiceItemsParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -62,6 +67,8 @@ pub struct InvoiceItemsListParams<'a> {
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl InvoiceItems {

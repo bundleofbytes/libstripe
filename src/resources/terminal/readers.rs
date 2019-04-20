@@ -3,7 +3,7 @@ use crate::Client;
 use crate::resources::common::path::UrlPath;
 use crate::util::{Deleted, List};
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Readers {
     pub id: String,
     pub object: Object,
@@ -16,7 +16,7 @@ pub struct Readers {
     pub status: ReadersStatus
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all="lowercase")]
 pub enum ReadersStatus {
     Online,

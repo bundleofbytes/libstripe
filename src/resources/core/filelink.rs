@@ -5,7 +5,7 @@ use crate::util::List;
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FileLink {
     pub id: String,
     pub object: Object,
@@ -18,11 +18,16 @@ pub struct FileLink {
     pub url: String,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Default, Debug, Serialize)]
 pub struct FileLinkParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl FileLink {

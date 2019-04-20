@@ -9,6 +9,14 @@ pub struct List<T> {
     pub url: String,
 }
 
+//Note: The internal naming *might* change in the future.
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged, rename_all="lowercase")]
+pub enum Expandable<T> {
+    Object(T),
+    Id(String)
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Deleted {
     pub deleted: bool,

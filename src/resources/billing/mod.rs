@@ -1,4 +1,5 @@
 pub mod coupons;
+pub mod credit_notes;
 pub mod discounts;
 pub mod invoiceitems;
 pub mod invoices;

@@ -6,7 +6,7 @@ use crate::util::{Deleted, List};
 use crate::Client;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BankAccount {
     pub id: String,
     pub object: Object,
@@ -43,6 +43,8 @@ pub struct BankAccountParam<'a> {
     pub routing_number: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 //NOTE: Workaround to add an object name while leaving the rest "default"
@@ -69,16 +71,18 @@ pub struct BankListParams<'a> {
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum AccountHolderType {
     Individual,
     Company,
 }
 
-#[derive(Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum BankStatus {
     New,

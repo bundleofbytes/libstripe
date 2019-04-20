@@ -6,7 +6,7 @@ use crate::util::{Deleted, List};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Products {
     pub id: String,
     pub object: Object,
@@ -65,6 +65,8 @@ pub struct ProductsParam<'a> {
     pub shippable: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Products {

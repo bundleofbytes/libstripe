@@ -7,7 +7,7 @@ use crate::{Client};
 use serde::Serialize;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Persons {
     pub id: String,
     pub object: Object,
@@ -150,6 +150,8 @@ pub struct PersonsParam<'a> {
     pub ssn_last_4: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verification: Option<AccountVerification>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -162,6 +164,8 @@ pub struct PersonsListParams<'a> {
     pub starting_after: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub relationship: Option<Relationship>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Persons {

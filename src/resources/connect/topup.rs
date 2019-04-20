@@ -7,7 +7,7 @@ use crate::util::{List, RangeQuery};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Topup {
     pub id: String,
     pub object: Object,
@@ -53,6 +53,8 @@ pub struct TopupParam<'a> {
     pub statement_descriptor: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_group: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -69,6 +71,8 @@ pub struct TopupListParams<'a> {
     pub starting_after: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<TopupStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Topup {

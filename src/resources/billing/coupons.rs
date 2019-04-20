@@ -5,7 +5,7 @@ use crate::util::{RangeQuery, Deleted, List};
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Coupon {
     pub id: String,
     pub object: Object,
@@ -24,7 +24,7 @@ pub struct Coupon {
     pub valid: bool,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum Duration {
     Forever,

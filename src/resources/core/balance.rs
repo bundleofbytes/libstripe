@@ -2,10 +2,11 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
+use crate::resources::paymentmethods::source::Source;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Balance {
     pub object: Object,
     pub available: Vec<BalanceSource>,
@@ -14,20 +15,20 @@ pub struct Balance {
     pub livemode: bool,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BalanceSource {
     pub currency: Currency,
     pub amount: i64,
     pub source_types: Option<BalanceSourceType>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BalanceSourceType {
     pub card: Option<i64>,
     pub bank_account: Option<i64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BalanceTransaction {
     pub id: String,
     pub object: Object,
@@ -40,13 +41,13 @@ pub struct BalanceTransaction {
     pub fee: i64,
     pub fee_details: Vec<FeeDetails>,
     pub net: i64,
-    pub source: String,
+    pub source: Expandable<Source>,
     pub status: BalanceStatus,
     #[serde(rename = "type")]
     pub balance_type: BalanceType,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum BalanceStatus {
     Available,
@@ -74,7 +75,7 @@ pub enum BalanceType {
     NetworkCost,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FeeDetails {
     pub amount: i64,
     pub application: Option<String>,
@@ -84,7 +85,7 @@ pub struct FeeDetails {
     pub fee_type: FeeType,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum FeeType {
     ApplicationFee,
@@ -111,7 +112,8 @@ pub struct BalanceListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency: Option<Currency>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "type")]
+    pub expand: Option<Vec<&'a str>>,
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub balance_type: Option<BalanceType>,
 }
 

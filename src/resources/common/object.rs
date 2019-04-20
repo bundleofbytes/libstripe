@@ -6,6 +6,7 @@ pub enum Object {
     Balance,
     BalanceTransaction,
     Charge,
+    CreditNote,
     Customer,
     Dispute,
     Event,

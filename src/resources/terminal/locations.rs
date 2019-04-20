@@ -4,7 +4,7 @@ use crate::resources::common::path::UrlPath;
 use crate::Client;
 use crate::util::{Deleted, List};
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Locations {
     pub id: String,
     pub object: Object,

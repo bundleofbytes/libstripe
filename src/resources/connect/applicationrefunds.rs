@@ -8,7 +8,7 @@ use crate::{Client};
 use serde::Serialize;
 use std::collections::HashMap;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ApplicationFeeRefunds {
     pub id: String,
     pub object: Object,
@@ -18,6 +18,22 @@ pub struct ApplicationFeeRefunds {
     pub currency: Currency,
     pub fee: String,
     pub metadata: HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Serialize)]
+pub struct ApplicationFeeRetundsParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amount: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<HashMap<&'a str, &'a str>>,
+}
+
+#[derive(Default, Debug, Serialize)]
+pub struct ApplicationFeeRetundsListParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl ApplicationFeeRefunds {

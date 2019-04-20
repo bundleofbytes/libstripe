@@ -2,9 +2,12 @@ use crate::resources::billing::subscriptions::{BillingThresholds, SubscriptionBi
 use crate::resources::common::object::Object;
 use crate::resources::common::path::{UrlPath};
 use crate::resources::issuing::cardholders::Billing;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::Client;
 use std::collections::HashMap;
+use crate::resources::core::customer::Customer;
+use crate::resources::billing::coupons::Coupon;
+use crate::resources::billing::plans::Plans;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SubscriptionSchedules {
@@ -16,7 +19,7 @@ pub struct SubscriptionSchedules {
     pub completed_at: Option<i64>,
     pub created: i64,
     pub current_phase: Option<CurrentPhase>,
-    pub customer: String,
+    pub customer: Expandable<Customer>,
     pub invoice_settings: Option<InvoiceSettings>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
@@ -27,7 +30,7 @@ pub struct SubscriptionSchedules {
     pub renewal_interval: Option<RenewalInterval>,
     pub revision: String,
     pub status: SubscriptionSchedulesStatus,
-    pub subscription: Option<String>,
+    pub subscription: Option<String>, //Expandable?
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -38,7 +41,7 @@ pub struct InvoiceSettings {
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct Phase {
     pub applicaiton_fee_percent: Option<f64>,
-    pub coupon: Option<String>,
+    pub coupon: Option<Expandable<Coupon>>,
     pub end_date: Option<i64>,
     pub start_date: Option<i64>,
     pub trail_end: Option<i64>,
@@ -50,7 +53,7 @@ pub struct Phase {
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct PhasePlans {
     pub billing_thresholds: Option<BillingThresholds>,
-    pub plan: Option<String>,
+    pub plan: Option<Expandable<Plans>>,
     pub quantity: Option<i64>,
 }
 #[derive(Serialize, Deserialize, Debug)]
@@ -83,7 +86,7 @@ pub enum RenewalBehavior {
     Release,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SubscriptionSchedulesParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing: Option<SubscriptionBilling>,
@@ -111,6 +114,8 @@ pub struct SubscriptionSchedulesParam<'a> {
     pub prorate: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preserve_cancel_date: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl SubscriptionSchedules {

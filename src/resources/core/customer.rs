@@ -8,14 +8,14 @@ use crate::util::{Deleted, List, RangeQuery};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CustomerShipping {
     pub address: Address,
     pub name: String,
     pub phone: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Customer {
     pub id: String,
     pub object: Object,
@@ -39,32 +39,32 @@ pub struct Customer {
 }
 
 //TODO: Move to invoice?
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct InvoiceSettings {
     pub custom_fields: Option<CustomFields>,
     pub footer: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CustomFields {
     pub name: String,
     pub value: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TaxInfo {
     pub tax_id: String,
     #[serde(rename = "type")]
     pub tax_type: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TaxInfoVerification {
     pub verified_name: String,
     pub status: TaxStatus,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum TaxStatus {
     Unverified,
@@ -96,6 +96,8 @@ pub struct CustomerParam<'a> {
     pub source: Option<PaymentSourceParam<'a>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tax_info: Option<TaxInfo>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Serialize, Debug)]
@@ -110,6 +112,8 @@ pub struct CustomerListParams<'a> {
     pub limit: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Customer {

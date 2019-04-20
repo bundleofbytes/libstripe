@@ -3,11 +3,13 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::charges::ShippingDetails;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::orders::sku::Sku;
+use crate::resources::billing::discounts::Discount;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Order {
     pub id: String,
     pub object: Object,
@@ -33,7 +35,7 @@ pub struct Order {
     pub upstream_id: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DeliveryEstimate {
     #[serde(rename = "type")]
     pub delivery_type: DeliveryType,
@@ -42,14 +44,14 @@ pub struct DeliveryEstimate {
     pub date: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum DeliveryType {
     Range,
     Exact,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ShippingMethods {
     pub id: String,
     pub amount: i64,
@@ -58,7 +60,7 @@ pub struct ShippingMethods {
     pub description: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct OrderTransitions {
     pub canceled: i64,
     pub fulfiled: Option<i64>,
@@ -66,7 +68,7 @@ pub struct OrderTransitions {
     pub returned: Option<i64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct OrderReturn {
     pub id: String,
     pub object: Object,
@@ -82,10 +84,17 @@ pub struct OrderItem {
     pub amount: Option<i64>,
     pub currency: Option<Currency>,
     pub description: Option<String>,
-    pub parent: Option<String>,
+    pub parent: Option<Expandable<OrderItemParent>>,
     pub quantity: Option<i64>,
     #[serde(rename = "type")]
     pub item_type: Option<ItemType>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
+pub enum OrderItemParent {
+    Sku(Sku),
+    Discount(Discount)
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -131,6 +140,8 @@ pub struct OrderParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping: Option<ShippingDetails>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl Order {

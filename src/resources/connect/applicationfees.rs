@@ -3,10 +3,10 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::refunds::Refund;
-use crate::util::List;
+use crate::util::{List, RangeQuery};
 use crate::{Client};
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ApplicationFees {
     pub id: String,
     pub object: Object,
@@ -22,6 +22,28 @@ pub struct ApplicationFees {
     pub originating_transaction: Option<String>,
     pub refunded: bool,
     pub refunds: List<Refund>,
+}
+
+#[derive(Default, Debug, Serialize)]
+pub struct ApplicationFeesParam<'a>{
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
+}
+
+#[derive(Default, Serialize, Debug)]
+pub struct ApplicationFeesListParams<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<RangeQuery>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub charge: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 impl ApplicationFees {
