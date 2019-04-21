@@ -23,6 +23,7 @@ use crate::resources::paymentmethods::cards::Card;
 use crate::resources::paymentmethods::source::Source;
 use crate::util::List;
 use crate::{Client};
+use crate::resources::billing::subscription_schedules::SubscriptionSchedules;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum EventType {
@@ -322,6 +323,7 @@ pub enum EventObject {
     Discount(Discount),
     Transfer(Transfer),
     SubscriptionItem(SubscriptionItems),
+    SubscriptionSchedule(SubscriptionSchedules),
     Order(Order),
     Product(Products),
     OrderReturn(OrderReturn),
