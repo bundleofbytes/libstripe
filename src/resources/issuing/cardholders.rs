@@ -2,7 +2,7 @@ use crate::resources::common::address::Address;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::List;
+use crate::util::{List, RangeQuery};
 use crate::Client;
 use std::collections::HashMap;
 
@@ -91,6 +91,28 @@ pub struct CardHolderParam<'a> {
     pub phone_number: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<CardHolderStatus>,
+}
+
+#[derive(Default, Serialize, Debug)]
+pub struct CardHolderListParam<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<RangeQuery>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<CardHolderStatus>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<&'a str>,
+    #[serde(rename="type", skip_serializing_if = "Option::is_none")]
+    pub cardholder_type: Option<CardHolderType>,
 }
 
 impl CardHolders {

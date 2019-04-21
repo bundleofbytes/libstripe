@@ -306,7 +306,6 @@ pub struct EventData {
 pub enum EventObject {
     Charge(Charge),
     Invoice(Invoice),
-    #[serde(rename = "invoiceitem")]
     InvoiceItem(InvoiceItems),
     Subscription(Subscription),
     Card(Card),
