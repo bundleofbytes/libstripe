@@ -1,5 +1,5 @@
 use crate::error::{self, Error};
-use reqwest::header::{self, HeaderMap};
+use reqwest::header::{AUTHORIZATION, USER_AGENT};
 use reqwest::multipart::Form;
 use reqwest::{Client as HttpClient, Method};
 use serde;
@@ -10,13 +10,17 @@ use crate::{Result};
 
 #[derive(Clone)]
 pub struct Client {
-    header: HeaderMap,
+    key: String,
+    account: Option<String>,
+    idempotency: Option<String>,
 }
 
 impl Default for Client {
     fn default() -> Self {
         Client {
-            header: HeaderMap::new(),
+            key: String::new(),
+            account: None,
+            idempotency: None,
         }
     }
 }
@@ -24,36 +28,20 @@ impl Default for Client {
 impl Client {
     pub fn new<S: AsRef<str>>(api_key: S) -> Client {
         let mut client = Client::default();
-        client.stripe_key(api_key).unwrap_or(());
+        client.stripe_key(api_key);
         client
     }
 
-    pub fn stripe_key<S: AsRef<str>>(&mut self, key: S) -> Result<()> {
-        self.header
-            .insert(
-                header::AUTHORIZATION,
-                format!("Bearer {}", key.as_ref()).parse()?,
-            )
-            .ok_or(Error::Unknown)
-            .map(|_| ())
+    pub fn stripe_key<S: AsRef<str>>(&mut self, key: S) {
+        self.key = key.as_ref().into();
     }
 
-    pub fn stripe_account(&mut self, acct: &str) -> Result<()> {
-        self.header
-            .insert("Stripe-Account", acct.parse()?)
-            .ok_or(Error::Unknown)
-            .map(|_| ())
+    pub fn stripe_account(&mut self, acct: &str) {
+        self.account = Some(acct.to_string());
     }
 
-    pub fn idempotent(&mut self, key: &str) -> Result<()> {
-        self.header
-            .insert("Idempotency-Key", key.parse()?)
-            .ok_or(Error::Unknown)
-            .map(|_| ())
-    }
-
-    fn headers(&self) -> HeaderMap {
-        self.header.clone()
+    pub fn idempotency(&mut self, key: &str) {
+        self.idempotency = Some(key.to_string());
     }
 
     pub fn get<A, B>(&self, path: UrlPath, param: Vec<&str>, data: B) -> Result<A>
@@ -105,10 +93,10 @@ impl Client {
                 .map(|s| s.to_string())
                 .collect::<Vec<String>>()
                 .join("/");
+
         if param.len() > 0 {
             param = format!("/{}", param);
         }
-
 
         let uri = match path {
             UrlPath::File(true) => format!("https://files.stripe.com/v1{}{}", path, param),
@@ -117,28 +105,38 @@ impl Client {
 
         let client = HttpClient::new();
         let query = serde_qs::to_string(&data)?;
-        let req = client
+        let mut req = client
             .request(method, &uri)
-            .headers(self.headers())
-            .body(query);
+            .body(query)
+            .header(AUTHORIZATION, format!("Bearer {}", self.key))
+            .header(USER_AGENT, "libstripe-rs/(crates.io/crates/libstripe)");
 
-        let mut res = match form {
-            Some(multipart) => req.multipart(multipart).send()?,
-            None => req.send()?,
-        };
-
-        if res.status().is_success() {
-            res.json().map_err(Error::from)
-        } else {
-            let err: error::StripeErrorObject =
-                res.json().map_err(|e| error::StripeErrorObject {
-                    error: error::StripeRequestObject {
-                        error_type: error::ErrorType::Unknown,
-                        message: Some(format!("{}", e)),
-                        ..Default::default()
-                    },
-                })?;
-            Err(Error::from(err))
+        if let Some(account) = self.account.clone() {
+            req = req.header("Stripe-Account", account);
         }
+
+        if let Some(idemp) = self.idempotency.clone() {
+            req = req.header("Idempotency-Key", idemp);
+        }
+
+        if let Some(multipart) = form {
+            req = req.multipart(multipart);
+        }
+
+        req.send().map_err(Error::from).and_then(|mut res| {
+            if res.status().is_success() {
+                res.json().map_err(Error::from)
+            } else {
+                let err: error::StripeErrorObject =
+                    res.json().map_err(|e| error::StripeErrorObject {
+                        error: error::StripeRequestObject {
+                            error_type: error::ErrorType::Unknown,
+                            message: Some(format!("{}", e)),
+                            ..Default::default()
+                        },
+                    })?;
+                Err(Error::from(err))
+            }
+        })
     }
 }
