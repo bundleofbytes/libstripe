@@ -4,11 +4,12 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::balance::BalanceTransaction;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::Client;
 use std::collections::HashMap;
 use crate::resources::issuing::cards::IssuingCard;
 use crate::resources::issuing::transactions::Transactions;
+use crate::resources::issuing::cardholders::CardHolders;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Authorizations {
@@ -20,7 +21,7 @@ pub struct Authorizations {
     pub authorized_currency: Currency,
     pub balance_transactions: Vec<BalanceTransaction>,
     pub card: Option<IssuingCard>,
-    pub cardholder: Option<String>,
+    pub cardholder: Option<Expandable<CardHolders>>,
     pub created: i64,
     pub held_amount: i64,
     pub held_currency: Currency,

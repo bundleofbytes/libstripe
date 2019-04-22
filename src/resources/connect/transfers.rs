@@ -3,9 +3,12 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::connect::transfer_reversal::TransferReversal;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::balance::BalanceTransaction;
+use crate::resources::connect::account::Account;
+use crate::resources::issuing::transactions::Transactions;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Transfer {
@@ -13,17 +16,17 @@ pub struct Transfer {
     pub object: Object,
     pub amount: i64,
     pub amount_reversed: i64,
-    pub balance_transaction: String,
+    pub balance_transaction: Expandable<BalanceTransaction>,
     pub created: i64,
     pub currency: Currency,
     pub description: String,
-    pub destination: String,
-    pub destination_payment: String,
+    pub destination: Expandable<Account>,
+    pub destination_payment: String, //Expandable but needs clarification
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub reversals: List<TransferReversal>,
     pub reversed: bool,
-    pub source_transaction: Option<String>,
+    pub source_transaction: Option<Expandable<Transactions>>,
     pub source_type: TransferSourceType,
     pub transfer_group: Option<String>,
 }

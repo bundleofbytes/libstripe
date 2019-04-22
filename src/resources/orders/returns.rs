@@ -2,9 +2,10 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::resources::orders::order::OrderItem;
-use crate::util::{List, RangeQuery};
+use crate::resources::orders::order::{OrderItem, Order};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
+use crate::resources::core::refunds::Refund;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Returns {
@@ -15,8 +16,8 @@ pub struct Returns {
     pub currency: Currency,
     pub items: Vec<OrderItem>,
     pub livemode: bool,
-    pub order: String,
-    pub refund: Option<String>,
+    pub order: Expandable<Order>,
+    pub refund: Option<Expandable<Refund>>,
 }
 
 #[derive(Default, Serialize, Debug)]

@@ -3,20 +3,21 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::balance::BalanceTransaction;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::{Client};
 use serde::Serialize;
 use std::collections::HashMap;
+use crate::resources::connect::applicationfees::ApplicationFees;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ApplicationFeeRefunds {
     pub id: String,
     pub object: Object,
     pub amount: i64,
-    pub balance_transaction: Option<BalanceTransaction>,
+    pub balance_transaction: Option<Expandable<BalanceTransaction>>,
     pub created: i64,
     pub currency: Currency,
-    pub fee: String,
+    pub fee: Expandable<ApplicationFees>,
     pub metadata: HashMap<String, String>,
 }
 

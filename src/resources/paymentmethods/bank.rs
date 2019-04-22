@@ -2,20 +2,22 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::{Deleted, List};
+use crate::util::{Deleted, List, Expandable};
 use crate::Client;
 use std::collections::HashMap;
+use crate::resources::connect::account::Account;
+use crate::resources::core::customer::Customer;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct BankAccount {
     pub id: String,
     pub object: Object,
-    pub account: Option<String>,
+    pub account: Option<Expandable<Account>>,
     pub account_holder_name: String,
     pub account_holder_type: AccountHolderType,
     pub bank_name: String,
     pub country: String,
-    pub customer: Option<String>,
+    pub customer: Option<Expandable<Customer>>,
     pub currency: Currency,
     pub default_for_currency: Option<bool>,
     pub fingerprint: String,

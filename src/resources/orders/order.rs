@@ -2,12 +2,13 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::resources::core::charges::ShippingDetails;
+use crate::resources::core::charges::{ShippingDetails, Charge};
 use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
 use crate::resources::orders::sku::Sku;
 use crate::resources::billing::discounts::Discount;
+use crate::resources::core::customer::Customer;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Order {
@@ -17,10 +18,10 @@ pub struct Order {
     pub amount_returned: Option<i64>,
     pub application: Option<String>,
     pub application_fee: Option<i64>,
-    pub charge: Option<String>,
+    pub charge: Option<Box<Expandable<Charge>>>,
     pub created: i64,
     pub currency: Currency,
-    pub customer: Option<String>,
+    pub customer: Option<Expandable<Customer>>,
     pub email: Option<String>,
     pub items: Vec<OrderItem>,
     pub livemode: bool,

@@ -3,22 +3,24 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::balance::BalanceTransaction;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::refunds::Refund;
+use crate::resources::connect::transfers::Transfer;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransferReversal {
     pub id: String,
     pub object: Object,
     pub amount: i64,
-    pub balance_transaction: Option<BalanceTransaction>,
+    pub balance_transaction: Option<Expandable<BalanceTransaction>>,
     pub created: i64,
     pub currency: Currency,
-    pub destination_payment_refund: Option<String>,
+    pub destination_payment_refund: Option<Expandable<Refund>>,
     pub metadata: HashMap<String, String>,
-    pub source_refund: Option<String>,
-    pub transfer: String,
+    pub source_refund: Option<Expandable<Refund>>,
+    pub transfer: Expandable<Transfer>,
 }
 
 #[derive(Default, Serialize, Debug)]

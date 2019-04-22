@@ -2,9 +2,10 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::{Deleted, List};
+use crate::util::{Deleted, List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::product::Products;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Sku {
@@ -20,7 +21,7 @@ pub struct Sku {
     pub metadata: HashMap<String, String>,
     pub package_dimensions: Option<PackageDimensions>,
     pub price: i64,
-    pub product: String,
+    pub product: Expandable<Products>,
     pub updated: i64,
 }
 
@@ -78,6 +79,8 @@ pub struct SkuParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub package_dimensions: Option<PackageDimensions>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
 }
 
 #[derive(Default, Debug, Serialize)]

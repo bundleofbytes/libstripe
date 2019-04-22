@@ -10,6 +10,15 @@ use std::collections::HashMap;
 use crate::resources::common::path::UrlPath;
 use crate::resources::paymentmethods::paymentmethods::PaymentMethodsDetails;
 use crate::resources::core::balance::BalanceTransaction;
+use crate::resources::connect::applicationfees::ApplicationFees;
+use crate::resources::core::customer::Customer;
+use crate::resources::core::disputes::Dispute;
+use crate::resources::billing::invoices::Invoice;
+use crate::resources::orders::order::Order;
+use crate::resources::fraud::review::Reviews;
+use crate::resources::connect::transfers::Transfer;
+use crate::resources::core::paymentintents::TransferData;
+use crate::resources::connect::account::Account;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Charge {
@@ -18,25 +27,25 @@ pub struct Charge {
     pub amount: i64,
     pub amount_refunded: i64,
     pub application: Option<String>,
-    pub application_fee: Option<String>,
+    pub application_fee: Option<Box<Expandable<ApplicationFees>>>,
     pub application_fee_amount: Option<i32>,
     pub balance_transaction: Expandable<BalanceTransaction>,
     pub billing_details: BillingDetails,
     pub captured: bool,
     pub created: i64,
     pub currency: Currency,
-    pub customer: Option<String>,
+    pub customer: Option<Expandable<Customer>>,
     pub description: Option<String>,
     pub destination: Option<String>,
-    pub dispute: Option<String>,
+    pub dispute: Option<Expandable<Dispute>>,
     pub failure_code: Option<ErrorCode>,
     pub failure_message: Option<String>,
     pub fraud_details: FraudDetails,
-    pub invoice: Option<String>,
+    pub invoice: Option<Box<Expandable<Invoice>>>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
-    pub on_behalf_of: Option<String>,
-    pub order: Option<String>,
+    pub on_behalf_of: Option<Expandable<Account>>,
+    pub order: Option<Expandable<Order>>,
     pub outcome: Option<Outcome>,
     pub paid: bool,
     pub payment_intent: Option<String>,
@@ -47,13 +56,14 @@ pub struct Charge {
     pub receipt_url: String,
     pub refunded: bool,
     pub refunds: List<Refund>,
-    pub review: Option<String>,
+    pub review: Option<Expandable<Reviews>>,
     pub shipping: Option<ShippingDetails>,
     pub source: Option<PaymentSource>,
-    pub source_transfer: Option<String>,
+    pub source_transfer: Option<Expandable<Transfer>>,
     pub statement_descriptor: Option<String>,
     pub status: ChargeStatus,
-    pub transfer: Option<String>,
+    pub transfer: Option<Expandable<Transfer>>,
+    pub transfer_data: TransferData,
     pub transfer_group: Option<String>,
 }
 

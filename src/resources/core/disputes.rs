@@ -5,9 +5,10 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::balance::BalanceTransaction;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::charges::Charge;
 
 #[derive(Default, Serialize, Deserialize, Debug)]
 pub struct Evidence {
@@ -82,7 +83,7 @@ pub struct Dispute {
     pub amount: i64,
     pub balance_transaction: String,
     pub balance_transactions: Vec<BalanceTransaction>,
-    pub charge: String,
+    pub charge: Box<Expandable<Charge>>,
     pub created: i64,
     pub currency: Currency,
     pub evidence: Evidence,

@@ -3,25 +3,36 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::refunds::Refund;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
+use crate::resources::connect::account::Account;
+use crate::resources::core::balance::BalanceTransaction;
+use crate::resources::core::charges::Charge;
+use crate::resources::connect::transfers::Transfer;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ApplicationFees {
     pub id: String,
     pub object: Object,
-    pub account: String,
+    pub account: Expandable<Account>,
     pub amount: i64,
     pub amount_refunded: i64,
     pub application: String,
-    pub balance_transaction: String,
-    pub charge: String,
+    pub balance_transaction: Expandable<BalanceTransaction>,
+    pub charge: Box<Expandable<Charge>>,
     pub created: i64,
     pub currency: Currency,
     pub livemode: bool,
-    pub originating_transaction: Option<String>,
+    pub originating_transaction: Option<Box<Expandable<OriginatingTransaction>>>,
     pub refunded: bool,
     pub refunds: List<Refund>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
+pub enum OriginatingTransaction {
+    Charge(Charge),
+    Transfer(Transfer)
 }
 
 #[derive(Default, Debug, Serialize)]

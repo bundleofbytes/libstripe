@@ -4,9 +4,15 @@ use crate::resources::common::object::Object;
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::charges::Charge;
 use crate::resources::issuing::cards::IssuingShipping;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::customer::Customer;
+use crate::resources::billing::invoices::Invoice;
+use crate::resources::paymentmethods::paymentmethods::{PaymentMethods, PaymentMethodsType};
+use crate::resources::fraud::review::Reviews;
+use crate::resources::paymentmethods::source::Source;
+use crate::resources::connect::account::Account;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PaymentIntent {
@@ -26,21 +32,24 @@ pub struct PaymentIntent {
     pub confirmation_method: ConfirmationMethod,
     pub created: i64,
     pub currency: Currency,
-    pub customer: Option<String>,
-    pub description: String,
+    pub customer: Option<Expandable<Customer>>,
+    pub description: Option<String>,
+    pub invoice: Option<Box<Expandable<Invoice>>>,
     pub last_payment_error: Option<LastPaymentError>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
-    pub next_source_action: Option<NextSourceAction>,
-    pub on_behalf_of: String,
-    pub receipt_email: String,
-    pub review: String,
-    pub shipping: IssuingShipping,
-    pub source: String,
-    pub statement_descriptor: String,
+    pub next_source: Option<NextSourceAction>,
+    pub on_behalf_of: Option<String>,
+    pub payment_method: Option<PaymentMethods>,
+    pub payment_method_type: Option<PaymentMethodsType>,
+    pub receipt_email: Option<String>,
+    pub review: Option<Expandable<Reviews>>,
+    pub shipping: Option<IssuingShipping>,
+    pub source: Option<Expandable<Source>>,
+    pub statement_descriptor: Option<String>,
     pub status: PaymentIntentsStatus,
-    pub transfer_data: TransferData,
-    pub transfer_group: String,
+    pub transfer_data: Option<TransferData>,
+    pub transfer_group: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -100,7 +109,7 @@ pub enum PaymentIntentsStatus {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransferData {
-    pub destination: String,
+    pub destination: Expandable<Account>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

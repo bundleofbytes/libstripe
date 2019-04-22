@@ -4,9 +4,10 @@ use crate::resources::core::charges::BillingDetails;
 use crate::resources::paymentmethods::bank::AccountHolderType;
 use crate::resources::paymentmethods::cards::{CardBrand, CardCheck, CardType};
 use crate::resources::paymentmethods::source::PaymentSourceParam;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::customer::Customer;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PaymentMethods {
@@ -16,7 +17,7 @@ pub struct PaymentMethods {
     pub card: PaymentCard,
     pub card_present: Option<String>,
     pub created: i64,
-    pub customer: String,
+    pub customer: Expandable<Customer>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     #[serde(rename = "type")]

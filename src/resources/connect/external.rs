@@ -6,7 +6,7 @@ use crate::util::{Deleted, List};
 use crate::{Client};
 
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "snake_case")]
+#[serde(untagged)]
 pub enum ExternalAccounts {
     Card(Card),
     BankAccount(BankAccount),

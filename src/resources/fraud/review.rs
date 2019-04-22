@@ -1,14 +1,15 @@
 use crate::resources::common::object::Object;
 use crate::Client;
 use crate::resources::common::path::UrlPath;
-use crate::util::RangeQuery;
+use crate::util::{RangeQuery, Expandable};
+use crate::resources::core::charges::Charge;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Reviews {
     pub id: String,
     pub object: Object,
     pub billing_zip: Option<String>,
-    pub charge: Option<String>,
+    pub charge: Option<Box<Expandable<Charge>>>,
     pub closed_reason: Reason,
     pub created: i64,
     pub ip_address: Option<String>,

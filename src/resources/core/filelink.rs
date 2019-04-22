@@ -1,9 +1,10 @@
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::file::File;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FileLink {
@@ -12,7 +13,7 @@ pub struct FileLink {
     pub created: i64,
     pub expired: bool,
     pub expires_at: Option<i64>,
-    pub file: String,
+    pub file: Expandable<File>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub url: String,

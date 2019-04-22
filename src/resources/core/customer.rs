@@ -3,8 +3,8 @@ use crate::resources::common::address::Address;
 use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 use crate::resources::common::path::{UrlPath};
-use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam};
-use crate::util::{Deleted, List, RangeQuery};
+use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam, Source};
+use crate::util::{Deleted, List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
 
@@ -22,7 +22,7 @@ pub struct Customer {
     pub account_balance: i64,
     pub created: i64,
     pub currency: Option<Currency>,
-    pub default_source: Option<String>,
+    pub default_source: Option<Box<Expandable<Source>>>,
     pub delinquent: bool,
     pub description: Option<String>,
     pub discount: Option<String>,

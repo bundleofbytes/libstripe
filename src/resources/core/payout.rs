@@ -2,9 +2,12 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::List;
+use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::balance::BalanceTransaction;
+use crate::resources::paymentmethods::cards::Card;
+use crate::resources::paymentmethods::bank::BankAccount;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Payout {
@@ -13,12 +16,12 @@ pub struct Payout {
     pub amount: i64,
     pub arrival_date: i64,
     pub automatic: bool,
-    pub balance_transaction: String,
+    pub balance_transaction: Expandable<BalanceTransaction>,
     pub created: i64,
     pub currency: Currency,
     pub description: String,
-    pub destination: Option<String>,
-    pub failure_balance_transaction: Option<String>,
+    pub destination: Option<Expandable<PayoutDestination>>,
+    pub failure_balance_transaction: Option<Expandable<BalanceTransaction>>,
     pub failure_code: Option<PayoutFailureCode>,
     pub failure_message: Option<String>,
     pub livemode: bool,
@@ -29,6 +32,13 @@ pub struct Payout {
     pub status: PayoutStatus,
     #[serde(rename = "type")]
     pub payout_type: PayoutType,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
+pub enum PayoutDestination{
+    Card(Card),
+    Bank(BankAccount)
 }
 
 #[derive(Serialize, Deserialize, Debug)]

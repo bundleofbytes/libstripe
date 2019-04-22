@@ -10,6 +10,7 @@ use std::collections::HashMap;
 use crate::resources::core::customer::Customer;
 use crate::resources::paymentmethods::paymentmethods::PaymentMethods;
 use crate::resources::billing::invoices::Invoice;
+use crate::resources::billing::subscription_schedules::SubscriptionSchedules;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Subscription {
@@ -36,7 +37,7 @@ pub struct Subscription {
     pub metadata: HashMap<String, String>,
     pub plan: Plans,
     pub quantity: i64,
-    pub schedule: String, //TODO: Expandable?
+    pub schedule: Expandable<SubscriptionSchedules>,
     pub start: i64,
     pub status: SubscriptionStatus,
     pub tax_percent: Option<f64>,

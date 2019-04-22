@@ -2,15 +2,17 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::util::{Deleted, List};
+use crate::util::{Deleted, List, Expandable};
 use crate::Client;
 use std::collections::HashMap;
+use crate::resources::connect::account::Account;
+use crate::resources::core::customer::Customer;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Card {
     pub id: String,
     pub object: Object,
-    pub account: Option<String>,
+    pub account: Option<Expandable<Account>>,
     pub address_city: Option<String>,
     pub address_country: Option<String>,
     pub address_line1: Option<String>,
@@ -23,7 +25,7 @@ pub struct Card {
     pub brand: CardBrand,
     pub country: String,
     pub currency: Option<Currency>,
-    pub customer: Option<String>,
+    pub customer: Option<Expandable<Customer>>,
     pub cvc_check: Option<CardCheck>,
     pub dynamic_last4: Option<String>,
     pub exp_month: i32,
@@ -33,7 +35,7 @@ pub struct Card {
     pub last4: String,
     pub metadata: HashMap<String, String>,
     pub name: Option<String>,
-    pub recipient: Option<String>,
+    pub recipient: Option<String>, //Expandable but needs clarification
     pub tokenization_method: Option<TokenizationMethod>,
 }
 

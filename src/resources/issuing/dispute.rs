@@ -4,7 +4,8 @@ use std::collections::HashMap;
 use crate::resources::core::disputes::{DisputeReason, DisputeStatus};
 use crate::Client;
 use crate::resources::common::path::UrlPath;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
+use crate::resources::issuing::transactions::Transactions;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct IssuingDispute {
@@ -13,7 +14,7 @@ pub struct IssuingDispute {
     pub amount: i64,
     pub created: i64,
     pub currency: Currency,
-    pub disputed_transaction: Option<String>,
+    pub disputed_transaction: Option<Expandable<Transactions>>,
     pub evidence: DisputeEvidence,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,

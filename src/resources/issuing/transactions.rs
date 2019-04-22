@@ -2,23 +2,27 @@ use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
-use crate::resources::issuing::authorizations::MerchantData;
-use crate::util::{List, RangeQuery};
+use crate::resources::issuing::authorizations::{MerchantData, Authorizations};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::balance::BalanceTransaction;
+use crate::resources::paymentmethods::cards::Card;
+use crate::resources::issuing::cardholders::CardHolders;
+use crate::resources::core::disputes::Dispute;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Transactions {
     pub id: String,
     pub object: Object,
     pub amount: i64,
-    pub authorization: String,
-    pub balance_transaction: String,
-    pub card: String,
-    pub cardholder: String,
+    pub authorization: Box<Expandable<Authorizations>>,
+    pub balance_transaction: Expandable<BalanceTransaction>,
+    pub card: Expandable<Card>,
+    pub cardholder: Expandable<CardHolders>,
     pub created: i64,
     pub currency: Currency,
-    pub dispute: String,
+    pub dispute: Box<Expandable<Dispute>>,
     pub livemode: bool,
     pub merchant_data: MerchantData,
     #[serde(rename = "type")]

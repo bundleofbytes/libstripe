@@ -3,16 +3,17 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::paymentmethods::source::Source;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::issuing::transactions::Transactions;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Topup {
     pub id: String,
     pub object: Object,
     pub amount: i64,
-    pub balance_transaction: Option<String>,
+    pub balance_transaction: Option<Expandable<Transactions>>,
     pub created: i64,
     pub currency: Currency,
     pub description: String,
