@@ -22,6 +22,8 @@ pub enum Object {
     #[serde(rename = "issuing.cardholder")]
     CardHolders,
     Source,
+    #[serde(rename = "checkout.session")]
+    CheckoutSession,
     Coupon,
     Discount,
     Invoice,

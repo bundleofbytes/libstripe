@@ -38,6 +38,7 @@ use crate::resources::fraud::review::Reviews;
 use crate::resources::connect::topup::Topup;
 use crate::resources::connect::applicationfees::ApplicationFees;
 use crate::resources::connect::applicationrefunds::ApplicationFeeRefunds;
+use crate::resources::checkout::sessions::Sessions;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum EventType {
@@ -87,8 +88,8 @@ pub enum EventType {
     ChargeDisputeUpdated,
     #[serde(rename = "charge.refund.updated")]
     ChargeRefundUpdated,
-    #[serde(rename = "checkout_beta.session_succeeded")]
-    CheckoutBetaSessionSucceeded,
+    #[serde(rename = "checkout.session.completed")]
+    CheckoutSessionCompleted,
     #[serde(rename = "coupon.created")]
     CouponCreated,
     #[serde(rename = "coupon.deleted")]
@@ -103,6 +104,12 @@ pub enum EventType {
     CustomerUpdated,
     #[serde(rename = "customer.discount.created")]
     CustomerDiscountCreated,
+    #[serde(rename = "customer.tax_id.created")]
+    CustomerTaxIdCreated,
+    #[serde(rename = "customer.tax_id.deleted")]
+    CustomerTaxIdDeleted,
+    #[serde(rename = "customer.tax_id.updated")]
+    CustomerTaxIdUpdated,
     #[serde(rename = "customer.discount.deleted")]
     CustomerDiscountDeleted,
     #[serde(rename = "customer.discount.updated")]
@@ -340,6 +347,7 @@ pub enum EventObject {
     ApplicationFeeRefund(ApplicationFeeRefunds),
     Authorization(Authorizations),
     Charge(Charge),
+    CheckoutSessions(Sessions),
     Invoice(Invoice),
     InvoiceItem(InvoiceItems),
     Subscription(Subscription),
