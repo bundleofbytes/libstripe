@@ -7,7 +7,7 @@ use crate::resources::common::path::UrlPath;
 use crate::util::{List, RangeQuery, Expandable};
 use crate::resources::issuing::transactions::Transactions;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct IssuingDispute {
     pub id: String,
     pub object: Object,
@@ -22,19 +22,19 @@ pub struct IssuingDispute {
     pub status: DisputeStatus
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct DisputeEvidence {
     pub fraudulent: Option<Evidence>,
     pub other: Option<Evidence>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Evidence {
     pub dispute_explanation: Option<String>,
     pub uncategorized_file: Option<String>,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct IssuingDisputeParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disputed_transaction: Option<&'a str>,
@@ -50,7 +50,7 @@ pub struct IssuingDisputeParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct IssuingDisputeListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disputed_transaction: Option<&'a str>,

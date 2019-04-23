@@ -6,7 +6,7 @@ use crate::util::{List, RangeQuery};
 use crate::Client;
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CardHolders {
     pub id: String,
     pub object: Object,
@@ -24,21 +24,21 @@ pub struct CardHolders {
     pub cardholder_type: CardHolderType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct AuthorizationControls {
     pub allowed_categories: Vec<String>,
     pub blocked_categories: Vec<String>,
     pub spending_limits: Vec<SpendingLimits>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SpendingLimits {
     pub amount: Option<i64>,
     pub categories: Option<Vec<String>>,
     pub interval: Option<SpendingLimitsInterval>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SpendingLimitsInterval {
     PerAuthorization,
@@ -49,13 +49,13 @@ pub enum SpendingLimitsInterval {
     AllTime,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Billing {
     pub address: Address,
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum CardHolderStatus {
     Active,
@@ -64,14 +64,14 @@ pub enum CardHolderStatus {
     Blocked,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum CardHolderType {
     Individual,
     BusinessEntity,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CardHolderParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing: Option<Billing>,
@@ -93,7 +93,7 @@ pub struct CardHolderParam<'a> {
     pub status: Option<CardHolderStatus>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CardHolderListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

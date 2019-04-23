@@ -1,19 +1,19 @@
 use crate::resources::billing::subscriptions::{BillingThresholds, SubscriptionBilling};
 use crate::resources::common::object::Object;
 use crate::resources::common::path::{UrlPath};
-use crate::resources::issuing::cardholders::Billing;
 use crate::util::{List, Expandable};
 use crate::Client;
 use std::collections::HashMap;
 use crate::resources::core::customer::Customer;
 use crate::resources::billing::coupons::Coupon;
 use crate::resources::billing::plans::Plans;
+use crate::resources::billing::invoices::InvoiceBilling;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SubscriptionSchedules {
     pub id: String,
     pub object: Object,
-    pub billing: Billing,
+    pub billing: InvoiceBilling,
     pub billing_thresholds: Option<BillingThresholds>,
     pub canceled_at: Option<i64>,
     pub completed_at: Option<i64>,
@@ -33,12 +33,12 @@ pub struct SubscriptionSchedules {
     pub subscription: Option<String>, //Expandable?
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct InvoiceSettings {
     pub days_until_due: i64,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Phase {
     pub applicaiton_fee_percent: Option<f64>,
     pub coupon: Option<Expandable<Coupon>>,
@@ -50,25 +50,25 @@ pub struct Phase {
     pub plans: Option<Vec<PhasePlans>>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct PhasePlans {
     pub billing_thresholds: Option<BillingThresholds>,
     pub plan: Option<Expandable<Plans>>,
     pub quantity: Option<i64>,
 }
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CurrentPhase {
     pub start_date: i64,
     pub end_date: i64,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct RenewalInterval {
     pub interval: Option<String>,
     pub length: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SubscriptionSchedulesStatus {
     NotStarted,
@@ -78,7 +78,7 @@ pub enum SubscriptionSchedulesStatus {
     Canceled,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum RenewalBehavior {
     None,
@@ -86,7 +86,7 @@ pub enum RenewalBehavior {
     Release,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SubscriptionSchedulesParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub billing: Option<SubscriptionBilling>,

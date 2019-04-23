@@ -1,4 +1,4 @@
-#[derive(Serialize, Deserialize, PartialEq, Eq, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum Object {
     #[serde(rename = "issuing.authorization")]

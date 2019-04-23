@@ -6,7 +6,7 @@ use crate::util::List;
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CountrySpecs {
     pub id: String,
     pub object: Object,
@@ -17,19 +17,19 @@ pub struct CountrySpecs {
     pub verification_fields: Option<Verification>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Verification {
     pub individual: Option<EntityVerification>,
     pub company: Option<EntityVerification>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct EntityVerification {
     pub minimum: Option<Vec<MinimumVerification>>,
     pub additional: Option<Vec<AdditionalVerification>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum MinimumVerification {
     ExternalAccount,
@@ -86,7 +86,7 @@ pub enum MinimumVerification {
     TOSAcceptanceIP,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum AdditionalVerification {
     #[serde(rename = "individual.id_number")]
     IndividualIDNumber,
@@ -96,7 +96,7 @@ pub enum AdditionalVerification {
     RelationshipAccountOpener,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum PaymentMethods {
     Alipay,
@@ -105,7 +105,7 @@ pub enum PaymentMethods {
     Ach,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CountrySpecListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

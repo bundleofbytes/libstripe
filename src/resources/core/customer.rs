@@ -8,14 +8,14 @@ use crate::util::{Deleted, List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CustomerShipping {
     pub address: Address,
     pub name: String,
     pub phone: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Customer {
     pub id: String,
     pub object: Object,
@@ -39,32 +39,32 @@ pub struct Customer {
 }
 
 //TODO: Move to invoice?
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct InvoiceSettings {
     pub custom_fields: Option<CustomFields>,
     pub footer: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CustomFields {
     pub name: String,
     pub value: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TaxInfo {
     pub tax_id: String,
     #[serde(rename = "type")]
     pub tax_type: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TaxInfoVerification {
     pub verified_name: String,
     pub status: TaxStatus,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum TaxStatus {
     Unverified,
@@ -72,7 +72,7 @@ pub enum TaxStatus {
     Verified,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct CustomerParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_balance: Option<i64>,
@@ -100,7 +100,7 @@ pub struct CustomerParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CustomerListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

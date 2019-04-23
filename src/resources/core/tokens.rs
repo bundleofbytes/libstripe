@@ -7,7 +7,7 @@ use crate::resources::paymentmethods::bank::{BankAccount, BankAccountParam};
 use crate::resources::paymentmethods::cards::{Card, CardParam};
 use crate::{Client};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Tokens {
     pub id: String,
     pub object: Object,
@@ -21,14 +21,14 @@ pub struct Tokens {
     pub used: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum TokenType {
     Card,
     BankAccount,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TokenParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub card: Option<CardParam<'a>>,
@@ -44,7 +44,7 @@ pub struct TokenParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct AccountTokenParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub business_type: Option<BusinessType>,
@@ -58,7 +58,7 @@ pub struct AccountTokenParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PIIParam<'a> {
     pub id_number: &'a str,
 }

@@ -5,7 +5,7 @@ use crate::resources::common::path::UrlPath;
 use crate::util::Deleted;
 use crate::{Client};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Discount {
     pub object: Object,
     pub coupon: Coupon,

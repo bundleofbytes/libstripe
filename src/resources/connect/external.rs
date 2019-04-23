@@ -5,7 +5,7 @@ use crate::resources::paymentmethods::cards::Card;
 use crate::util::{Deleted, List};
 use crate::{Client};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum ExternalAccounts {
     Card(Card),

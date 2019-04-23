@@ -14,11 +14,10 @@ use crate::resources::fraud::review::Reviews;
 use crate::resources::paymentmethods::source::Source;
 use crate::resources::connect::account::Account;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct PaymentIntent {
     pub id: String,
     pub object: Object,
-    pub allowed_source_types: Vec<String>,
     pub amount: i32,
     pub amount_capturable: i32,
     pub amount_received: i32,
@@ -52,7 +51,7 @@ pub struct PaymentIntent {
     pub transfer_group: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct NextSourceAction {
     pub authorize_with_url: Option<AuthorizeWithUrl>,
     #[serde(rename = "type")]
@@ -60,27 +59,28 @@ pub struct NextSourceAction {
     pub use_stripe_sdk: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ActionType {
     AuthorizeWithUrl,
     UseStripeSdk,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct AuthorizeWithUrl {
     pub return_url: Option<String>,
     pub url: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ConfirmationMethod {
+    Automatic,
     Secret,
     Publishable,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum CancellationReason {
     Duplicate,
@@ -88,16 +88,17 @@ pub enum CancellationReason {
     RequestedByCustomer,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum CaptureMethod {
     Automatic,
     Manual,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum PaymentIntentsStatus {
+    RequiresPaymentMethod,
     RequiresSource,
     RequiresConfirmation,
     RequiresSourceAction,
@@ -107,12 +108,12 @@ pub enum PaymentIntentsStatus {
     Succeeded,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TransferData {
     pub destination: Expandable<Account>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct LastPaymentError {
     pub error_type: LastPaymentErrorType,
     pub charge: Option<String>,
@@ -124,7 +125,7 @@ pub struct LastPaymentError {
     pub source: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum LastPaymentErrorType {
     ApiConnectionError,
@@ -136,7 +137,7 @@ pub enum LastPaymentErrorType {
     RateLimitError,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PaymentIntentParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_source_type: Option<Vec<&'a str>>,
@@ -182,7 +183,7 @@ pub struct PaymentIntentParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PaymentIntentListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

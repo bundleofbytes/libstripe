@@ -1,4 +1,4 @@
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum MerchantCategories {
     AcRefrigerationRepair,                              //A/C, Refrigeration Repair
@@ -137,7 +137,7 @@ pub enum MerchantCategories {
     GovernmentServices,              //Government Services (Not Elsewhere Classified)
     GroceryStoresSupermarkets,       //Grocery Stores, Supermarkets
     HardwareStores,                  //Hardware Stores
-    HardwareEquipmentAndSupplies,    //Hardware, Equipment, and Supplies
+    HardwareEquipmentAndSupplies,    //Hardwareuipment, and Supplies
     HealthAndBeautySpas,             //Health and Beauty Spas
     HearingAidsSalesAndSupplies,     //Hearing Aids Sales and Supplies
     HeatingPlumbingAC,               //Heating, Plumbing, A/C

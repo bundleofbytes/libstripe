@@ -9,7 +9,7 @@ use crate::resources::core::balance::BalanceTransaction;
 use crate::resources::core::charges::Charge;
 use crate::resources::connect::transfer_reversal::TransferReversal;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Refund {
     pub id: String,
     pub object: Object,
@@ -28,7 +28,7 @@ pub struct Refund {
     pub status: RefundStatus,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RefundReason {
     Duplicate,
@@ -36,7 +36,7 @@ pub enum RefundReason {
     RequestedByCustomer,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FailureReason {
     LostOrStolenCard,
@@ -44,7 +44,7 @@ pub enum FailureReason {
     Unknown,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum RefundStatus {
     Succeeded,
@@ -53,7 +53,7 @@ pub enum RefundStatus {
     Cancelled,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct RefundParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub charge: Option<&'a str>,

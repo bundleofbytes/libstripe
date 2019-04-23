@@ -7,26 +7,26 @@ use crate::{Client};
 use serde::Serialize;
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Persons {
     pub id: String,
     pub object: Object,
     pub account: String,
-    pub address: Address,
-    pub address_kana: Address,
-    pub address_kanji: Address,
+    pub address: Option<Address>,
+    pub address_kana: Option<Address>,
+    pub address_kanji: Option<Address>,
     pub created: i64,
     pub dob: DayOfBirth,
-    pub email: String,
-    pub first_name: String,
-    pub last_name: String,
+    pub email: Option<String>,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
     pub first_name_kana: Option<String>,
     pub last_name_kana: Option<String>,
     pub first_name_kanji: Option<String>,
     pub last_name_kanji: Option<String>,
-    pub gender: Gender,
+    pub gender: Option<Gender>,
     pub id_number_provided: bool,
-    pub maiden_name: String,
+    pub maiden_name: Option<String>,
     pub metadata: HashMap<String, String>,
     pub phone: String,
     pub relationship: Relationship,
@@ -35,30 +35,30 @@ pub struct Persons {
     pub verification: AccountVerification,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Relationship {
     pub account_opener: bool,
     pub director: bool,
     pub owner: bool,
-    pub percent_ownership: bool,
-    pub title: String,
+    pub percent_ownership: Option<bool>,
+    pub title: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum Gender {
     Male,
     Female,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct DayOfBirth {
     pub day: Option<i16>,
     pub month: Option<i16>,
     pub year: Option<i16>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct AccountVerification {
     pub details: Option<String>,
     pub details_code: Option<DetailsCode>,
@@ -66,7 +66,7 @@ pub struct AccountVerification {
     pub document: Option<Document>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Document {
     pub back: Option<String>,
     pub details: Option<String>,
@@ -74,7 +74,7 @@ pub struct Document {
     pub front: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum DocumentStatus {
     Unverified,
@@ -82,7 +82,7 @@ pub enum DocumentStatus {
     Verified,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum DetailsCode {
     DocumentCorrupt,
@@ -106,7 +106,7 @@ pub enum DetailsCode {
     FailedOther,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct PersonsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<&'a str>,
@@ -154,7 +154,7 @@ pub struct PersonsParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PersonsListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

@@ -20,7 +20,7 @@ use crate::resources::connect::transfers::Transfer;
 use crate::resources::core::paymentintents::TransferData;
 use crate::resources::connect::account::Account;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Charge {
     pub id: String,
     pub object: Object,
@@ -67,7 +67,7 @@ pub struct Charge {
     pub transfer_group: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct BillingDetails {
     pub address: Option<Address>,
     pub email: Option<String>,
@@ -75,7 +75,7 @@ pub struct BillingDetails {
     pub phone: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum PreferredLanguage {
     EN,
@@ -84,7 +84,7 @@ pub enum PreferredLanguage {
     NL,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ChargeStatus {
     Succeeded,
@@ -92,7 +92,7 @@ pub enum ChargeStatus {
     Failed,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Outcome {
     #[serde(rename = "type")]
     pub outcome_type: OutcomeType,
@@ -103,26 +103,26 @@ pub struct Outcome {
     pub rule: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct FraudDetails {
     pub user_report: Option<UserReport>,
     pub stripe_report: Option<StripeReport>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum UserReport {
     Safe,
     Fraudulent,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum StripeReport {
     Fraudulent,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ShippingDetails {
     pub name: String,
     pub address: Address,
@@ -131,7 +131,7 @@ pub struct ShippingDetails {
     pub tracking_number: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum OutcomeType {
     Authorized,
@@ -141,7 +141,7 @@ pub enum OutcomeType {
     Invalid,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum NetworkStatus {
     ApprovedByNetwork,
@@ -150,7 +150,7 @@ pub enum NetworkStatus {
     ReversedAfterApproval,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RiskLevel {
     Normal,
@@ -160,7 +160,7 @@ pub enum RiskLevel {
     Unknown,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum OutcomeReason {
     ApprovedWithID,
@@ -207,7 +207,7 @@ pub enum OutcomeReason {
     WithrawalCountLimitExceeded,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ChargeParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i32>,
@@ -244,7 +244,7 @@ pub struct ChargeParams<'a> {
     pub fraud_details: Option<FraudDetails>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ChargeListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer: Option<&'a str>,
@@ -264,12 +264,12 @@ pub struct ChargeListParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ChargeSourceListParam {
     pub object: ChargeSourceObject,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ChargeSourceObject {
     All,

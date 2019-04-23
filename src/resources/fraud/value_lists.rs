@@ -5,7 +5,7 @@ use crate::resources::fraud::value_list_items::ValueListItems;
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ValueLists {
     pub id: String,
     pub object: Object,
@@ -19,7 +19,7 @@ pub struct ValueLists {
     pub name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum ItemType {
     CardFingerprint,
@@ -31,7 +31,7 @@ pub enum ItemType {
     CaseSensitiveString
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ValueListsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<&'a str>,
@@ -43,7 +43,7 @@ pub struct ValueListsParam<'a> {
     pub metadata: Option<HashMap<String, String>>
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ValueListsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

@@ -8,7 +8,7 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::Path;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct File {
     pub id: String,
     pub object: Object,
@@ -23,7 +23,7 @@ pub struct File {
     pub url: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FilePurpose {
     BusinessLogo,
@@ -54,7 +54,7 @@ impl Into<Cow<'static, str>> for FilePurpose {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum FileType {
     PDF,
@@ -68,7 +68,7 @@ pub enum FileType {
     DOCX,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct FileLinkDataParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create: Option<bool>,

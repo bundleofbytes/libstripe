@@ -8,7 +8,7 @@ use crate::{Client};
 use std::collections::HashMap;
 use crate::resources::issuing::transactions::Transactions;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Topup {
     pub id: String,
     pub object: Object,
@@ -17,7 +17,7 @@ pub struct Topup {
     pub created: i64,
     pub currency: Currency,
     pub description: String,
-    pub exepcted_availability_date: i64,
+    pub exepcted_availability_date: Option<i64>,
     pub failure_code: Option<String>,
     pub failure_message: Option<String>,
     pub livemode: bool,
@@ -28,7 +28,7 @@ pub struct Topup {
     pub transfer_group: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum TopupStatus {
     Succeeded,
@@ -38,7 +38,7 @@ pub enum TopupStatus {
     Canceled,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TopupParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i64>,
@@ -58,7 +58,7 @@ pub struct TopupParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TopupListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i64>,

@@ -1,4 +1,4 @@
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize, PartialEq)]
 pub struct Address {
     pub line1: Option<String>,
     pub line2: Option<String>,

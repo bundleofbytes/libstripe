@@ -7,7 +7,7 @@ use crate::{Client};
 use std::collections::HashMap;
 use crate::resources::core::product::Products;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Sku {
     pub id: String,
     pub object: Object,
@@ -25,7 +25,7 @@ pub struct Sku {
     pub updated: i64,
 }
 
-#[derive(Default, Debug, Deserialize, Serialize)]
+#[derive(Default, Debug, Deserialize, Serialize, PartialEq)]
 pub struct PackageDimensions {
     pub height: f64,
     pub length: f64,
@@ -33,7 +33,7 @@ pub struct PackageDimensions {
     pub width: f64,
 }
 
-#[derive(Default, Debug, Deserialize, Serialize)]
+#[derive(Default, Debug, Deserialize, Serialize, PartialEq)]
 pub struct Inventory {
     pub quantity: Option<i32>,
     #[serde(rename = "type")]
@@ -41,7 +41,7 @@ pub struct Inventory {
     pub value: Option<InventoryValue>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum InventoryValue {
     InStock,
@@ -49,7 +49,7 @@ pub enum InventoryValue {
     OutOfStock,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum InventoryType {
     Finite,
@@ -57,7 +57,7 @@ pub enum InventoryType {
     Infinite,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct SkuParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<&'a str>,
@@ -83,7 +83,7 @@ pub struct SkuParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct SkuListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,

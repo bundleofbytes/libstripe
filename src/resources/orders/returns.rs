@@ -7,7 +7,7 @@ use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use crate::resources::core::refunds::Refund;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Returns {
     pub id: String,
     pub object: Object,
@@ -20,7 +20,7 @@ pub struct Returns {
     pub refund: Option<Expandable<Refund>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ReturnListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

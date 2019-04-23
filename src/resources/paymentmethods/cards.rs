@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use crate::resources::connect::account::Account;
 use crate::resources::core::customer::Customer;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Card {
     pub id: String,
     pub object: Object,
@@ -39,7 +39,7 @@ pub struct Card {
     pub tokenization_method: Option<TokenizationMethod>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CardParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object: Option<Object>,
@@ -75,7 +75,7 @@ pub struct CardParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Deserialize, Serialize, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
 #[serde(rename="lowercase")]
 pub enum AvailablePayoutMethods {
     Standard,
@@ -92,7 +92,7 @@ impl<'a> CardParam<'a> {
     }
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CardListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,
@@ -104,7 +104,7 @@ pub struct CardListParams<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Deserialize, Serialize, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum CardType {
     Credit,
@@ -134,7 +134,7 @@ pub enum CardBrand {
     Unknown,
 }
 
-#[derive(Deserialize, Serialize, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum CardCheck {
     Pass,
@@ -143,7 +143,7 @@ pub enum CardCheck {
     Unchecked,
 }
 
-#[derive(Deserialize, Serialize, PartialEq, Debug)]
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum TokenizationMethod {
     ApplePay,

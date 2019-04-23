@@ -7,7 +7,7 @@ use crate::util::List;
 
 use serde::Serialize;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ScheduledQueryRun {
     pub id: String,
     pub object: Object,
@@ -22,12 +22,12 @@ pub struct ScheduledQueryRun {
     pub title: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SigmaError {
     pub message: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SigmaStatus {
     Completed,
@@ -36,7 +36,7 @@ pub enum SigmaStatus {
     TimedOut,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, PartialEq)]
 pub struct ScheduleQueryRunListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

@@ -2,14 +2,14 @@ use crate::resources::common::object::Object;
 use crate::resources::common::path::{UrlPath};
 use crate::resources::core::charges::BillingDetails;
 use crate::resources::paymentmethods::bank::AccountHolderType;
-use crate::resources::paymentmethods::cards::{CardBrand, CardCheck, CardType};
+use crate::resources::paymentmethods::cards::{CardCheck, CardType};
 use crate::resources::paymentmethods::source::PaymentSourceParam;
 use crate::util::{List, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
 use crate::resources::core::customer::Customer;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct PaymentMethods {
     pub id: String,
     pub object: Object,
@@ -17,16 +17,16 @@ pub struct PaymentMethods {
     pub card: PaymentCard,
     pub card_present: Option<String>,
     pub created: i64,
-    pub customer: Expandable<Customer>,
+    pub customer: Option<Expandable<Customer>>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     #[serde(rename = "type")]
     pub payment_method_type: PaymentMethodsType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct PaymentCard {
-    pub brand: CardBrand,
+    pub brand: PaymentCardBrand,
     pub checks: ChargeChecks,
     pub country: String,
     pub exp_month: i32,
@@ -39,18 +39,33 @@ pub struct PaymentCard {
     pub wallet: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
+#[serde(rename_all="lowercase")]
+pub enum PaymentCardBrand {
+    Visa,
+    #[serde(rename = "amex")]
+    AmericanExpress,
+    MasterCard,
+    Discover,
+    JCB,
+    #[serde(rename = "diners")]
+    DinersClub,
+    UnionPay,
+    Unknown,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ThreeDSecureUsage {
     pub supported: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct GenerateFrom {
     pub charge: String,
     pub payment_method_details: PaymentMethodsDetails,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct PaymentMethodsDetails {
     #[serde(rename = "type")]
     pub method_type: String,
@@ -58,7 +73,7 @@ pub struct PaymentMethodsDetails {
     pub method: PaymentMethodsDetailsInner,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(remote = "Self", rename_all = "snake_case")]
 pub enum PaymentMethodsDetailsInner {
     AchCreditTransfer {
@@ -102,7 +117,7 @@ pub enum PaymentMethodsDetailsInner {
 //TODO: Relook at this in the future before 0.6.0 release
 //impl<'de> Deserialize<'de> for PaymentMethodsDetails {
 //    fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-//        #[derive(Deserialize)]
+//        #[derive(Deserialize, PartialEq)]
 //        struct Inner {
 //            #[serde(rename = "type")]
 //            _type: String,
@@ -113,21 +128,21 @@ pub enum PaymentMethodsDetailsInner {
 //    }
 //}
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ChargeChecks {
     pub address_line1_check: Option<CardCheck>,
     pub address_postal_code_check: Option<CardCheck>,
     pub cvc_check: Option<CardCheck>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum PaymentMethodsType {
     Card,
     CardPresent,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PaymentMethodsParam<'a> {
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub payment_method_type: Option<PaymentMethodsType>,
@@ -141,7 +156,7 @@ pub struct PaymentMethodsParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PaymentMethodsListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer: Option<&'a str>,

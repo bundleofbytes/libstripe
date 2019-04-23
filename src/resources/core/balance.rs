@@ -6,7 +6,7 @@ use crate::util::{List, RangeQuery, Expandable};
 use crate::{Client};
 use crate::resources::paymentmethods::source::Source;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Balance {
     pub object: Object,
     pub available: Vec<BalanceSource>,
@@ -15,20 +15,20 @@ pub struct Balance {
     pub livemode: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct BalanceSource {
     pub currency: Currency,
     pub amount: i64,
     pub source_types: Option<BalanceSourceType>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct BalanceSourceType {
     pub card: Option<i64>,
     pub bank_account: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct BalanceTransaction {
     pub id: String,
     pub object: Object,
@@ -47,14 +47,14 @@ pub struct BalanceTransaction {
     pub balance_type: BalanceType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum BalanceStatus {
     Available,
     Pending,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum BalanceType {
     Adjustment,
@@ -75,7 +75,7 @@ pub enum BalanceType {
     NetworkCost,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct FeeDetails {
     pub amount: i64,
     pub application: Option<String>,
@@ -85,7 +85,7 @@ pub struct FeeDetails {
     pub fee_type: FeeType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum FeeType {
     ApplicationFee,
@@ -93,7 +93,7 @@ pub enum FeeType {
     Tax,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct BalanceListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub available_on: Option<RangeQuery>,

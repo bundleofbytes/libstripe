@@ -9,17 +9,17 @@ use crate::resources::paymentmethods::cards::{Card, CardParam};
 use crate::{Client};
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Source {
     pub id: String,
     pub object: Object,
     pub ach_credit_transfer: Option<AchCreditTransfer>,
-    pub amount: i32,
+    pub amount: Option<i32>,
     pub client_secret: String,
-    pub code_verification: CodeVerification,
+    pub code_verification: Option<CodeVerification>,
     pub created: i64,
     pub currency: Currency,
-    pub customer: String,
+    pub customer: Option<String>,
     pub flow: SourceFlow,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
@@ -33,7 +33,7 @@ pub struct Source {
     pub usage: SourceUsage,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct AchCreditTransfer {
     pub account_number: String,
     pub routing_number: String,
@@ -42,13 +42,13 @@ pub struct AchCreditTransfer {
     pub swift_code: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CodeVerification {
     pub attempts_remaining: i64,
     pub status: VerificationStatus,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum VerificationStatus {
     Pending,
@@ -56,7 +56,7 @@ pub enum VerificationStatus {
     Failed,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SourceRedirect {
     pub failure_reason: FailureReason,
     pub return_url: String,
@@ -64,7 +64,7 @@ pub struct SourceRedirect {
     pub url: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RedirectFailureReason {
     UserAbort,
@@ -72,7 +72,7 @@ pub enum RedirectFailureReason {
     ProcessingError,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SourceRedirectStatus {
     Pending,
@@ -81,7 +81,7 @@ pub enum SourceRedirectStatus {
     Failed,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SourceOwner {
     pub address: Option<Address>,
     pub email: Option<String>,
@@ -93,7 +93,7 @@ pub struct SourceOwner {
     pub verified_phone: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SourceReceiver {
     pub address: String,
     pub amount_charged: i32,
@@ -103,7 +103,7 @@ pub struct SourceReceiver {
     pub refund_attributes_status: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SourceFlow {
     Redirect,
@@ -112,14 +112,14 @@ pub enum SourceFlow {
     None,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SourceUsage {
     Reusable,
     SingleUse,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum SourceStatus {
     Canceled,
@@ -129,7 +129,7 @@ pub enum SourceStatus {
     Pending,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SourceType {
     AchCreditTransfer,
@@ -151,14 +151,14 @@ pub enum SourceType {
     Wechat,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum PaymentSource {
     BankAccount(BankAccount),
     Card(Card),
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum PaymentSourceParam<'a> {
     BankAccount(BankAccountParam<'a>),
@@ -166,7 +166,7 @@ pub enum PaymentSourceParam<'a> {
     Token(&'a str),
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PaymentParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<PaymentSourceParam<'a>>,
@@ -174,7 +174,7 @@ pub struct PaymentParam<'a> {
     pub metadata: Option<HashMap<String, String>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct SourceParam<'a> {
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub source_type: Option<SourceType>,
@@ -200,7 +200,7 @@ pub struct SourceParam<'a> {
     pub usage: Option<SourceUsage>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct SourceRedirectParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub return_url: Option<&'a str>,

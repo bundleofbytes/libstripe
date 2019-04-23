@@ -10,7 +10,7 @@ use crate::util::{List, RangeQuery};
 use crate::Client;
 use std::collections::HashMap;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct IssuingCard {
     pub id: String,
     pub object: Object,
@@ -31,7 +31,7 @@ pub struct IssuingCard {
     pub card_type: IssuingCardType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct AuthorizationControls {
     pub allowed_categories: Option<Vec<MerchantCategories>>,
     pub blocked_categories: Option<Vec<MerchantCategories>>,
@@ -40,7 +40,7 @@ pub struct AuthorizationControls {
     pub max_approvals: i64,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum CardStatus {
     Active,
@@ -51,14 +51,14 @@ pub enum CardStatus {
     Stolen,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum IssuingCardType {
     Virtual,
     Physical,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct IssuingShipping {
     pub address: Address,
     pub carrier: String,
@@ -70,7 +70,7 @@ pub struct IssuingShipping {
     pub tracking_url: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum IssuingShippingStatus {
     Pending,
@@ -81,7 +81,7 @@ pub enum IssuingShippingStatus {
     Canceled,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct IssuingCardParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency: Option<AuthorizationControls>,
@@ -99,7 +99,7 @@ pub struct IssuingCardParam<'a> {
     pub status: Option<CardStatus>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct IssuingCardListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exp_month: Option<&'a str>,

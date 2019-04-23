@@ -3,7 +3,7 @@ use crate::util::{RangeQuery, Deleted, List};
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ValueListItems {
     pub id: String,
     pub object: Object,
@@ -14,7 +14,7 @@ pub struct ValueListItems {
     pub value_list: String,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct ValueListItemsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<&'a str>,
@@ -22,7 +22,7 @@ pub struct ValueListItemsParam<'a> {
     pub value_list: Option<&'a str>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ValueListItemsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

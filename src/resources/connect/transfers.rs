@@ -10,7 +10,7 @@ use crate::resources::core::balance::BalanceTransaction;
 use crate::resources::connect::account::Account;
 use crate::resources::issuing::transactions::Transactions;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Transfer {
     pub id: String,
     pub object: Object,
@@ -19,7 +19,7 @@ pub struct Transfer {
     pub balance_transaction: Expandable<BalanceTransaction>,
     pub created: i64,
     pub currency: Currency,
-    pub description: String,
+    pub description: Option<String>,
     pub destination: Expandable<Account>,
     pub destination_payment: String, //Expandable but needs clarification
     pub livemode: bool,
@@ -31,7 +31,7 @@ pub struct Transfer {
     pub transfer_group: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum TransferSourceType {
     Card,
@@ -39,7 +39,7 @@ pub enum TransferSourceType {
     AlipayAccount,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TransferParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i32>,
@@ -57,7 +57,7 @@ pub struct TransferParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TransferListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

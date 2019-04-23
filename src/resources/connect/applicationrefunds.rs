@@ -9,7 +9,7 @@ use serde::Serialize;
 use std::collections::HashMap;
 use crate::resources::connect::applicationfees::ApplicationFees;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ApplicationFeeRefunds {
     pub id: String,
     pub object: Object,
@@ -21,7 +21,7 @@ pub struct ApplicationFeeRefunds {
     pub metadata: HashMap<String, String>,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct ApplicationFeeRetundsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<Vec<&'a str>>,
@@ -31,7 +31,7 @@ pub struct ApplicationFeeRetundsParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct ApplicationFeeRetundsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<Vec<&'a str>>,

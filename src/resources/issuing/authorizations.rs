@@ -11,7 +11,7 @@ use crate::resources::issuing::cards::IssuingCard;
 use crate::resources::issuing::transactions::Transactions;
 use crate::resources::issuing::cardholders::CardHolders;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Authorizations {
     pub id: String,
     pub object: Object,
@@ -33,12 +33,12 @@ pub struct Authorizations {
     pub pending_held_amount: i64,
     pub request_history: Vec<RequestHistory>,
     pub status: AuthorizationStatus,
-    pub transactions: Option<Transactions>,
+    pub transactions: Option<Vec<Transactions>>,
     pub verification_data: VerificationData,
     pub wallet_provider: Option<WalletProvider>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum WalletProvider {
     ApplePay,
@@ -46,7 +46,7 @@ pub enum WalletProvider {
     SamsungPay
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum AuthorizationMethod {
     KeyedIn,
@@ -56,7 +56,7 @@ pub enum AuthorizationMethod {
     Online,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct MerchantData {
     pub category: MerchantCategories,
     pub city: String,
@@ -67,7 +67,7 @@ pub struct MerchantData {
     pub state: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct RequestHistory {
     pub approved: bool,
     pub authorized_amount: i64,
@@ -78,7 +78,7 @@ pub struct RequestHistory {
     pub reason: RequestReason,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum RequestReason {
     AuthorizationControls,
@@ -103,14 +103,14 @@ pub enum RequestReason {
     ForcedSuspectedFraud,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct VerificationData {
     pub address_line1_check: VerificationCheck,
     pub address_zip_check: VerificationCheck,
     pub cvc_check: VerificationCheck,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum VerificationCheck {
     Match,
@@ -118,7 +118,7 @@ pub enum VerificationCheck {
     NotProvided,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum AuthorizationStatus {
     Pending,
@@ -126,7 +126,7 @@ pub enum AuthorizationStatus {
     Closed,
 }
 
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Serialize, PartialEq)]
 pub struct AuthorizationsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
@@ -136,7 +136,7 @@ pub struct AuthorizationsParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Default, Serialize, PartialEq)]
 pub struct AuthorizationsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub card: Option<&'a str>,

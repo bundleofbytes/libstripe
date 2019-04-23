@@ -3,13 +3,13 @@ use serde::Serialize;
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ConnectionTokens {
     pub object: Object,
     pub secret: String,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct ConnectionTokensParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operator_account: Option<&'a str>,

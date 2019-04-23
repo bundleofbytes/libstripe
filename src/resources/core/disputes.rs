@@ -10,7 +10,7 @@ use crate::{Client};
 use std::collections::HashMap;
 use crate::resources::core::charges::Charge;
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Evidence {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_activity_log: Option<String>,
@@ -68,7 +68,7 @@ pub struct Evidence {
     pub uncategorized_text: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct EvidenceDetails {
     pub due_by: i64,
     pub has_evidence: bool,
@@ -76,7 +76,7 @@ pub struct EvidenceDetails {
     pub submission_count: i64,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Dispute {
     pub id: String,
     pub object: Object,
@@ -95,7 +95,7 @@ pub struct Dispute {
     pub status: DisputeStatus,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum DisputeReason {
     CheckReturned,
@@ -115,7 +115,7 @@ pub enum DisputeReason {
     Other
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum DisputeStatus {
     WarningNeedsResponse,
@@ -129,7 +129,7 @@ pub enum DisputeStatus {
     Lost,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct DisputeParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evidence: Option<Evidence>,
@@ -141,7 +141,7 @@ pub struct DisputeParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct DisputeListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

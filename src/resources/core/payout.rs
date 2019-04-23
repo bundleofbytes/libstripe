@@ -9,7 +9,7 @@ use crate::resources::core::balance::BalanceTransaction;
 use crate::resources::paymentmethods::cards::Card;
 use crate::resources::paymentmethods::bank::BankAccount;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Payout {
     pub id: String,
     pub object: Object,
@@ -34,14 +34,14 @@ pub struct Payout {
     pub payout_type: PayoutType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum PayoutDestination{
     Card(Card),
     Bank(BankAccount)
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum PayoutStatus {
     Paid,
@@ -51,21 +51,21 @@ pub enum PayoutStatus {
     Failed,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum PayoutSourceType {
     BankAccount,
     Card,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum PayoutType {
     BankAccount,
     Card,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum PayoutFailureCode {
     AccountClosed,
@@ -81,14 +81,14 @@ pub enum PayoutFailureCode {
     UnsupportedCard,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum PayoutMethod {
     STANDARD,
     INSTANT,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct PayoutParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i32>,

@@ -4,25 +4,26 @@ use crate::resources::common::path::UrlPath;
 use crate::util::{RangeQuery, Expandable};
 use crate::resources::core::charges::Charge;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Reviews {
     pub id: String,
     pub object: Object,
     pub billing_zip: Option<String>,
     pub charge: Option<Box<Expandable<Charge>>>,
-    pub closed_reason: Reason,
+    pub closed_reason: Option<Reason>,
     pub created: i64,
     pub ip_address: Option<String>,
     pub ip_address_locations: Option<String>,
     pub livemode: bool,
     pub opened_reason: Reason,
-    pub session: String,
+    pub session: Option<Session>,
     pub payment_intent: Option<String>,
+    pub reason: Reason,
     pub open: bool,
 
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Session {
     pub browser: String,
     pub device: String,
@@ -31,7 +32,7 @@ pub struct Session {
 
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum Reason {
     Rule,
@@ -42,7 +43,7 @@ pub enum Reason {
     Disputed,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ReviewsListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

@@ -8,7 +8,7 @@ use crate::resources::core::refunds::Refund;
 use crate::resources::common::path::UrlPath;
 use crate::Client;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CreditNotes {
     pub id: String,
     pub object: Object,
@@ -29,7 +29,7 @@ pub struct CreditNotes {
     pub credit_note_type: CreditNoteType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum CreditNoteReason {
     Duplicate,
@@ -38,21 +38,21 @@ pub enum CreditNoteReason {
     ProductUnsatisfactory
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum CreditNoteStatus {
     Issued,
     Void
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="snake_case")]
 pub enum CreditNoteType {
     PostPayment,
     PrePayment
 }
 
-#[derive(Serialize, Default, Debug)]
+#[derive(Serialize, Default, Debug, PartialEq)]
 pub struct CreditNoteParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i64>,
@@ -74,7 +74,7 @@ pub struct CreditNoteParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Serialize, Default, Debug)]
+#[derive(Serialize, Default, Debug, PartialEq)]
 pub struct CreditNoteListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

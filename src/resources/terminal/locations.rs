@@ -4,7 +4,7 @@ use crate::resources::common::path::UrlPath;
 use crate::Client;
 use crate::util::{Deleted, List};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Locations {
     pub id: String,
     pub object: Object,
@@ -12,7 +12,7 @@ pub struct Locations {
     pub display_name: String,
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct LocationsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<Address>,
@@ -22,7 +22,7 @@ pub struct LocationsParam<'a> {
     pub operator_account: Option<&'a str>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct LocationsListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

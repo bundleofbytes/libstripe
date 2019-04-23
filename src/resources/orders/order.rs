@@ -10,7 +10,7 @@ use crate::resources::orders::sku::Sku;
 use crate::resources::billing::discounts::Discount;
 use crate::resources::core::customer::Customer;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Order {
     pub id: String,
     pub object: Object,
@@ -36,7 +36,7 @@ pub struct Order {
     pub upstream_id: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct DeliveryEstimate {
     #[serde(rename = "type")]
     pub delivery_type: DeliveryType,
@@ -45,14 +45,14 @@ pub struct DeliveryEstimate {
     pub date: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum DeliveryType {
     Range,
     Exact,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ShippingMethods {
     pub id: String,
     pub amount: i64,
@@ -61,7 +61,7 @@ pub struct ShippingMethods {
     pub description: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct OrderTransitions {
     pub canceled: i64,
     pub fulfiled: Option<i64>,
@@ -69,7 +69,7 @@ pub struct OrderTransitions {
     pub returned: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct OrderReturn {
     pub id: String,
     pub object: Object,
@@ -79,7 +79,7 @@ pub struct OrderReturn {
     pub items: Vec<OrderItem>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct OrderItem {
     pub object: Option<Object>,
     pub amount: Option<i64>,
@@ -91,14 +91,14 @@ pub struct OrderItem {
     pub item_type: Option<ItemType>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum OrderItemParent {
     Sku(Sku),
     Discount(Discount)
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum ItemType {
     Sku,
@@ -115,7 +115,7 @@ impl Default for ItemType {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum OrderStatus {
     Created,
@@ -125,7 +125,7 @@ pub enum OrderStatus {
     Returned,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct OrderParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub currency: Option<Currency>,

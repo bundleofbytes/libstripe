@@ -1,6 +1,6 @@
 use crate::resources::common::object::Object;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct List<T> {
     pub data: Vec<T>,
     pub object: Object,
@@ -9,27 +9,26 @@ pub struct List<T> {
     pub url: String,
 }
 
-//Note: The internal naming *might* change in the future.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(untagged, rename_all="lowercase")]
 pub enum Expandable<T> {
     Object(T),
     Id(String)
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Deleted {
     pub deleted: bool,
     pub id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Period {
     start: i64,
     end: i64,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, PartialEq)]
 pub struct RangeBounds {
     pub gt: Option<i64>,
     pub gte: Option<i64>,
@@ -48,7 +47,7 @@ impl Default for RangeBounds {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum RangeQuery {
     Exact(i64),
@@ -89,22 +88,3 @@ impl RangeQuery {
         RangeQuery::Bounds(bounds)
     }
 }
-
-//pub fn to_snakecase(camel: &str) -> String {
-//    let mut i = 0;
-//    let mut snake = String::new();
-//    let mut chars = camel.chars().peekable();
-//    while let Some(ch) = chars.next() {
-//        if ch.is_uppercase() {
-//            if i > 0 && !chars.peek().unwrap_or(&'A').is_uppercase() {
-//                snake.push('_');
-//            }
-//            snake.push(ch.to_lowercase().next().unwrap_or(ch));
-//        } else {
-//            snake.push(ch);
-//        }
-//        i += 1;
-//    }
-//
-//    snake
-//}

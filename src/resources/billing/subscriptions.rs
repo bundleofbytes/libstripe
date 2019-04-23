@@ -12,7 +12,7 @@ use crate::resources::paymentmethods::paymentmethods::PaymentMethods;
 use crate::resources::billing::invoices::Invoice;
 use crate::resources::billing::subscription_schedules::SubscriptionSchedules;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Subscription {
     pub id: String,
     pub object: Object,
@@ -22,6 +22,7 @@ pub struct Subscription {
     pub billing_thresholds: Option<BillingThresholds>,
     pub cancel_at_period_end: bool,
     pub canceled_at: Option<i64>,
+    pub cancel_at: Option<i64>,
     pub created: i64,
     pub current_period_end: i64,
     pub current_period_start: i64,
@@ -37,7 +38,7 @@ pub struct Subscription {
     pub metadata: HashMap<String, String>,
     pub plan: Plans,
     pub quantity: i64,
-    pub schedule: Expandable<SubscriptionSchedules>,
+    pub schedule: Option<Expandable<SubscriptionSchedules>>,
     pub start: i64,
     pub status: SubscriptionStatus,
     pub tax_percent: Option<f64>,
@@ -45,20 +46,20 @@ pub struct Subscription {
     pub trial_start: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SubscriptionBilling {
     ChargeAutomatically,
     SendInvoice,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct BillingThresholds {
     pub amount_gte: i64,
     pub reset_billing_cycle_anchor: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct SubscriptionItems {
     pub id: String,
     pub object: Object,
@@ -70,7 +71,7 @@ pub struct SubscriptionItems {
     pub subscription: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum SubscriptionStatus {
     Trialing,
@@ -82,7 +83,7 @@ pub enum SubscriptionStatus {
     IncompleteExpired,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct SubscriptionItemParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub plan: Option<&'a str>,
@@ -120,7 +121,7 @@ impl SubscriptionItems {
     }
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct SubscriptionParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer: Option<&'a str>,
@@ -150,7 +151,7 @@ pub struct SubscriptionParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ItemParam<'a> {
     pub plan: &'a str,
     #[serde(skip_serializing_if = "Option::is_none")]

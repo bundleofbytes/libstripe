@@ -3,7 +3,7 @@ use crate::Client;
 use crate::resources::common::path::UrlPath;
 use crate::util::{Deleted, List};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Readers {
     pub id: String,
     pub object: Object,
@@ -16,14 +16,14 @@ pub struct Readers {
     pub status: ReadersStatus
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all="lowercase")]
 pub enum ReadersStatus {
     Online,
     Offline
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct ReadersParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_code: Option<&'a str>,
@@ -35,7 +35,7 @@ pub struct ReadersParam<'a> {
     pub operator_account: Option<&'a str>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ReadersListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

@@ -10,7 +10,7 @@ use crate::resources::core::customer::Customer;
 use crate::resources::billing::invoices::Invoice;
 use crate::resources::billing::subscriptions::Subscription;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct InvoiceItems {
     pub id: String,
     pub object: Object,
@@ -31,7 +31,7 @@ pub struct InvoiceItems {
     pub subscription_item: Option<String>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct InvoiceItemsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i64>,
@@ -53,7 +53,7 @@ pub struct InvoiceItemsParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct InvoiceItemsListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,

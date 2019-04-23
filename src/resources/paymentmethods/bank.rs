@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use crate::resources::connect::account::Account;
 use crate::resources::core::customer::Customer;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct BankAccount {
     pub id: String,
     pub object: Object,
@@ -27,7 +27,7 @@ pub struct BankAccount {
     pub status: BankStatus,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct BankAccountParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object: Option<Object>,
@@ -59,13 +59,13 @@ impl<'a> BankAccountParam<'a> {
     }
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct BankAccountVerifyParam {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amounts: Option<(u32, u32)>,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, PartialEq)]
 pub struct BankListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,
@@ -77,14 +77,14 @@ pub struct BankListParams<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AccountHolderType {
     Individual,
     Company,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum BankStatus {
     New,

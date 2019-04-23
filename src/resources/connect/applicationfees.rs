@@ -10,7 +10,7 @@ use crate::resources::core::balance::BalanceTransaction;
 use crate::resources::core::charges::Charge;
 use crate::resources::connect::transfers::Transfer;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct ApplicationFees {
     pub id: String,
     pub object: Object,
@@ -28,20 +28,20 @@ pub struct ApplicationFees {
     pub refunds: List<Refund>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(untagged)]
 pub enum OriginatingTransaction {
     Charge(Charge),
     Transfer(Transfer)
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 pub struct ApplicationFeesParam<'a>{
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct ApplicationFeesListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

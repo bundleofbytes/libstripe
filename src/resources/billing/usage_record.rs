@@ -3,7 +3,7 @@ use crate::resources::common::object::Object;
 use crate::resources::common::path::UrlPath;
 use crate::{Client};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct UsageRecord {
     pub id: String,
     pub object: Object,
@@ -13,7 +13,7 @@ pub struct UsageRecord {
     pub timestamp: i64,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct UsageRecordParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quantity: Option<i64>,
@@ -25,7 +25,7 @@ pub struct UsageRecordParam<'a> {
     pub action: Option<UsageAction>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum UsageAction {
     Increment,

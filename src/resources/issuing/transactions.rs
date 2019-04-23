@@ -11,25 +11,25 @@ use crate::resources::paymentmethods::cards::Card;
 use crate::resources::issuing::cardholders::CardHolders;
 use crate::resources::core::disputes::Dispute;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Transactions {
     pub id: String,
     pub object: Object,
     pub amount: i64,
     pub authorization: Box<Expandable<Authorizations>>,
-    pub balance_transaction: Expandable<BalanceTransaction>,
+    pub balance_transaction: Option<Expandable<BalanceTransaction>>,
     pub card: Expandable<Card>,
-    pub cardholder: Expandable<CardHolders>,
+    pub cardholder: Option<Expandable<CardHolders>>,
     pub created: i64,
     pub currency: Currency,
-    pub dispute: Box<Expandable<Dispute>>,
+    pub dispute: Option<Box<Expandable<Dispute>>>,
     pub livemode: bool,
     pub merchant_data: MerchantData,
     #[serde(rename = "type")]
     pub transaction_type: TransactionType,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum TransactionType {
     Capture,
@@ -40,13 +40,13 @@ pub enum TransactionType {
     DisputeLoss,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TransactionsParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TransactionsListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub card: Option<bool>,

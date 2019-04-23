@@ -5,7 +5,7 @@ use crate::util::{Deleted, List};
 use crate::{Client};
 use serde::Serialize;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct WebhookEndpoints {
     pub id: String,
     pub object: Object,
@@ -19,14 +19,14 @@ pub struct WebhookEndpoints {
     pub secret: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum EndpointStatus {
     Enabled,
     Disabled,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, PartialEq)]
 pub struct WebhookEndpointsParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled_events: Option<Vec<&'a str>>,
@@ -38,7 +38,7 @@ pub struct WebhookEndpointsParams<'a> {
     pub connect: Option<bool>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct WebhookEndpointsListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ending_before: Option<&'a str>,

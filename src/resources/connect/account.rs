@@ -10,8 +10,9 @@ use crate::util::{Deleted, List};
 use crate::{Client};
 use serde::Serialize;
 use std::collections::HashMap;
+use crate::resources::connect::country::Verification;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Account {
     pub id: String,
     pub object: Object,
@@ -32,11 +33,12 @@ pub struct Account {
     pub requirements: Requirements,
     pub settings: AccountSettings,
     pub tos_acceptance: TosAcceptance,
+    pub verification: Verification,
     #[serde(rename = "type")]
     pub account_type: AccountType,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Requirements {
     pub current_deadline: Option<i64>,
     pub currently_due: Option<Vec<String>>, //TODO
@@ -45,7 +47,7 @@ pub struct Requirements {
     pub past_due: Option<Vec<String>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum DisabledReason {
     #[serde(rename = "requirements.past_due")]
@@ -65,14 +67,14 @@ pub enum DisabledReason {
     Other,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum BusinessType {
     Individual,
     Company,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct BusinessProfile {
     pub mcc: Option<String>, //MerchantCategories,
     pub name: Option<String>,
@@ -84,7 +86,7 @@ pub struct BusinessProfile {
     pub url: Option<String>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct AccountSettings {
     pub branding: Option<Branding>,
     pub card_payments: Option<CardPayments>,
@@ -93,38 +95,38 @@ pub struct AccountSettings {
     pub payouts: Option<Payouts>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Branding {
     pub icon: Option<String>,
     pub logo: Option<String>,
     pub primary_color: Option<String>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CardPayments {
     pub decline_on: Option<DeclineOn>,
     pub statement_descriptor_prefix: Option<String>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Dashboard {
     pub display_name: String,
     pub timezone: String,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Payments {
     pub statement_descriptor: Option<String>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Payouts {
     pub debit_negative_balance: Option<bool>,
     pub schedule: Option<PayoutsSchedule>,
     pub statement_descriptor: Option<String>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct PayoutsSchedule {
     pub dalay_days: Option<i32>,
     pub interval: Option<Interval>,
@@ -132,21 +134,21 @@ pub struct PayoutsSchedule {
     pub weekly_anchor: Option<i32>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct TosAcceptance {
     pub date: Option<i64>,
     pub ip: Option<String>,
     pub user_agent: Option<String>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Capabilities {
     pub card_payments: Option<String>,
     pub legacy_payments: Option<String>,
     pub platform_payments: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum AccountType {
     STANDARD,
@@ -154,7 +156,7 @@ pub enum AccountType {
     CUSTOM,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Company {
     pub address: Option<Address>,
     pub address_kana: Option<Address>,
@@ -170,7 +172,7 @@ pub struct Company {
     pub owners_provided: bool,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CompanyParam<'a> {
     pub address: Option<Address>,
     pub address_kana: Option<Address>,
@@ -186,20 +188,20 @@ pub struct CompanyParam<'a> {
     pub owners_provided: Option<bool>,
 }
 
-#[derive(Default, Serialize, Deserialize, Debug)]
+#[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct DeclineOn {
     pub avs_failure: bool,
     pub cvc_failure: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct LoginLink {
     pub object: Object,
     pub created: i64,
     pub url: String,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct AccountParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_token: Option<&'a str>,

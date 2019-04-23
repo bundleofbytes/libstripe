@@ -3,7 +3,7 @@ use std::fmt;
 /// Currency is the list of supported currencies.
 ///
 /// For more details see https://support.stripe.com/questions/which-currencies-does-stripe-support.
-#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Hash)]
+#[derive(Debug, Deserialize, Serialize, Hash, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum Currency {
     AED, // United Arab Emirates Dirham

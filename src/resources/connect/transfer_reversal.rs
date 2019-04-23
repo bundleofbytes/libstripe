@@ -9,7 +9,7 @@ use std::collections::HashMap;
 use crate::resources::core::refunds::Refund;
 use crate::resources::connect::transfers::Transfer;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TransferReversal {
     pub id: String,
     pub object: Object,
@@ -23,7 +23,7 @@ pub struct TransferReversal {
     pub transfer: Expandable<Transfer>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TransferReveralParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<i64>,
@@ -37,7 +37,7 @@ pub struct TransferReveralParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct TransferReversalListParams<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<&'a str>,

@@ -5,7 +5,7 @@ use crate::util::{RangeQuery, Deleted, List};
 use crate::Client;
 use crate::resources::common::path::UrlPath;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Coupon {
     pub id: String,
     pub object: Object,
@@ -24,7 +24,7 @@ pub struct Coupon {
     pub valid: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum Duration {
     Forever,
@@ -32,7 +32,7 @@ pub enum Duration {
     Repeating,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CouponParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<&'a str>,
@@ -54,7 +54,7 @@ pub struct CouponParam<'a> {
     pub redeem_by: Option<i64>,
 }
 
-#[derive(Default, Serialize, Debug)]
+#[derive(Default, Serialize, Debug, PartialEq)]
 pub struct CouponListParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created: Option<RangeQuery>,
