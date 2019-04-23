@@ -24,8 +24,22 @@ use crate::resources::paymentmethods::source::Source;
 use crate::util::List;
 use crate::{Client};
 use crate::resources::billing::subscription_schedules::SubscriptionSchedules;
+use crate::resources::core::file::File;
+use crate::resources::issuing::authorizations::Authorizations;
+use crate::resources::issuing::cards::IssuingCard;
+use crate::resources::issuing::cardholders::CardHolders;
+use crate::resources::issuing::dispute::IssuingDispute;
+use crate::resources::issuing::transactions::Transactions;
+use serde_json::Value;
+use crate::resources::core::paymentintents::PaymentIntent;
+use crate::resources::paymentmethods::paymentmethods::PaymentMethods;
+use crate::resources::connect::persons::Persons;
+use crate::resources::fraud::review::Reviews;
+use crate::resources::connect::topup::Topup;
+use crate::resources::connect::applicationfees::ApplicationFees;
+use crate::resources::connect::applicationrefunds::ApplicationFeeRefunds;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub enum EventType {
     #[serde(rename = "account.updated")]
     AccountUpdated,
@@ -159,6 +173,10 @@ pub enum EventType {
     IssuingTransactionCreated,
     #[serde(rename = "issuing_transaction.updated")]
     IssuingTransactionUpdated,
+    #[serde(rename = "issuing_settlement.created")]
+    IssuingSettlementCreated,
+    #[serde(rename = "issuing_settlement.updated")]
+    IssuingSettlementUpdated,
     #[serde(rename = "order.created")]
     OrderCreated,
     #[serde(rename = "order.payment_failed")]
@@ -179,6 +197,12 @@ pub enum EventType {
     PaymentIntentRequiresCapture,
     #[serde(rename = "payment_intent.succeeded")]
     PaymentIntentSucceeded,
+    #[serde(rename = "payment_method.attached")]
+    PaymentMethodAttached,
+    #[serde(rename = "payment_method.card_automatically_updated")]
+    PaymentMethodCardAutomaticallyUpdated,
+    #[serde(rename = "payment_method.detached")]
+    PaymentMethodDetached,
     #[serde(rename = "payout.canceled")]
     PayoutCanceled,
     #[serde(rename = "payout.created")]
@@ -189,6 +213,12 @@ pub enum EventType {
     PayoutPaid,
     #[serde(rename = "payout.updated")]
     PayoutUpdated,
+    #[serde(rename = "person.created")]
+    PersonCreated,
+    #[serde(rename = "person.deleted")]
+    PersonDeleted,
+    #[serde(rename = "person.updated")]
+    PersonUpdated,
     #[serde(rename = "plan.created")]
     PlanCreated,
     #[serde(rename = "plan.deleted")]
@@ -271,6 +301,8 @@ pub enum EventType {
     TransferUpdated,
     #[serde(rename = "transfer.paid")]
     TransferPaid,
+    #[serde(rename = "transfer.failed")]
+    TransferFailed,
     #[serde(rename = "ping")]
     Ping,
 }
@@ -298,17 +330,25 @@ pub struct EventRequest {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EventData {
     pub object: EventObject,
-    pub previous_attributes: Option<String>,
+    pub previous_attributes: Option<Value>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 #[serde(untagged, rename_all = "snake_case")]
 pub enum EventObject {
+    ApplicationFees(ApplicationFees),
+    ApplicationFeeRefund(ApplicationFeeRefunds),
+    Authorization(Authorizations),
     Charge(Charge),
     Invoice(Invoice),
     InvoiceItem(InvoiceItems),
     Subscription(Subscription),
+    File(File),
     Card(Card),
+    CardHolder(CardHolders),
+    IssuingCard(IssuingCard),
+    IssuingDispute(IssuingDispute),
+    IssuingTransaction(Transactions),
     Customer(Customer),
     Coupon(Coupon),
     Balance(Balance),
@@ -320,9 +360,14 @@ pub enum EventObject {
     BankAccount(BankAccount),
     Source(Source),
     Discount(Discount),
+    Topup(Topup),
     Transfer(Transfer),
     SubscriptionItem(SubscriptionItems),
     SubscriptionSchedule(SubscriptionSchedules),
+    PaymentIntent(PaymentIntent),
+    PaymentMethod(PaymentMethods),
+    Person(Persons),
+    Review(Reviews),
     Order(Order),
     Product(Products),
     OrderReturn(OrderReturn),
