@@ -29,7 +29,7 @@ pub struct Charge {
     pub application: Option<String>,
     pub application_fee: Option<Box<Expandable<ApplicationFees>>>,
     pub application_fee_amount: Option<i32>,
-    pub balance_transaction: Expandable<BalanceTransaction>,
+    pub balance_transaction: Option<Expandable<BalanceTransaction>>,
     pub billing_details: BillingDetails,
     pub captured: bool,
     pub created: i64,
@@ -63,7 +63,7 @@ pub struct Charge {
     pub statement_descriptor: Option<String>,
     pub status: ChargeStatus,
     pub transfer: Option<Expandable<Transfer>>,
-    pub transfer_data: TransferData,
+    pub transfer_data: Option<TransferData>,
     pub transfer_group: Option<String>,
 }
 
