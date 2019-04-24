@@ -1,4 +1,4 @@
-use crate::client::Client;
+use crate::Client;
 use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;

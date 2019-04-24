@@ -2,10 +2,12 @@ use crate::resources::common::object::Object;
 use crate::resources::common::path::{UrlPath};
 use crate::resources::core::filelink::FileLink;
 use crate::util::List;
-use crate::{Client};
+use crate::Client;
+#[cfg(not(feature = "async"))]
 use reqwest::multipart::Form;
 use std::borrow::Cow;
 use std::collections::HashMap;
+#[cfg(not(feature = "async"))]
 use std::path::Path;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -81,6 +83,8 @@ pub struct FileLinkDataParam<'a> {
 }
 
 impl File {
+
+    #[cfg(not(feature = "async"))]
     pub fn create<B: serde::Serialize, P: AsRef<Path>>(
         client: &Client,
         path: P,

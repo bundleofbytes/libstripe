@@ -17,3 +17,12 @@ serde_qs = "0.4"
 reqwest = "0.9"
 http = "0.1"
 mime = "0.3"
+futures = "0.1"
+
+
+[dev-dependencies]
+tokio = "0.1"
+
+[features]
+default=[]
+async=[]
