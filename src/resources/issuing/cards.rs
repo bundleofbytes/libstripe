@@ -6,7 +6,7 @@ use crate::resources::common::object::Object;
 use crate::resources::common::path::UrlPath;
 use crate::resources::issuing::cardholders::CardHolders;
 use crate::resources::paymentmethods::cards::CardBrand;
-use crate::util::{List, RangeQuery};
+use crate::util::{List, RangeQuery, Expandable};
 use crate::Client;
 use std::collections::HashMap;
 
@@ -25,6 +25,8 @@ pub struct IssuingCard {
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub name: String,
+    pub replacement_for: Option<Box<Expandable<IssuingCard>>>,
+    pub replacement_reason: Option<String>,
     pub shipping: Option<IssuingShipping>,
     pub status: CardStatus,
     #[serde(rename = "type")]
@@ -93,6 +95,10 @@ pub struct IssuingCardParam<'a> {
     pub cardholder: Option<CardHolders>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<&'a str, &'a str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_for: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_reason: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping: Option<IssuingShipping>,
     #[serde(skip_serializing_if = "Option::is_none")]
