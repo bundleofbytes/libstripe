@@ -7,6 +7,7 @@ use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam
 use crate::util::{Deleted, List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
+use crate::resources::core::customer_taxid::{CustomerTaxID, CustomerTaxIDParam};
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CustomerShipping {
@@ -34,8 +35,10 @@ pub struct Customer {
     pub shipping: Option<CustomerShipping>,
     pub sources: Option<List<PaymentSource>>,
     pub subscription: Option<List<Subscription>>,
-    pub tax_info: Option<TaxInfo>,
-    pub tax_info_verification: Option<TaxInfoVerification>,
+    pub tax_exempt: Option<TaxExempt>,
+    pub tax_ids: Option<List<CustomerTaxID>>,
+    pub tax_info: Option<TaxInfo>, //Deprecated
+    pub tax_info_verification: Option<TaxInfoVerification>, //Deprecated
 }
 
 //TODO: Move to invoice?
@@ -49,6 +52,14 @@ pub struct InvoiceSettings {
 pub struct CustomFields {
     pub name: String,
     pub value: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[serde(rename_all="lowercase")]
+pub enum TaxExempt {
+    None,
+    Exempt,
+    Reversed
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -95,7 +106,11 @@ pub struct CustomerParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<PaymentSourceParam<'a>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tax_info: Option<TaxInfo>,
+    pub tax_info: Option<TaxInfo>, //Deprecated
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tax_exempt: Option<TaxExempt>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tax_id_data: Option<CustomerTaxIDParam<'a>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<Vec<&'a str>>,
 }

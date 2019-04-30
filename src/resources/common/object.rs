@@ -8,6 +8,7 @@ pub enum Object {
     Charge,
     CreditNote,
     Customer,
+    TaxID,
     Dispute,
     Event,
     File,

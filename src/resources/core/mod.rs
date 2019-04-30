@@ -1,6 +1,7 @@
 pub mod balance;
 pub mod charges;
 pub mod customer;
+pub mod customer_taxid;
 pub mod disputes;
 pub mod events;
 pub mod file;
