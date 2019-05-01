@@ -1,105 +1,104 @@
 use std::fmt;
 
-#[derive(Clone)]
+#[derive(Deserialize, Serialize, Clone)]
 pub enum UrlPath {
+    #[serde(rename="/accounts")]
     Accounts,
+    #[serde(rename="/application_fees")]
     ApplicationFees,
+    #[serde(rename="/issuing/authorizations")]
     Authorizations,
+    #[serde(rename="/balance")]
     Balance,
+    #[serde(rename="/issuing/cardholders")]
     CardHolders,
+    #[serde(rename="/charges")]
     Charges,
+    #[serde(rename="/checkout/sessions")]
     CheckoutSessions,
+    #[serde(rename="/country_specs")]
     CountrySpecs,
+    #[serde(rename="/coupons")]
     Coupons,
+    #[serde(rename="/credit_notes")]
     CreditNote,
+    #[serde(rename="/customers")]
     Customers,
+    #[serde(rename="/disputes")]
     Disputes,
+    #[serde(rename="/events")]
     Events,
+    #[serde(rename="/files")]
     File(bool),
+    #[serde(rename="/file_link")]
     FileLink,
+    #[serde(rename="/invoiceitems")]
     InvoiceItems,
+    #[serde(rename="/invoices")]
     Invoices,
+    #[serde(rename="/issuing/disputes")]
     IssuingDispute,
+    #[serde(rename="/issuing/cards")]
     IssuingCard,
+    #[serde(rename="/order")]
     Order,
+    #[serde(rename="/payment_intents")]
     PaymentIntents,
+    #[serde(rename="/payment_methods")]
     PaymentMethods,
+    #[serde(rename="/payouts")]
     Payouts,
+    #[serde(rename="/plans")]
     Plans,
+    #[serde(rename="/products")]
     Products,
+    #[serde(rename="/refunds")]
     Refunds,
+    #[serde(rename="/order_returns")]
     OrderReturns,
+    #[serde(rename="/radar/value_lists")]
     RadarValueList,
+    #[serde(rename="/radar/value_list_items")]
     RadarValueListItems,
+    #[serde(rename="/reviews")]
     Reviews,
+    #[serde(rename="/sigma/scheduled_query_runs")]
     Sigma,
+    #[serde(rename="/skus")]
     Sku,
+    #[serde(rename="/sources")]
     Sources,
+    #[serde(rename="/subscriptions")]
     Subscriptions,
+    #[serde(rename="/subscription_items")]
     SubscriptionItems,
+    #[serde(rename="/subscription_schedules")]
     SubscriptionSchedules,
+    #[serde(rename="/tax_rates")]
     TaxRates,
+    #[serde(rename="/terminal/connection_tokens")]
     TerminalConnectionTokens,
+    #[serde(rename="/terminal/locations")]
     TerminalLocations,
+    #[serde(rename="/terminal/readers")]
     TerminalReaders,
+    #[serde(rename="/tokens")]
     Tokens,
+    #[serde(rename="/topups")]
     Topups,
+    #[serde(rename="/issuing/transactions")]
     Transactions,
+    #[serde(rename="/transfers")]
     Transfers,
+    #[serde(rename="/webhook_endpoints")]
     WebhookEndpoints,
-    Other(String),
 }
 
 impl fmt::Display for UrlPath {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let uri = match *self {
-            UrlPath::Accounts => "/accounts",
-            UrlPath::Authorizations => "/issuing/authorizations",
-            UrlPath::ApplicationFees => "/application_fees",
-            UrlPath::Balance => "/balance",
-            UrlPath::CardHolders => "/issuing/cardholders",
-            UrlPath::Charges => "/charges",
-            UrlPath::CheckoutSessions => "/checkout/sessions",
-            UrlPath::CountrySpecs => "/country_specs",
-            UrlPath::Coupons => "/coupons",
-            UrlPath::Customers => "/customers",
-            UrlPath::CreditNote => "/credit_notes",
-            UrlPath::Disputes => "/disputes",
-            UrlPath::Events => "/events",
-            UrlPath::File(_) => "/files",
-            UrlPath::FileLink => "/file_link",
-            UrlPath::IssuingCard => "/issuing/cards",
-            UrlPath::IssuingDispute => "/issuing/disputes",
-            UrlPath::InvoiceItems => "/invoiceitems",
-            UrlPath::Invoices => "/invoices",
-            UrlPath::Order => "/order",
-            UrlPath::PaymentMethods => "/payment_methods",
-            UrlPath::PaymentIntents => "/payment_intents",
-            UrlPath::Payouts => "/payouts",
-            UrlPath::Plans => "/plans",
-            UrlPath::Products => "/products",
-            UrlPath::RadarValueList => "/radar/value_lists",
-            UrlPath::RadarValueListItems => "/radar/value_list_items",
-            UrlPath::Reviews => "/reviews",
-            UrlPath::Refunds => "/refunds",
-            UrlPath::OrderReturns => "/order_returns",
-            UrlPath::Sigma => "/sigma/scheduled_query_runs",
-            UrlPath::Sku => "/skus",
-            UrlPath::Sources => "/sources",
-            UrlPath::Subscriptions => "/subscriptions",
-            UrlPath::SubscriptionItems => "/subscription_items",
-            UrlPath::SubscriptionSchedules => "/subscription_schedules",
-            UrlPath::TaxRates => "/tax_rates",
-            UrlPath::TerminalConnectionTokens => "/terminal/connection_tokens",
-            UrlPath::TerminalLocations => "/terminal/locations",
-            UrlPath::TerminalReaders => "/terminal/readers",
-            UrlPath::Tokens => "/tokens",
-            UrlPath::Topups => "/topups",
-            UrlPath::Transactions => "/issuing/transactions",
-            UrlPath::Transfers => "/transfers",
-            UrlPath::WebhookEndpoints => "/webhook_endpoints",
-            UrlPath::Other(ref path) => &path,
-        };
+        let uri = serde_json::to_string(self)
+            .unwrap_or_default()
+            .replace("\"", "");
         write!(f, "{}", uri)
     }
 }
