@@ -38,6 +38,7 @@ pub enum UrlPath {
     Subscriptions,
     SubscriptionItems,
     SubscriptionSchedules,
+    TaxRates,
     TerminalConnectionTokens,
     TerminalLocations,
     TerminalReaders,
@@ -53,7 +54,7 @@ impl fmt::Display for UrlPath {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let uri = match *self {
             UrlPath::Accounts => "/accounts",
-            UrlPath::Authorizations => "/issuing/authorzations",
+            UrlPath::Authorizations => "/issuing/authorizations",
             UrlPath::ApplicationFees => "/application_fees",
             UrlPath::Balance => "/balance",
             UrlPath::CardHolders => "/issuing/cardholders",
@@ -88,6 +89,7 @@ impl fmt::Display for UrlPath {
             UrlPath::Subscriptions => "/subscriptions",
             UrlPath::SubscriptionItems => "/subscription_items",
             UrlPath::SubscriptionSchedules => "/subscription_schedules",
+            UrlPath::TaxRates => "/tax_rates",
             UrlPath::TerminalConnectionTokens => "/terminal/connection_tokens",
             UrlPath::TerminalLocations => "/terminal/locations",
             UrlPath::TerminalReaders => "/terminal/readers",
