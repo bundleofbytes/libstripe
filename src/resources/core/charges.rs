@@ -99,6 +99,7 @@ pub struct Outcome {
     pub network_status: NetworkStatus,
     pub reason: Option<OutcomeReason>,
     pub risk_level: RiskLevel,
+    pub risk_score: i64,
     pub seller_message: Option<String>,
     pub rule: Option<String>,
 }
