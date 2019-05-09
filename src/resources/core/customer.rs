@@ -8,6 +8,7 @@ use crate::util::{Deleted, List, RangeQuery, Expandable};
 use crate::{Client};
 use std::collections::HashMap;
 use crate::resources::core::customer_taxid::{CustomerTaxID, CustomerTaxIDParam};
+use crate::resources::billing::discounts::Discount;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CustomerShipping {
@@ -21,17 +22,21 @@ pub struct Customer {
     pub id: String,
     pub object: Object,
     pub account_balance: i64,
+    pub address: Option<Address>,
     pub created: i64,
     pub currency: Option<Currency>,
     pub default_source: Option<Box<Expandable<Source>>>,
     pub delinquent: bool,
     pub description: Option<String>,
-    pub discount: Option<String>,
+    pub discount: Option<Expandable<Discount>>,
     pub email: Option<String>,
     pub invoice_prefix: Option<String>,
     pub invoice_settings: InvoiceSettings,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
+    pub name: Option<String>,
+    pub phone: Option<String>,
+    pub preferred_locales: Option<Vec<String>>,
     pub shipping: Option<CustomerShipping>,
     pub sources: Option<List<PaymentSource>>,
     pub subscription: Option<List<Subscription>>,
@@ -45,6 +50,7 @@ pub struct Customer {
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct InvoiceSettings {
     pub custom_fields: Option<CustomFields>,
+    pub default_payment_method: Option<String>,
     pub footer: Option<String>,
 }
 
@@ -88,7 +94,7 @@ pub struct CustomerParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_balance: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub business_vat_id: Option<&'a str>,
+    pub address: Option<Address>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub coupon: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -98,7 +104,17 @@ pub struct CustomerParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub payment_method: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_locales: Option<Vec<&'a str>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub invoice_prefix: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invoice_settings: Option<InvoiceSettings>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
