@@ -16,6 +16,42 @@ pub enum Expandable<T> {
     Id(String)
 }
 
+macro_rules! match_object {
+    ($self:ident) => (
+        match $self {
+            Expandable::Object(obj) => Some(obj),
+            Expandable::Id(..) => None,
+        }
+    )
+}
+
+macro_rules! match_id {
+    ($self:ident) => (
+        match $self {
+            Expandable::Object(..) => None,
+            Expandable::Id(id) => Some(id),
+        }
+    )
+}
+
+impl<T> Expandable<T> {
+    pub fn as_object(&self) -> Option<&T> {
+        match_object!(self)
+    }
+
+    pub fn as_id(&self) -> Option<&str> {
+        match_id!(self)
+    }
+
+    pub fn into_object(self) -> Option<T> {
+        match_object!(self)
+    }
+
+    pub fn into_id(self) -> Option<String> {
+        match_id!(self)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Deleted {
     pub deleted: bool,
@@ -86,5 +122,31 @@ impl RangeQuery {
         let mut bounds = RangeBounds::default();
         bounds.gte = Some(value);
         RangeQuery::Bounds(bounds)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    struct Foo {
+        bar: Box<Expandable<Bar>>,
+    }
+
+    struct Bar {
+        foo: Box<Expandable<Foo>>,
+    }
+
+    #[test]
+    fn expand_chaining() {
+        let foo = Foo { bar: Box::new(Expandable::Id("bar".into())) };
+        let bar = Bar { foo: Box::new(Expandable::Object(foo)) };
+        let foo = Foo { bar: Box::new(Expandable::Object(bar)) };
+
+        let res = foo
+            .bar.into_object().unwrap()
+            .foo.into_object().unwrap()
+            .bar.into_id().unwrap();
+        assert_eq!(res, format!("bar"));
     }
 }
