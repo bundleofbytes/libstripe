@@ -83,7 +83,7 @@ pub struct Dispute {
     pub amount: i64,
     pub balance_transaction: String,
     pub balance_transactions: Vec<BalanceTransaction>,
-    pub charge: Box<Expandable<Charge>>,
+    pub charge: Expandable<Charge>,
     pub created: i64,
     pub currency: Currency,
     pub evidence: Evidence,

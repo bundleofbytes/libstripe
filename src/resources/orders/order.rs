@@ -18,7 +18,7 @@ pub struct Order {
     pub amount_returned: Option<i64>,
     pub application: Option<String>,
     pub application_fee: Option<i64>,
-    pub charge: Option<Box<Expandable<Charge>>>,
+    pub charge: Option<Expandable<Charge>>,
     pub created: i64,
     pub currency: Currency,
     pub customer: Option<Expandable<Customer>>,

@@ -9,7 +9,7 @@ pub struct Reviews {
     pub id: String,
     pub object: Object,
     pub billing_zip: Option<String>,
-    pub charge: Option<Box<Expandable<Charge>>>,
+    pub charge: Option<Expandable<Charge>>,
     pub closed_reason: Option<Reason>,
     pub created: i64,
     pub ip_address: Option<String>,

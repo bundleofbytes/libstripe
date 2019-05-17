@@ -65,7 +65,7 @@ pub struct Invoice {
     pub statement_descriptor: Option<String>,
     pub status: InvoiceStatus,
     pub status_transition: Option<StatusTransitions>,
-    pub subscription: Option<Box<Expandable<Subscription>>>,
+    pub subscription: Option<Expandable<Subscription>>,
     pub subscription_proration_date: Option<i64>,
     pub subtotal: i64,
     pub tax: Option<i64>,

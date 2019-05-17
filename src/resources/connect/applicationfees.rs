@@ -19,11 +19,11 @@ pub struct ApplicationFees {
     pub amount_refunded: i64,
     pub application: String,
     pub balance_transaction: Expandable<BalanceTransaction>,
-    pub charge: Box<Expandable<Charge>>,
+    pub charge: Expandable<Charge>,
     pub created: i64,
     pub currency: Currency,
     pub livemode: bool,
-    pub originating_transaction: Option<Box<Expandable<OriginatingTransaction>>>,
+    pub originating_transaction: Option<Expandable<OriginatingTransaction>>,
     pub refunded: bool,
     pub refunds: List<Refund>,
 }

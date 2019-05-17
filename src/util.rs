@@ -12,7 +12,7 @@ pub struct List<T> {
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(untagged, rename_all="lowercase")]
 pub enum Expandable<T> {
-    Object(T),
+    Object(Box<T>),
     Id(String)
 }
 
@@ -44,7 +44,7 @@ impl<T> Expandable<T> {
     }
 
     pub fn into_object(self) -> Option<T> {
-        match_object!(self)
+        match_object!(self).map(|obj| *obj)
     }
 
     pub fn into_id(self) -> Option<String> {

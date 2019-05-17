@@ -22,8 +22,8 @@ pub struct Refund {
     pub reason: Option<RefundReason>,
     pub failure_balance_transaction: Option<Expandable<BalanceTransaction>>,
     pub failure_reason: Option<FailureReason>,
-    pub source_transfer_reversal: Option<Box<Expandable<TransferReversal>>>,
-    pub transfer_reversal: Option<Box<Expandable<TransferReversal>>>,
+    pub source_transfer_reversal: Option<Expandable<TransferReversal>>,
+    pub transfer_reversal: Option<Expandable<TransferReversal>>,
     pub receipt_number: Option<String>,
     pub status: RefundStatus,
 }

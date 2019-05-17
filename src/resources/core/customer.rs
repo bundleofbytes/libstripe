@@ -25,7 +25,7 @@ pub struct Customer {
     pub address: Option<Address>,
     pub created: i64,
     pub currency: Option<Currency>,
-    pub default_source: Option<Box<Expandable<Source>>>,
+    pub default_source: Option<Expandable<Source>>,
     pub delinquent: bool,
     pub description: Option<String>,
     pub discount: Option<Expandable<Discount>>,

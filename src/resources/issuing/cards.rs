@@ -25,7 +25,7 @@ pub struct IssuingCard {
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
     pub name: String,
-    pub replacement_for: Option<Box<Expandable<IssuingCard>>>,
+    pub replacement_for: Option<Expandable<IssuingCard>>,
     pub replacement_reason: Option<String>,
     pub shipping: Option<IssuingShipping>,
     pub status: CardStatus,

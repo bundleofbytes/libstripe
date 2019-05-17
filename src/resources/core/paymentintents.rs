@@ -33,7 +33,7 @@ pub struct PaymentIntent {
     pub currency: Currency,
     pub customer: Option<Expandable<Customer>>,
     pub description: Option<String>,
-    pub invoice: Option<Box<Expandable<Invoice>>>,
+    pub invoice: Option<Expandable<Invoice>>,
     pub last_payment_error: Option<LastPaymentError>,
     pub livemode: bool,
     pub metadata: HashMap<String, String>,
