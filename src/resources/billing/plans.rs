@@ -1,11 +1,13 @@
-use crate::resources::common::currency::Currency;
-use crate::resources::common::object::Object;
-
-use crate::resources::common::path::UrlPath;
-use crate::resources::core::product::{ProductsParam, Products};
-use crate::util::{Deleted, Expandable, List};
-use crate::Client;
 use std::collections::HashMap;
+
+use crate::{
+    resources::{
+        common::{currency::Currency, object::Object, path::UrlPath},
+        core::product::{ProductsParam, Products},
+    },
+    util::{Deleted, Expandable, List, RangeQuery},
+    Client,
+};
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Plans {
@@ -111,8 +113,26 @@ pub struct PlansParam<'a> {
     pub expand: Option<Vec<&'a str>>,
 }
 
+#[derive(Default, Serialize, Debug, PartialEq)]
+pub struct PlansListParams<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<RangeQuery>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
+}
+
 impl Plans {
-    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+    pub fn create<'a>(client: &Client, param: PlansParam<'a>) -> crate::Result<Self> {
         client.post(UrlPath::Plans, vec![], param)
     }
 
@@ -120,11 +140,7 @@ impl Plans {
         client.get(UrlPath::Plans, vec![plan], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize>(
-        client: &Client,
-        plan: &str,
-        param: B,
-    ) -> crate::Result<Self> {
+    pub fn update<'a>(client: &Client, plan: &str, param: PlansParam<'a>) -> crate::Result<Self> {
         client.post(UrlPath::Plans, vec![plan], param)
     }
 
@@ -132,7 +148,7 @@ impl Plans {
         client.delete(UrlPath::Plans, vec![plan], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
-        client.get(UrlPath::Plans, vec![], param)
+    pub fn list<'a>(client: &Client, params: PlansListParams<'a>) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Plans, vec![], params)
     }
 }
