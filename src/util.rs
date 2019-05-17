@@ -54,6 +54,7 @@ impl<T> Expandable<T> {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Deleted {
+    pub object: Object,
     pub deleted: bool,
     pub id: String,
 }
