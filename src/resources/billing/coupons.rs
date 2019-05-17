@@ -47,6 +47,8 @@ pub struct CouponParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_redemptions: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<HashMap<String, String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub percent_off: Option<i32>,
@@ -90,4 +92,51 @@ impl Coupon {
     pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
         client.get(UrlPath::Coupons, vec![], param)
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn coupon_create() {
+        let client = Client::new(std::env::var("STRIPE_KEY").unwrap());
+        let mut coupon_param = CouponParam::default();
+        coupon_param.id = Some("35OFF");
+        coupon_param.duration = Some(Duration::Repeating);
+        coupon_param.percent_off = Some(35);
+        coupon_param.duration_in_months = Some(3);
+
+        let coupon = Coupon::create(&client, coupon_param).unwrap();
+
+        assert_eq!(coupon.id, String::from("35OFF"))
+    }
+
+    #[test]
+    fn coupon_retrieve() {
+        let client = Client::new(std::env::var("STRIPE_KEY").unwrap());
+        let coupon = Coupon::retrieve(&client, "35OFF").unwrap();
+        assert_eq!(coupon.id, String::from("35OFF"));
+    }
+
+    #[test]
+    fn coupon_update() {
+        let client = Client::new(std::env::var("STRIPE_KEY").unwrap());
+        let mut coupon_param = CouponParam::default();
+        coupon_param.name = Some("35% OFF");
+        let coupon = Coupon::update(&client, "35OFF", coupon_param).unwrap();
+        assert_eq!(coupon.name, Some(String::from("35% OFF")));
+    }
+
+    #[test]
+    fn coupon_delete() {
+        let client = Client::new(std::env::var("STRIPE_KEY").unwrap());
+        let deleted = Coupon::delete(&client, "35OFF").unwrap();
+        assert_eq!(deleted, Deleted {
+            object: Object::Coupon,
+            deleted: true,
+            id: "35OFF".to_string()
+        });
+    }
+
 }
