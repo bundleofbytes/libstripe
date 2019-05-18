@@ -40,7 +40,7 @@ pub struct InvoiceSettings {
 
 #[derive(Default, Serialize, Deserialize, Debug, PartialEq)]
 pub struct Phase {
-    pub applicaiton_fee_percent: Option<f64>,
+    pub application_fee_percent: Option<f64>,
     pub coupon: Option<Expandable<Coupon>>,
     pub end_date: Option<i64>,
     pub start_date: Option<i64>,
