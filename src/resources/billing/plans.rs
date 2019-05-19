@@ -3,7 +3,7 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::product::{ProductsParam, Products};
-use crate::util::{Deleted, Expandable};
+use crate::util::{Deleted, Expandable, List};
 use crate::Client;
 use std::collections::HashMap;
 
@@ -130,5 +130,9 @@ impl Plans {
 
     pub fn delete(client: &Client, plan: &str) -> crate::Result<Deleted> {
         client.delete(UrlPath::Plans, vec![plan], serde_json::Map::new())
+    }
+
+    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+        client.get(UrlPath::Plans, vec![], param)
     }
 }

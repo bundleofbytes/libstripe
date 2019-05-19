@@ -74,9 +74,3 @@ pub enum Object {
     #[serde(other, skip_serializing)]
     Unknown,
 }
-
-//impl Default for Object {
-//    fn default() -> Self {
-//        Object::Unknown
-//    }
-//}
