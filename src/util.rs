@@ -131,18 +131,18 @@ mod tests {
     use super::*;
 
     struct Foo {
-        bar: Box<Expandable<Bar>>,
+        bar: Expandable<Bar>,
     }
 
     struct Bar {
-        foo: Box<Expandable<Foo>>,
+        foo: Expandable<Foo>,
     }
 
     #[test]
     fn expand_chaining() {
-        let foo = Foo { bar: Box::new(Expandable::Id("bar".into())) };
-        let bar = Bar { foo: Box::new(Expandable::Object(foo)) };
-        let foo = Foo { bar: Box::new(Expandable::Object(bar)) };
+        let foo = Foo { bar: Expandable::Id("bar".into()) };
+        let bar = Bar { foo: Expandable::Object(Box::new(foo)) };
+        let foo = Foo { bar: Expandable::Object(Box::new(bar)) };
 
         let res = foo
             .bar.into_object().unwrap()
