@@ -148,7 +148,7 @@ pub struct CustomerListParams<'a> {
 }
 
 impl Customer {
-    pub fn create<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<Self> {
+    pub fn create<'a>(client: &Client, param: CustomerParam<'a>) -> crate::Result<Self> {
         client.post(UrlPath::Customers, vec![], param)
     }
 
@@ -156,7 +156,7 @@ impl Customer {
         client.get(UrlPath::Customers, vec![id], serde_json::Map::new())
     }
 
-    pub fn update<B: serde::Serialize>(client: &Client, id: &str, param: B) -> crate::Result<Self> {
+    pub fn update<'a>(client: &Client, id: &str, param: CustomerParam<'a>) -> crate::Result<Self> {
         client.post(UrlPath::Customers, vec![id], param)
     }
 
@@ -164,7 +164,7 @@ impl Customer {
         client.delete(UrlPath::Customers, vec![id], serde_json::Map::new())
     }
 
-    pub fn list<B: serde::Serialize>(client: &Client, param: B) -> crate::Result<List<Self>> {
+    pub fn list<'a>(client: &Client, param: CustomerListParams<'a>) -> crate::Result<List<Self>> {
         client.get(UrlPath::Customers, vec![], param)
     }
 }
