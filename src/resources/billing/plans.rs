@@ -3,7 +3,7 @@ use crate::resources::common::object::Object;
 
 use crate::resources::common::path::UrlPath;
 use crate::resources::core::product::{ProductsParam, Products};
-use crate::util::{Deleted, Expandable, List};
+use crate::util::{Deleted, Expandable, List, RangeQuery};
 use crate::Client;
 use std::collections::HashMap;
 
@@ -107,6 +107,25 @@ pub struct PlansParam<'a> {
     pub metadata: Option<HashMap<&'a str, &'a str>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product: Option<ProductsParam<'a>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<&'a str>>,
+}
+
+
+#[derive(Default, Serialize, Debug, PartialEq)]
+pub struct PlansListParams<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<RangeQuery>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ending_before: Option<&'a str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub starting_after: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<Vec<&'a str>>,
 }
