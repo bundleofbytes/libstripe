@@ -1,6 +1,6 @@
 [package]
 name = "libstripe"
-version = "0.5.6"
+version = "0.5.7"
 authors = ["Darius C. <darius.clark@bundleofbytes.com>"]
 edition = "2018"
 description = "Stripe library for rust."
