@@ -144,6 +144,8 @@ pub enum EventType {
     InvoicePaymentFailed,
     #[serde(rename = "invoice.payment_succeeded")]
     InvoicePaymentSucceeded,
+    #[serde(rename = "invoice.payment_action_required")]
+    InvoicePaymentActionRequired,
     #[serde(rename = "invoice.sent")]
     InvoiceSent,
     #[serde(rename = "invoice.upcoming")]
