@@ -1,8 +1,8 @@
 use crate::resources::common::object::Object;
-use crate::util::{Expandable, List, Deleted};
-use crate::resources::core::customer::Customer;
-use crate::Client;
 use crate::resources::common::path::UrlPath;
+use crate::resources::core::customer::Customer;
+use crate::util::{Deleted, Expandable, List};
+use crate::Client;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CustomerTaxID {
@@ -12,36 +12,35 @@ pub struct CustomerTaxID {
     pub created: i64,
     pub customer: Expandable<Customer>,
     pub livemode: bool,
-    #[serde(rename="type")]
+    #[serde(rename = "type")]
     pub taxid_type: TaxIDType,
     pub value: String,
     pub verification: TaxIDVerification,
-
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all="snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum TaxIDType {
     EuVat,
     NzGst,
     AuAbn,
-    Unknown
+    Unknown,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TaxIDVerification {
     pub status: TaxIDVerificationStatus,
     pub verified_address: Option<String>,
-    pub verified_name: Option<String>
+    pub verified_name: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum TaxIDVerificationStatus {
     Pending,
     Unavailable,
     Unverified,
-    Verified
+    Verified,
 }
 
 #[derive(Default, Debug, Serialize, PartialEq)]
@@ -49,6 +48,7 @@ pub struct CustomerTaxIDParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer: Option<&'a str>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "type")]
     pub taxid_type: Option<TaxIDType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<&'a str>,
