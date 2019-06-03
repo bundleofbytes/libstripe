@@ -1,14 +1,14 @@
+use crate::resources::billing::discounts::Discount;
 use crate::resources::billing::subscriptions::Subscription;
 use crate::resources::common::address::Address;
 use crate::resources::common::currency::Currency;
 use crate::resources::common::object::Object;
-use crate::resources::common::path::{UrlPath};
-use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam, Source};
-use crate::util::{Deleted, List, RangeQuery, Expandable};
-use crate::{Client};
-use std::collections::HashMap;
+use crate::resources::common::path::UrlPath;
 use crate::resources::core::customer_taxid::{CustomerTaxID, CustomerTaxIDParam};
-use crate::resources::billing::discounts::Discount;
+use crate::resources::paymentmethods::source::{PaymentSource, PaymentSourceParam, Source};
+use crate::util::{Deleted, Expandable, List, RangeQuery};
+use crate::Client;
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct CustomerShipping {
@@ -42,7 +42,7 @@ pub struct Customer {
     pub subscription: Option<List<Subscription>>,
     pub tax_exempt: Option<TaxExempt>,
     pub tax_ids: Option<List<CustomerTaxID>>,
-    pub tax_info: Option<TaxInfo>, //Deprecated
+    pub tax_info: Option<TaxInfo>,                          //Deprecated
     pub tax_info_verification: Option<TaxInfoVerification>, //Deprecated
 }
 
@@ -61,11 +61,11 @@ pub struct CustomFields {
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all="lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum TaxExempt {
     None,
     Exempt,
-    Reversed
+    Reversed,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -77,7 +77,7 @@ pub struct TaxInfo {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct TaxInfoVerification {
-    pub verified_name: String,
+    pub verified_name: Option<String>,
     pub status: TaxStatus,
 }
 
@@ -126,7 +126,7 @@ pub struct CustomerParam<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tax_exempt: Option<TaxExempt>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub tax_id_data: Option<CustomerTaxIDParam<'a>>,
+    pub tax_id_data: Option<Vec<CustomerTaxIDParam<'a>>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expand: Option<Vec<&'a str>>,
 }
