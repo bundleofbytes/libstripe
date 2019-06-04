@@ -13,7 +13,7 @@ pub struct Plans {
     pub object: Object,
     pub active: bool,
     pub aggregate_usage: Option<AggregateUsage>,
-    pub amount: i64,
+    pub amount: Option<i64>,
     pub billing_scheme: Option<BillingScheme>,
     pub created: i64,
     pub currency: Currency,
