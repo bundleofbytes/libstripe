@@ -23,7 +23,7 @@ pub struct Plans {
     pub metadata: HashMap<String, String>,
     pub nickname: Option<String>,
     pub product: Option<Expandable<Products>>,
-    pub tiers: Option<Tiers>,
+    pub tiers: Option<Vec<Tiers>>,
     pub tiers_mode: Option<TiersMode>,
     pub transform_usage: Option<String>,
     pub trial_period_days: Option<i64>,
@@ -41,8 +41,9 @@ pub enum AggregateUsage {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Tiers {
-    pub amount: i64,
-    pub up_to: Option<String>,
+    pub flat_amount: Option<i64>,
+    pub unit_amount: i64,
+    pub up_to: Option<i64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
