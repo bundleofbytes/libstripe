@@ -71,21 +71,35 @@ pub struct CustomerTaxIDListParams<'a> {
 }
 
 impl CustomerTaxID {
-
-    pub fn create<B: serde::Serialize>(client: &Client, customer: &str, param: B) -> crate::Result<Self> {
+    pub fn create<B: serde::Serialize>(
+        client: &Client,
+        customer: &str,
+        param: B,
+    ) -> crate::Result<Self> {
         client.post(UrlPath::Customers, vec![customer, "tax_ids"], param)
     }
 
     pub fn retrieve(client: &Client, customer: &str, id: &str) -> crate::Result<Self> {
-        client.get(UrlPath::Customers, vec![customer, "tax_ids", id], serde_json::Map::new())
+        client.get(
+            UrlPath::Customers,
+            vec![customer, "tax_ids", id],
+            serde_json::Map::new(),
+        )
     }
 
     pub fn delete(client: &Client, customer: &str, id: &str) -> crate::Result<Deleted> {
-        client.delete(UrlPath::Customers, vec![customer, "tax_ids", id], serde_json::Map::new())
+        client.delete(
+            UrlPath::Customers,
+            vec![customer, "tax_ids", id],
+            serde_json::Map::new(),
+        )
     }
 
-    pub fn list<B: serde::Serialize>(client: &Client, customer: &str, param: B) -> crate::Result<List<Self>> {
+    pub fn list<B: serde::Serialize>(
+        client: &Client,
+        customer: &str,
+        param: B,
+    ) -> crate::Result<List<Self>> {
         client.get(UrlPath::Customers, vec![customer, "tax_ids"], param)
     }
-
 }
