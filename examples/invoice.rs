@@ -3,6 +3,8 @@ use libstripe::resources::core::customer::{Customer, CustomerParam};
 use libstripe::resources::paymentmethods::source::PaymentSourceParam;
 use libstripe::Client;
 use std::env;
+use libstripe::resources::billing::invoiceitems::{InvoiceItemsParam, InvoiceItems};
+use libstripe::resources::common::currency::Currency;
 
 fn main() -> libstripe::Result<()> {
     let secret_key = env::var("STRIPE_KEY").expect("Missing 'STRIPE_KEY'.");
@@ -14,6 +16,14 @@ fn main() -> libstripe::Result<()> {
     customer_param.source = Some(PaymentSourceParam::Token("tok_amex"));
 
     let customer = Customer::create(&client, customer_param)?;
+
+    let mut item_param = InvoiceItemsParam::default();
+    item_param.currency = Some(Currency::USD);
+    item_param.customer = Some(&customer.id);
+    item_param.amount = Some(100);
+    item_param.description = Some("Example");
+
+    let _ = InvoiceItems::create(&client, item_param)?;
 
     let mut invoice_param = InvoiceParam::default();
     invoice_param.customer = Some(&customer.id);
