@@ -1,4 +1,4 @@
-#![recursion_limit="128"]
+#![recursion_limit = "128"]
 
 #[macro_use]
 extern crate serde_derive;
@@ -18,4 +18,4 @@ use futures::future::Future;
 #[cfg(not(feature = "async"))]
 pub type Result<T> = ::std::result::Result<T, Error>;
 #[cfg(feature = "async")]
-pub type Result<T> = Box<Future<Item=T, Error=Error> + Send>;
+pub type Result<T> = Box<Future<Item = T, Error = Error> + Send>;
