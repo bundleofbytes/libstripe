@@ -39,7 +39,7 @@ pub struct Customer {
     pub preferred_locales: Option<Vec<String>>,
     pub shipping: Option<CustomerShipping>,
     pub sources: Option<List<PaymentSource>>,
-    pub subscription: Option<List<Subscription>>,
+    pub subscriptions: Option<List<Subscription>>,
     pub tax_exempt: Option<TaxExempt>,
     pub tax_ids: Option<List<CustomerTaxID>>,
     pub tax_info: Option<TaxInfo>,                          //Deprecated
